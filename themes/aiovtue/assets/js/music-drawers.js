@@ -1,6 +1,7 @@
 export function mountMusicDrawers(root, onChange) {
   const main = root.querySelector('.music-main-card')
   const drawer = root.querySelector('[data-music-drawer]')
+  const sheet = root.querySelector('[data-music-sheet]')
   const tabs = [...root.querySelectorAll('[data-music-tab]')]
   const reduced = matchMedia('(prefers-reduced-motion: reduce)')
   const titles = { search: '搜索音乐', lyrics: '歌词时光', queue: '播放队列' }
@@ -17,24 +18,29 @@ export function mountMusicDrawers(root, onChange) {
   function layout() {
     if (!root.classList.contains('is-open')) return
     const rect = main.getBoundingClientRect()
-    const leftFits = rect.left >= rect.width + 24
-    const rightFits = window.innerWidth - rect.right >= rect.width + 24
+    const pageWidth = Math.min(320, rect.width - 28)
+    const leftFits = rect.left >= pageWidth - 8 + 68
+    const rightFits = window.innerWidth - rect.right >= pageWidth - 8 + 68
     const small = !leftFits && !rightFits
+    const right = !leftFits && (rightFits || rect.left < 68)
     root.classList.toggle('is-music-compact', small)
-    root.classList.toggle('is-drawer-right', !leftFits && rightFits)
-    distance = small ? 0 : (leftFits ? -1 : 1) * (rect.width + 12)
-    const nextGeometry = `${rect.width}:${rect.height}:${distance}`
+    root.classList.toggle('is-drawer-right', right)
+    const width = small ? rect.width : pageWidth
+    distance = small ? 0 : (right ? 1 : -1) * (width - 8)
+    const nextGeometry = `${width}:${rect.height}:${distance}:${right}`
     if (nextGeometry !== geometry) {
       geometry = nextGeometry; cancelAnimation()
-      drawer.style.width = `${rect.width}px`; drawer.style.height = `${rect.height}px`
+      sheet.style.width = `${width}px`; sheet.style.height = `${small ? rect.height : rect.height - 8}px`
+      sheet.style.top = small ? '0px' : '4px'
+      sheet.style.left = right ? `${rect.width - width}px` : '0px'
       drawer.hidden = !active
     }
-    drawer.style.transform = targetTransform()
+    sheet.style.transform = targetTransform()
     syncMain()
   }
   function show(name, immediate = false) {
     const previous = active
-    const start = drawer.hidden ? 'translateX(0px)' : getComputedStyle(drawer).transform
+    const start = getComputedStyle(sheet).transform
     active = name
     if (name) {
       drawer.dataset.page = name
@@ -49,12 +55,12 @@ export function mountMusicDrawers(root, onChange) {
     })
     layout(); syncMain(); onChange(name)
     if (immediate || compact() || reduced.matches || typeof drawer.animate !== 'function') {
-      cancelAnimation(); drawer.style.transform = targetTransform(); drawer.hidden = !name; return
+      cancelAnimation(); sheet.style.transform = targetTransform(); drawer.hidden = !name; return
     }
     // An already extracted page stays put when only its contents change.
     if (previous && name) return
     cancelAnimation(); drawer.hidden = false
-    const animation = drawer.animate([{ transform: start }, { transform: targetTransform() }], {
+    const animation = sheet.animate([{ transform: start }, { transform: targetTransform() }], {
       duration: name ? 460 : 320, easing: 'cubic-bezier(.22,.7,.18,1)', fill: 'both',
     })
     pageAnimation = animation
@@ -74,7 +80,7 @@ export function mountMusicDrawers(root, onChange) {
   }
   root.querySelector('[data-music-drawer-close]').addEventListener('click', close)
   root.addEventListener('music:layout', layout)
-  reduced.addEventListener('change', () => { cancelAnimation(); drawer.style.transform = targetTransform(); drawer.hidden = !active })
+  reduced.addEventListener('change', () => { cancelAnimation(); sheet.style.transform = targetTransform(); drawer.hidden = !active })
   return {
     get active() { return active },
     close() { show('', true) },

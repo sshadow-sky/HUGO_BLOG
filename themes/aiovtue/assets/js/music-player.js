@@ -60,7 +60,7 @@ function fitMusicPanelInViewport(root, panel, toggle) {
   panel.style.top = 'auto'
 
   const panelRect = panel.getBoundingClientRect()
-  const topMargin = 42 // Keep the exposed bookmark tips inside the viewport.
+  const topMargin = margin
   if (panelRect.top < topMargin) {
     panel.style.bottom = 'auto'
     const panelHeight = panel.offsetHeight
@@ -357,9 +357,13 @@ export function initMusicPlayer() {
     }
     if (open) scheduleMusicPanelFit(root, panel, toggle)
   })
-  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => {
-    if (open) scheduleMusicPanelFit(root, panel, toggle)
-  }).observe(panel)
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(() => {
+      if (open) scheduleMusicPanelFit(root, panel, toggle)
+    })
+    observer.observe(panel)
+    observer.observe(root) // Dock expansion changes the anchor's width and position.
+  }
   // Always start collapsed. A restored queue must never trigger playback on page load.
 }
 export function scheduleMusicPlayerInit() {
