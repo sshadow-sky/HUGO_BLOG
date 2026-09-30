@@ -38,6 +38,7 @@
 <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "index.xml" | absURL }}">
 {{- $commentProvider := default "twikoo" site.Params.comment.provider -}}
 <meta name="sakura-comment-provider" content="{{ $commentProvider }}">
+<meta name="sakura-statistics" content="{{ if site.Params.statistics.enable }}1{{ else }}0{{ end }}" data-endpoint="{{ site.Params.statistics.endpoint }}">
 {{- if eq $commentProvider "waline" -}}
   {{- with site.Params.waline.serverURL -}}
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@3.15.2/dist/waline.css">

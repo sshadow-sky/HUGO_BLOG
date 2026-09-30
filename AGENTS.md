@@ -78,3 +78,4 @@
 - 已完成 P2.4：友链两个分组内的四张旧卡片清空为 `linkGroups: []`，页面显示“暂无友链，欢迎交流。”；RSS 开关和手动更新保留，空来源生成零 feeds。备份与执行记录见 `docs/superpowers/plans/2026-09-30-p2-4-links-cleanup.md`。相册按用户指令保留，P2.3 跳过。
 - 用户随后要求先在本地启动评论服务：已使用 `tkserver@1.7.12` 与现有前端同版接通本地预览，仅监听 `127.0.0.1:8080`。数据在被忽略的 `.local/twikoo`，开发端点在 `config/development/params.toml`；正式环境仍未部署。构建、浏览器评论提交/PJAX/手机、重启持久性与测试记录清除均通过；记录见 `docs/superpowers/plans/2026-09-30-local-comments.md`。数据库及管理员凭据须单独备份，不提交 Git。
 - 尚未执行：P1.2 评论与统计关闭方案已暂停；其余服务及 P2–P6 剩余调整待逐项确认。Twikoo 本地服务已接通，公网服务尚未部署；不推送远端。
+- 用户最新选择：整站统计继续使用第三方，沿用 busuanzi.cc，不部署自有统计后端。官方记录禁止 localhost/IP 接入，因此开发环境关闭统计上报、保留“—”占位；生产使用集中配置的 HTTPS 接口。本站适配代码支持 PJAX 上报、数值过滤、超时及旧请求取消；文章优先 Twikoo，第三方文章显示改为显式开关。正式域名的真实计数需上线验证，不以模拟测试代替。记录见 `docs/superpowers/plans/2026-09-30-third-party-statistics.md`。

@@ -1,3 +1,7 @@
 # Only `hugo server` / the development environment uses this endpoint.
 [twikoo]
 envId = 'http://127.0.0.1:8080'
+
+# busuanzi.cc rejects localhost/IP addresses; previews must not report visits.
+[statistics]
+enable = false

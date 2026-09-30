@@ -16,6 +16,7 @@ import {
 } from './post-content.js'
 import { initNoticeBoard } from './notice-board.js'
 import { initSiteRuntime } from './site-runtime.js'
+import { initStatistics, cleanupStatistics } from './statistics.js'
 import {
   initHomeLayoutRandom,
   initHomePaginationScroll,
@@ -43,6 +44,7 @@ import { cancelTypeWriter } from './typewriter.js'
 import { bootSignatureWidget } from './signature-boot.js'
 
 function unmountPage() {
+  cleanupStatistics()
   runPageCleanups()
   cleanupHero()
   cleanupCharts()
@@ -67,6 +69,7 @@ function mountPage() {
   bindHeroScrollDown()
   initNoticeBoard()
   initSiteRuntime()
+  void initStatistics()
   initHomeLayoutRandom()
   initHomePaginationScroll()
   initHomePostListScrollAnimation()

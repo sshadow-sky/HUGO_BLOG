@@ -8,11 +8,11 @@
 {{- if eq .Params.comment false -}}
 <div id="twikoo-visitor-mount" class="sakura-twikoo-visitor-mount" hidden></div>
 {{- end -}}
-{{- else -}}
+{{- else if and site.Params.statistics.enable site.Params.statistics.articleEnable -}}
 <p class="sakura-post-header-busuanzi">
-  <span>访客数：<span id="busuanzi_page_uv">加载中...</span></span>
+  <span>访客数：<span id="busuanzi_page_uv" data-statistic>—</span></span>
   <span class="sakura-post-header-busuanzi__sep">|</span>
-  <span>阅读量：<span id="busuanzi_page_pv">加载中...</span></span>
+  <span>阅读量：<span id="busuanzi_page_pv" data-statistic>—</span></span>
 </p>
 {{- end -}}
 {{- end -}}

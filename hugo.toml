@@ -271,6 +271,13 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
   [params.postFooter]
     navigationMerge = true # 合并上一篇/下一篇导航样式
 
+  # 第三方整站统计：沿用 busuanzi.cc；开发环境覆盖为关闭。
+  # endpoint 需返回 busuanzi_* 字段；不能直接替换成任意分析服务地址。
+  [params.statistics]
+    enable = true
+    endpoint = 'https://cdn.busuanzi.cc/api.php'
+    articleEnable = false  # 文章优先 Twikoo，不隐式回退到第三方
+
   # --- 评论系统（文章 / 友链 / 留言页共用）---
   # provider 可选：waline | twikoo
   # 单篇文章可在 front matter 写 comment: false 关闭评论区
