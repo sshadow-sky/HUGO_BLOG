@@ -1,8 +1,5 @@
-{{- $enabled := true -}}
-{{- if isset site.Params.music "enable" -}}
-  {{- $enabled = site.Params.music.enable -}}
-{{- end -}}
+{{- $enabled := site.Params.music.enable | default false -}}
 {{- if isset .Params "musicplayer" -}}
-  {{- $enabled = .Params.musicplayer -}}
+  {{- $enabled = and $enabled .Params.musicplayer -}}
 {{- end -}}
 {{- return $enabled -}}

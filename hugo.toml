@@ -400,21 +400,15 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
     icon = 'ant-design:idcard-filled'
     weight = 6
 
-# --- 音乐播放器（APlayer + Meting.js）---
+# --- 搜索式音乐播放器（原生 Audio + GD 协议接口）---
   # enable：是否显示播放器；单页可在 front matter 写 musicPlayer: false 关闭
   [params.music]
     enable = true
     position = 'right'        # left | right，按钮默认停靠左下或右下
     
-    # apis：按顺序尝试，前一个不可用时自动切换下一个，默认不需要动
-    apis = [
-      'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r',
-      'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id',
-      'https://meting.qjqq.cn/?server=:server&type=:type&id=:id',
-    ]
-    server = 'netease'
-    type = 'playlist'                             # playlist | song | album | artist
-    id = '2580064383'                             # 网易云歌单/歌曲 ID
+    # 无默认歌单；访客搜索或选择歌曲后才请求服务。空配置不回退到其他接口。
+    endpoint = 'https://music-api.gdstudio.xyz/api.php'
+    source = 'netease'
 
   # --- Live2D 看板娘（左下角 Live2D 角色）---
   # enable：是否启用；单页可在 front matter 写 live2d: false 关闭

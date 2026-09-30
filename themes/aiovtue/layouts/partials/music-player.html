@@ -1,60 +1,43 @@
 {{- if partial "music-enabled.html" . -}}
-{{- $music := .Site.Params.music -}}
-{{- $theme := .Site.Params.primaryColor | default "#DF9193" -}}
-{{- $apis := $music.apis | default slice -}}
-{{- if not $apis -}}
-  {{- with $music.api -}}
-    {{- $apis = slice . -}}
-  {{- end -}}
-{{- end -}}
-{{- if not $apis -}}
-  {{- $apis = slice "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r" -}}
-{{- end -}}
-{{- $position := default "left" $music.position -}}
-{{- if not (in (slice "left" "right") $position) -}}
-  {{- $position = "left" -}}
-{{- end -}}
-{{- $draggable := default false $music.draggable -}}
-{{- $edgeDock := true -}}
-{{- if isset $music "edgeDock" -}}{{- $edgeDock = $music.edgeDock -}}{{- end -}}
-<div
-  class="sakura-music sakura-music--{{ $position }}"
-  id="sakura-music"
-  data-storage-key="sakura-music-state"
-  data-position="{{ $position }}"
-  data-edge-dock="{{ if $edgeDock }}true{{ else }}false{{ end }}"
-  {{- if $draggable -}}
-  data-draggable="true"
-  {{- end -}}
-  data-server="{{ $music.server | default `netease` }}"
-  data-type="{{ $music.type | default `playlist` }}"
-  data-id="{{ $music.id }}"
-  data-theme="{{ $theme }}"
->
-  <div class="sakura-music__panel" id="sakura-music-panel" aria-hidden="true">
-    <div class="sakura-music__panel-head">
-      <span class="sakura-music__panel-title">正在播放</span>
-      <button type="button" class="sakura-music__panel-close" id="sakura-music-close" aria-label="收起播放器">
-        <iconify-icon icon="ri:arrow-down-s-line" aria-hidden="true"></iconify-icon>
-      </button>
+{{- $music := site.Params.music -}}
+{{- $position := default "right" $music.position -}}
+{{- if not (in (slice "left" "right") $position) -}}{{- $position = "right" -}}{{- end -}}
+<div class="sakura-music sakura-music--{{ $position }}" id="sakura-music"
+  data-storage-key="sakura-music-state" data-position="{{ $position }}"
+  data-edge-dock="{{ if and (isset $music `edgedock`) (not $music.edgeDock) }}false{{ else }}true{{ end }}"
+  data-draggable="{{ if $music.draggable }}true{{ else }}false{{ end }}"
+  data-endpoint="{{ $music.endpoint }}" data-source="{{ $music.source }}">
+  <section class="sakura-music__panel" id="sakura-music-panel" aria-label="音乐播放器" aria-hidden="true">
+    <header class="sakura-music__panel-head">
+      <span class="sakura-music__panel-title">随心听</span>
+      <button type="button" class="sakura-music__panel-close" id="sakura-music-close" aria-label="收起播放器"><iconify-icon icon="ri:arrow-down-s-line" aria-hidden="true"></iconify-icon></button>
+    </header>
+    <div class="music-search-player">
+      <form class="music-search" data-music-form role="search" aria-label="搜索音乐">
+        <input type="search" data-music-query aria-label="歌名或歌手" placeholder="搜索歌名或歌手" maxlength="100" autocomplete="off">
+        <button type="submit" aria-label="搜索歌曲"><iconify-icon icon="ri:search-line" aria-hidden="true"></iconify-icon></button>
+      </form>
+      <p class="music-hint" data-music-search-status role="status">搜索一首想听的歌</p>
+      <ul class="music-list music-results" data-music-results aria-label="搜索结果" hidden></ul>
+      <div class="music-now">
+        <div class="music-cover music-cover--large" data-music-cover><iconify-icon icon="ri:music-2-line" aria-hidden="true"></iconify-icon></div>
+        <div class="music-track-info"><strong data-music-title>还没有正在播放的歌曲</strong><span data-music-artist>从搜索结果中选择，开始聆听</span></div>
+      </div>
+      <div class="music-progress"><time data-music-time>00:00</time><input type="range" data-music-seek aria-label="播放进度" min="0" max="100" step="0.1" value="0" disabled><time data-music-duration>00:00</time></div>
+      <div class="music-controls">
+        <button type="button" data-music-prev aria-label="上一首" disabled><iconify-icon icon="ri:skip-back-fill" aria-hidden="true"></iconify-icon></button>
+        <button type="button" class="music-play" data-music-play aria-label="播放" disabled><iconify-icon icon="ri:play-fill" aria-hidden="true"></iconify-icon></button>
+        <button type="button" data-music-next aria-label="下一首" disabled><iconify-icon icon="ri:skip-forward-fill" aria-hidden="true"></iconify-icon></button>
+        <button type="button" class="music-mode" data-music-mode aria-label="当前顺序播放，切换播放模式">顺序</button>
+      </div>
+      <div class="music-volume"><iconify-icon icon="ri:volume-up-line" aria-hidden="true"></iconify-icon><input type="range" data-music-volume aria-label="音量" min="0" max="1" step="0.01" value="0.7"></div>
+      <p class="music-hint music-error" data-music-error role="status" hidden></p>
+      <div class="music-queue-heading"><span data-music-count>播放队列 · 0</span><button type="button" data-music-clear disabled>清空</button></div>
+      <p class="music-hint" data-music-empty>喜欢的歌，加入这里慢慢听</p>
+      <ul class="music-list music-queue" data-music-queue aria-label="播放队列"></ul>
+      <audio data-music-audio preload="none"></audio>
     </div>
-    <div class="sakura-music__meting-host" id="sakura-music-meting-host">
-      <p class="sakura-music__loading" id="sakura-music-loading" hidden>播放器加载中…</p>
-      <p class="sakura-music__error" id="sakura-music-error" hidden>音乐播放器加载失败，请稍后重试</p>
-    </div>
-  </div>
-  <button
-    type="button"
-    class="sakura-music__toggle"
-    id="sakura-music-toggle"
-    aria-label="打开音乐播放器"
-    aria-expanded="false"
-    aria-controls="sakura-music-panel"
-  >
-    <span class="sakura-music__toggle-disc" aria-hidden="true">
-      <iconify-icon icon="ri:disc-line" width="28" height="28"></iconify-icon>
-    </span>
-  </button>
-  <script type="application/json" id="sakura-music-apis">{{ $apis | jsonify | safeJS }}</script>
+  </section>
+  <button type="button" class="sakura-music__toggle" id="sakura-music-toggle" aria-label="打开音乐播放器" aria-expanded="false" aria-controls="sakura-music-panel"><span class="sakura-music__toggle-disc" aria-hidden="true"><iconify-icon icon="ri:disc-line" width="28" height="28"></iconify-icon></span></button>
 </div>
 {{- end -}}

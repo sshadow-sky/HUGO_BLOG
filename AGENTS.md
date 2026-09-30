@@ -81,3 +81,4 @@
 - 用户最新选择：整站统计继续使用第三方，沿用 busuanzi.cc，不部署自有统计后端。官方记录禁止 localhost/IP 接入，因此开发环境关闭统计上报、保留“—”占位；生产使用集中配置的 HTTPS 接口。本站适配代码支持 PJAX 上报、数值过滤、超时及旧请求取消；文章优先 Twikoo，第三方文章显示改为显式开关。正式域名的真实计数需上线验证，不以模拟测试代替。记录见 `docs/superpowers/plans/2026-09-30-third-party-statistics.md`。
 - 用户随后要求统计暂时搁置：线上验收已单独移入 `docs/post-deployment-todo.md`，所有验收项保持未完成。保留已完成的统计接入代码，不继续扩展统计功能。
 - 音乐方向最新调整：用户希望参考 Astro 博客播放器，改为访客主动搜索歌曲、选择播放的交互。先定位参考实现并说明方案；原歌单清空与音乐代码修改暂未执行。仅借鉴播放器逻辑，不迁移 Astro 博客或改动其仓库。
+- 音乐后续实施：参考位置已确认为 `D:\blog\Blog\src\components\widget\MusicPlayerCore.svelte`，用户确认方案后已在 Hugo 实现搜索、立即播放/入队、队列移除/清空、模式/音量/进度与本地保存；首次不请求默认歌单，刷新不自动播放，普通 PJAX 保留音频实例。原歌单及 APlayer/Meting/默认代理加载已移除。接口通过 `params.music.endpoint/source` 明确配置，空值不回退。真实搜索/音频播放、手机深浅主题与开关验证通过；详见 `docs/superpowers/plans/2026-09-30-music-search.md`。Astro 项目未修改；部署后统计 TODO 仍搁置。

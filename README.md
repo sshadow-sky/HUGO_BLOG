@@ -1,5 +1,7 @@
 # HUGO_BLOG
 
+音乐已改为搜索式播放器：保留右下角悬浮入口，访客搜歌后选择播放或加入队列，不再加载模板歌单。队列和音量/模式保存在访客本机，站内切页续播、刷新不自动播放。配置与操作见 [音乐播放器说明](docs/music-player.md)。
+
 正式上线后需要继续验证的事项集中在 [部署后 TODO](docs/post-deployment-todo.md)。第三方访问统计的线上验证已转入此清单，当前先推进其他去个人化清理。
 
 本地评论服务已接入开发预览：先 `npm run comments:install`，再 `npm run comments:start`；博客仍通过 `npm run dev` 启动。数据库保存在被忽略的 `.local/twikoo/`，运行及迁移说明见 [本地评论服务](services/twikoo/README.md)。生产评论后端尚未部署。

@@ -1,301 +1,7 @@
+import { mountMusicView } from './music-view.js'
 const DEFAULT_STORAGE_KEY = 'sakura-music-state'
-const API_CACHE_KEY = 'sakura-music-api'
-const APLAYER_CSS_URL = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css'
-const APLAYER_SCRIPT_URL = 'https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js'
-const METING_SCRIPT_URL = 'https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js'
-const DEFAULT_APIS = [
-  'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r',
-  'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id',
-  'https://meting.qjqq.cn/?server=:server&type=:type&id=:id',
-]
-
-function readState(storageKey) {
-  try {
-    return JSON.parse(localStorage.getItem(storageKey) || '{}')
-  } catch {
-    return {}
-  }
-}
-
-function writeState(storageKey, state) {
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(state))
-  } catch {
-    /* storage unavailable */
-  }
-}
-
-function readJsonData(el, fallback) {
-  if (!el) return fallback
-  try {
-    const raw = JSON.parse(el.textContent || '')
-    const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw
-    return parsed ?? fallback
-  } catch {
-    return fallback
-  }
-}
-
-function readApiList() {
-  const parsed = readJsonData(document.getElementById('sakura-music-apis'), null)
-  if (Array.isArray(parsed) && parsed.length) return parsed.filter(Boolean)
-  return [...DEFAULT_APIS]
-}
-
-function prioritizeApiList(apis) {
-  try {
-    const cached = sessionStorage.getItem(API_CACHE_KEY)
-    if (cached && apis.includes(cached)) {
-      return [cached, ...apis.filter((item) => item !== cached)]
-    }
-  } catch {
-    /* ignore */
-  }
-  return apis
-}
-
-function rememberWorkingApi(api) {
-  try {
-    sessionStorage.setItem(API_CACHE_KEY, api)
-  } catch {
-    /* ignore */
-  }
-}
-
-function loadStylesheet(href) {
-  if (document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
-    return Promise.resolve()
-  }
-  return new Promise((resolve, reject) => {
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = href
-    link.onload = () => resolve()
-    link.onerror = () => reject(new Error(`Failed to load ${href}`))
-    document.head.appendChild(link)
-  })
-}
-
-function loadScript(src) {
-  if (document.querySelector(`script[src="${src}"]`)) {
-    return Promise.resolve()
-  }
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script')
-    script.src = src
-    script.defer = true
-    script.onload = () => resolve()
-    script.onerror = () => reject(new Error(`Failed to load ${src}`))
-    document.body.appendChild(script)
-  })
-}
-
-let musicLibsPromise = null
-
-async function ensureMusicLibs() {
-  if (window.APlayer && customElements.get('meting-js')) return
-  if (!musicLibsPromise) {
-    musicLibsPromise = Promise.all([
-      loadStylesheet(APLAYER_CSS_URL),
-      loadScript(APLAYER_SCRIPT_URL),
-      loadScript(METING_SCRIPT_URL),
-    ]).then(() => waitForMusicLibs())
-  }
-  await musicLibsPromise
-}
-
-function waitForMusicLibs(timeout = 15000) {
-  return new Promise((resolve, reject) => {
-    const started = Date.now()
-    const tick = () => {
-      if (window.APlayer && customElements.get('meting-js')) {
-        resolve()
-        return
-      }
-      if (Date.now() - started > timeout) {
-        reject(new Error('music libs timeout'))
-        return
-      }
-      window.setTimeout(tick, 80)
-    }
-    tick()
-  })
-}
-
-function buildMetingApiUrl(metingEl, apiTemplate) {
-  const read = (name) => metingEl.getAttribute(name) || ''
-  const api = apiTemplate || read('api') || DEFAULT_APIS[0]
-  return api
-    .replace(':server', read('server'))
-    .replace(':type', read('type'))
-    .replace(':id', read('id'))
-    .replace(':auth', read('auth'))
-    .replace(':r', String(Math.random()))
-}
-
-async function fetchPlaylist(metingEl, apiTemplate) {
-  let res
-  try {
-    res = await fetch(buildMetingApiUrl(metingEl, apiTemplate), { cache: 'no-store' })
-  } catch (err) {
-    throw new Error(`无法连接 API（${err?.message || 'network error'}）`)
-  }
-  if (!res.ok) throw new Error(`API 响应 ${res.status}`)
-  let data
-  try {
-    data = await res.json()
-  } catch {
-    throw new Error('API 返回格式无效')
-  }
-  if (Array.isArray(data) && data.length) return data
-  const message = data?.message || data?.msg || '歌单为空或 API 不可用'
-  throw new Error(message)
-}
-
-function createMetingElement(root, apiTemplate) {
-  const metingEl = document.createElement('meting-js')
-  metingEl.setAttribute('api', apiTemplate)
-  metingEl.setAttribute('server', root.dataset.server || 'netease')
-  metingEl.setAttribute('type', root.dataset.type || 'playlist')
-  metingEl.setAttribute('id', root.dataset.id || '')
-  metingEl.setAttribute('fixed', 'false')
-  metingEl.setAttribute('mini', 'false')
-  metingEl.setAttribute('list-folded', 'false')
-  metingEl.setAttribute('list-max-height', '220px')
-  metingEl.setAttribute('preload', 'metadata')
-  metingEl.setAttribute('mutex', 'true')
-  metingEl.setAttribute('theme', root.dataset.theme || '#DF9193')
-  return metingEl
-}
-
-function resetMetingHost(host) {
-  host.querySelectorAll('meting-js').forEach((el) => el.remove())
-}
-
-function waitForAPlayer(metingEl, timeout = 18000) {
-  return new Promise((resolve, reject) => {
-    if (!metingEl) {
-      reject(new Error('meting element missing'))
-      return
-    }
-
-    const started = Date.now()
-    const tick = () => {
-      const ap = metingEl.aplayer || metingEl.__aplayer
-      if (ap?.list?.audios?.length) {
-        resolve(ap)
-        return
-      }
-      if (Date.now() - started > timeout) {
-        reject(new Error('播放器初始化超时'))
-        return
-      }
-      window.setTimeout(tick, 120)
-    }
-    tick()
-  })
-}
-
-async function mountWithApi(root, host, apiTemplate) {
-  resetMetingHost(host)
-  const metingEl = createMetingElement(root, apiTemplate)
-  host.appendChild(metingEl)
-  await fetchPlaylist(metingEl, apiTemplate)
-  const ap = await waitForAPlayer(metingEl)
-  return { ap, metingEl, apiTemplate }
-}
-
-async function mountWithFallback(root, host) {
-  const apis = prioritizeApiList(readApiList())
-  let lastError = null
-
-  for (const apiTemplate of apis) {
-    try {
-      const result = await mountWithApi(root, host, apiTemplate)
-      rememberWorkingApi(apiTemplate)
-      return result
-    } catch (err) {
-      lastError = err
-      console.warn('[music-player] api failed:', apiTemplate, err)
-      resetMetingHost(host)
-    }
-  }
-
-  throw lastError || new Error('所有音乐 API 均不可用')
-}
-
-function bindPlayingIndicator(ap, root, toggle) {
-  const sync = () => {
-    const playing = !ap.audio.paused
-    root.classList.toggle('is-playing', playing)
-    toggle?.setAttribute('aria-label', playing ? '音乐播放中，打开播放器' : '打开音乐播放器')
-  }
-
-  ap.on('play', sync)
-  ap.on('pause', sync)
-  ap.on('ended', sync)
-  sync()
-}
-
-function bindStatePersistence(ap, storageKey, getPanelOpen) {
-  let saveTimer = 0
-
-  const save = () => {
-    window.clearTimeout(saveTimer)
-    saveTimer = window.setTimeout(() => {
-      writeState(storageKey, {
-        ...readState(storageKey),
-        index: ap.list.index,
-        time: ap.audio.currentTime || 0,
-        volume: ap.audio.volume,
-        paused: ap.audio.paused,
-        panelOpen: getPanelOpen(),
-      })
-    }, 200)
-  }
-
-  ap.on('play', save)
-  ap.on('pause', save)
-  ap.on('ended', save)
-  ap.on('listswitch', save)
-  ap.on('volumechange', save)
-  ap.audio.addEventListener('timeupdate', save)
-
-  window.addEventListener('pagehide', save)
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') save()
-  })
-}
-
-function restorePlaybackState(ap, storageKey) {
-  const state = readState(storageKey)
-  if (typeof state.volume === 'number') {
-    ap.volume(state.volume, true, false)
-  }
-
-  const index = Number.isInteger(state.index) ? state.index : 0
-  const time = typeof state.time === 'number' ? state.time : 0
-  const shouldPlay = state.paused === false
-
-  const apply = () => {
-    if (index > 0 && index < ap.list.audios.length) {
-      ap.list.switch(index)
-    }
-    if (time > 0) ap.seek(time)
-    if (shouldPlay) ap.play()
-  }
-
-  if (ap.list.audios.length) apply()
-  else ap.on('loadeddata', apply)
-}
-
-function refreshAPlayerLayout(ap, onLayout) {
-  if (!ap) return
-  window.dispatchEvent(new Event('resize'))
-  if (typeof ap.resize === 'function') ap.resize()
-  onLayout?.()
-}
-
+function readState(key) { try { return JSON.parse(localStorage.getItem(key) || '{}') || {} } catch { return {} } }
+function writeState(key, state) { try { localStorage.setItem(key, JSON.stringify(state)) } catch {} }
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
 }
@@ -370,27 +76,6 @@ function scheduleMusicPanelFit(root, panel, toggle) {
   window.requestAnimationFrame(() => {
     fitMusicPanelInViewport(root, panel, toggle)
   })
-}
-
-function bindMusicPanelLayoutSync(ap, root, panel, toggle, getPanelOpen) {
-  if (!ap || !panel) return
-
-  let fitTimer = 0
-  const refit = () => {
-    if (!getPanelOpen()) return
-    window.clearTimeout(fitTimer)
-    fitTimer = window.setTimeout(() => {
-      scheduleMusicPanelFit(root, panel, toggle)
-    }, 16)
-  }
-
-  ap.on('listshow', refit)
-  ap.on('listhide', refit)
-
-  if (typeof ResizeObserver !== 'undefined') {
-    const observer = new ResizeObserver(refit)
-    observer.observe(panel)
-  }
 }
 
 function parseCssPx(value, fallback) {
@@ -529,6 +214,7 @@ function resolveMusicPositionFromState(root, state) {
   const maxX = Math.max(0, window.innerWidth - width)
   const maxY = Math.max(0, window.innerHeight - height)
   const insets = getMusicEdgeInsets(root)
+  const edgeDock = isEdgeDockEnabled(root)
   const dock = state.dock || root.dataset.position || 'left'
   const vDock = state.vDock || 'bottom'
 
@@ -625,168 +311,53 @@ function bindMusicDrag(root, storageKey, toggle, panel) {
 export function initMusicPlayer() {
   const root = document.getElementById('sakura-music')
   if (!root || root.dataset.shellReady === '1') return
-
-  const toggle = document.getElementById('sakura-music-toggle')
-  const closeBtn = document.getElementById('sakura-music-close')
-  const panel = document.getElementById('sakura-music-panel')
-  const host = document.getElementById('sakura-music-meting-host')
-  const loadingEl = document.getElementById('sakura-music-loading')
-  const errorEl = document.getElementById('sakura-music-error')
-  if (!toggle || !panel || !host || !loadingEl || !errorEl) return
-
   root.dataset.shellReady = '1'
-
+  const toggle = root.querySelector('#sakura-music-toggle')
+  const panel = root.querySelector('#sakura-music-panel')
+  const close = root.querySelector('#sakura-music-close')
   const storageKey = root.dataset.storageKey || DEFAULT_STORAGE_KEY
-
   applyMusicPosition(root, storageKey)
   syncEdgeDock(root)
   bindEdgeDock(root)
   bindMusicDrag(root, storageKey, toggle, panel)
-
-  let panelOpen = false
-  let aplayerRef = null
-  let playerReadyPromise = null
-  let playerBound = false
-
-  const setStatus = (state, message = '') => {
-    loadingEl.hidden = state !== 'loading'
-    errorEl.hidden = state !== 'error'
-    if (state === 'error' && message) errorEl.textContent = message
-    if (state === 'error') {
-      errorEl.hidden = false
-      loadingEl.hidden = true
-    }
-  }
-
-  const bindPlayer = (ap) => {
-    if (playerBound) return ap
-    playerBound = true
-    aplayerRef = ap
-    restorePlaybackState(ap, storageKey)
-    bindStatePersistence(ap, storageKey, () => panelOpen)
-    bindPlayingIndicator(ap, root, toggle)
-    bindMusicPanelLayoutSync(ap, root, panel, toggle, () => panelOpen)
-    setStatus('ready')
-    refreshAPlayerLayout(ap, () => scheduleMusicPanelFit(root, panel, toggle))
-    return ap
-  }
-
-  const ensurePlayer = () => {
-    if (aplayerRef) return Promise.resolve(aplayerRef)
-    if (playerReadyPromise) return playerReadyPromise
-
-    playerReadyPromise = (async () => {
-      setStatus('loading')
-      await ensureMusicLibs()
-      const { ap } = await mountWithFallback(root, host)
-      return bindPlayer(ap)
-    })().catch((err) => {
-      console.warn('[music-player]', err)
-      const message = err?.message
-        ? `音乐加载失败：${err.message}`
-        : '音乐播放器加载失败，请稍后重试'
-      setStatus('error', message)
-      toggle?.setAttribute('aria-label', '音乐播放器加载失败')
-      playerReadyPromise = null
-      throw err
-    })
-
-    return playerReadyPromise
-  }
-
-  const setPanelOpen = (open, persist = true) => {
-    panelOpen = open
+  const view = mountMusicView(root)
+  let open = false
+  const setOpen = value => {
+    open = value
     panel.classList.toggle('is-visible', open)
-    panel.setAttribute('aria-hidden', open ? 'false' : 'true')
+    panel.setAttribute('aria-hidden', String(!open))
+    toggle.setAttribute('aria-expanded', String(open))
     root.classList.toggle('is-open', open)
-    toggle?.setAttribute('aria-expanded', open ? 'true' : 'false')
-    if (open) {
-      root.classList.add('is-edge-expanded')
-    } else if (isEdgeDockEnabled(root)) {
-      root.classList.remove('is-edge-expanded')
-    }
-    if (open) {
-      scheduleMusicPanelFit(root, panel, toggle)
-      window.requestAnimationFrame(() => {
-        refreshAPlayerLayout(aplayerRef, () => scheduleMusicPanelFit(root, panel, toggle))
-      })
-    } else {
-      resetMusicPanelPosition(panel)
-    }
-    if (persist) {
-      const state = readState(storageKey)
-      writeState(storageKey, { ...state, panelOpen: open })
-    }
+    root.classList.toggle('is-edge-expanded', open)
+    if (open) { scheduleMusicPanelFit(root, panel, toggle); view.focus() }
+    else resetMusicPanelPosition(panel)
+    writeState(storageKey, { ...readState(storageKey), panelOpen: open })
   }
-
-  const openPanel = () => {
-    setPanelOpen(true)
-    ensurePlayer().then((ap) => {
-      refreshAPlayerLayout(ap, () => scheduleMusicPanelFit(root, panel, toggle))
-    }).catch(() => {})
-  }
-
+  toggle.addEventListener('click', event => {
+    event.stopPropagation()
+    if (root.dataset.dragMoved === '1') { root.dataset.dragMoved = '0'; return }
+    setOpen(!open)
+  })
+  close.addEventListener('click', () => { setOpen(false); toggle.focus() })
+  // Queue actions can remove their button before this event reaches document.
+  document.addEventListener('click', event => { if (open && !event.composedPath().includes(root)) setOpen(false) })
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && open) { setOpen(false); toggle.focus() }
+  })
   window.addEventListener('resize', () => {
     if (root.classList.contains('is-custom-position')) {
       const rect = root.getBoundingClientRect()
       const { x, y } = clampMusicRootPosition(root, rect.left, rect.top)
-      root.style.left = `${x}px`
-      root.style.top = `${y}px`
-      if (root.dataset.draggable === 'true') {
-        const state = readState(storageKey)
-        writeState(storageKey, { ...state, position: { x, y } })
-      }
+      root.style.left = `${x}px`; root.style.top = `${y}px`
     }
-    if (panelOpen) scheduleMusicPanelFit(root, panel, toggle)
+    if (open) scheduleMusicPanelFit(root, panel, toggle)
   })
-
-  const stored = readState(storageKey)
-  if (stored.panelOpen) openPanel()
-
-  toggle?.addEventListener('click', (event) => {
-    event.stopPropagation()
-    if (root.dataset.dragMoved === '1') {
-      root.dataset.dragMoved = '0'
-      return
-    }
-    if (panelOpen) setPanelOpen(false)
-    else openPanel()
-  })
-
-  closeBtn?.addEventListener('click', (event) => {
-    event.stopPropagation()
-    setPanelOpen(false)
-  })
-
-  document.addEventListener('click', (event) => {
-    if (!panelOpen) return
-    if (root.contains(event.target)) return
-    setPanelOpen(false)
-  })
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && panelOpen) setPanelOpen(false)
-  })
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => {
+    if (open) scheduleMusicPanelFit(root, panel, toggle)
+  }).observe(panel)
+  // Always start collapsed. A restored queue must never trigger playback on page load.
 }
-
 export function scheduleMusicPlayerInit() {
-  const root = document.getElementById('sakura-music')
-  if (!root) return
-
-  const storageKey = root.dataset.storageKey || DEFAULT_STORAGE_KEY
-  try {
-    if (readState(storageKey).panelOpen) {
-      initMusicPlayer()
-      return
-    }
-  } catch {
-    /* ignore */
-  }
-
-  const run = () => initMusicPlayer()
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(run, { timeout: 5000 })
-  } else {
-    window.setTimeout(run, 2000)
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMusicPlayer, { once: true })
+  else initMusicPlayer()
 }
