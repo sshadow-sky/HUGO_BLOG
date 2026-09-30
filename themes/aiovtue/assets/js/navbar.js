@@ -222,18 +222,3 @@ export function initNavbarDropdown() {
     })
   })
 }
-
-export function initBrandRotate() {
-  const el = document.querySelector('.sakura-hvr-rotate')
-  if (!el || el.dataset.rotateReady === '1') return
-  el.dataset.rotateReady = '1'
-
-  el.addEventListener('mouseenter', () => {
-    el.classList.remove('is-spinning')
-    void el.offsetWidth
-    el.classList.add('is-spinning')
-  })
-  el.addEventListener('animationend', () => {
-    el.classList.remove('is-spinning')
-  })
-}

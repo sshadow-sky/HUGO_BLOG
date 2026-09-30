@@ -16,7 +16,6 @@ import {
   initDesktopNavbarCollapse,
   initNavbarLinkScroll,
   initNavbarDropdown,
-  initBrandRotate,
 } from './navbar.js'
 import { initSidebar } from './sidebar.js'
 import { initSearchModal } from './search-modal.js'
@@ -137,7 +136,6 @@ export function bootShell({ mountPage, unmountPage }) {
   initDesktopNavbarCollapse()
   initNavbarLinkScroll()
   initNavbarDropdown()
-  initBrandRotate()
   initSearchModal()
   scheduleLive2dInit()
   scheduleMouseStyleInit()

@@ -244,19 +244,6 @@ img.sakura-lazy-img.is-loaded { opacity: 1; }
 .sakura-loop-float { animation: sakura-loop-float 2s ease-in-out infinite; }
 .sakura-loop-fly { animation: sakura-loop-fly 2s ease-in-out infinite alternate; }
 
-.sakura-hvr-rotate {
-  display: inline-block;
-  transform-origin: center center;
-  vertical-align: baseline;
-}
-.sakura-hvr-rotate.is-spinning {
-  animation: sakura-hvr-rotate-spin 0.8s ease-out 1 forwards;
-}
-@keyframes sakura-hvr-rotate-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
 .sakura-navbar {
   --navbar-collapse-duration-show: 0.34s;
   --navbar-collapse-duration-hide: 0.26s;
@@ -286,10 +273,14 @@ img.sakura-lazy-img.is-loaded { opacity: 1; }
   color: var(--sakura-navbar-title-color);
 }
 .sakura-navbar-brand .logo-link {
-  color: inherit; text-decoration: none;
+  position: relative;
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 4px;
 }
 .sakura-navbar-brand .navbar-title {
-  ruby-position: under;
+  display: inline-block;
   font-variant-ligatures: no-common-ligatures;
   position: relative;
   font-size: 20px; font-weight: 600; line-height: normal;
@@ -301,23 +292,84 @@ img.sakura-lazy-img.is-loaded { opacity: 1; }
 @media screen and (min-width: 1024px) {
   .sakura-navbar-brand .navbar-title { font-size: 24px; }
 }
-.sakura-navbar-brand .logo-link span { display: inline-block; transition: color 0.25s, background 0.25s; }
-.sakura-navbar-brand .logo-link span:first-child { border-radius: 9px; padding: 0 2px; }
-@media (hover: hover) and (pointer: fine) {
-  .sakura-navbar-brand .logo-link:hover span:first-child {
-    background-color: var(--sakura-color-primary); color: var(--sakura-navbar-bg);
-  }
-  .sakura-navbar-brand .logo-link:hover span:not(:first-child) { color: var(--sakura-color-primary); }
-  .sakura-navbar-brand .navbar-title:hover rt {
-    color: var(--sakura-color-primary);
-    opacity: 1;
-  }
+.brand-mark__text { position: relative; }
+.brand-mark__effect {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.brand-mark__effect::before,
+.brand-mark__effect::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.brand-mark__effect::before {
+  color: currentColor;
+  filter: blur(0.6px);
+}
+.brand-mark__effect::after {
+  color: transparent;
+  background: linear-gradient(105deg, transparent 36%, #bfe9ff 46%, #fff 50%, var(--sakura-color-primary) 54%, transparent 64%);
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.sakura-navbar-brand .logo-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
 }
 .sakura-navbar-brand .navbar-subtitle {
-  text-align: justify; text-align-last: justify;
-  opacity: 0; width: 100%; font-size: 12px; font-weight: 400;
-  transition: opacity 0.5s;
-  position: absolute; transform: translateY(-0.2em); pointer-events: none;
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  width: 100%;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: center;
+  letter-spacing: 0.04em;
+  color: inherit;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+.sakura-navbar-brand .navbar-title:focus-within .navbar-subtitle {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (hover: hover) and (pointer: fine) {
+  .sakura-navbar-brand .navbar-title:hover .navbar-subtitle {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .brand-mark:is(:hover, :focus-visible) .brand-mark__effect::after {
+    animation: brand-light-sweep 0.7s ease-out 1;
+  }
+  .brand-mark:is(:hover, :focus-visible) .brand-mark__effect::before {
+    animation: brand-shadow-trace 0.7s ease-out 1;
+  }
+}
+@keyframes brand-light-sweep {
+  0% { background-position: 100% 0; opacity: 0; }
+  12%, 78% { opacity: 1; }
+  100% { background-position: 0% 0; opacity: 0; }
+}
+@keyframes brand-shadow-trace {
+  0%, 18% { transform: translate(0, 0); opacity: 0; }
+  45% { transform: translate(2px, 1px); opacity: 0.28; }
+  100% { transform: translate(5px, 2px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sakura-navbar-brand .navbar-title,
+  .sakura-navbar-brand .navbar-subtitle { transition: none; }
+  .sakura-navbar-brand .navbar-subtitle { transform: none; }
 }
 
 .sakura-navbar-link {

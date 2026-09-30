@@ -9,14 +9,14 @@
         <span></span>
       </button>
       <div class="sakura-navbar-brand">
-        <ruby class="navbar-title relative">
-          <a class="logo-link" href="{{ `/` | relLangURL }}" title="{{ .Site.Title }}">
-            {{ range $i, $part := .Site.Params.navbar.titleParts }}
-            <span{{ if eq $i 1 }} class="sakura-hvr-rotate" id="navbar-brand-rotate"{{ end }}>{{ $part }}</span>
-            {{ end }}
+        {{- $brand := delimit (.Site.Params.navbar.titleParts | default slice) "" | default .Site.Title -}}
+        <span class="navbar-title">
+          <a class="logo-link brand-mark" href="{{ `/` | relLangURL }}" title="{{ .Site.Title }}" aria-label="{{ $brand }} · 返回首页">
+            <span class="brand-mark__text">{{ $brand }}</span>
+            <span class="brand-mark__effect" data-text="{{ $brand }}" aria-hidden="true"></span>
           </a>
-          <rt class="navbar-subtitle">{{ .Site.Params.navbar.subTitle }}</rt>
-        </ruby>
+          <span class="navbar-subtitle">{{ .Site.Params.navbar.subTitle }}</span>
+        </span>
       </div>
     </div>
 
