@@ -114,7 +114,7 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
   # --- 追番页（Bilibili 追番列表，npm run update:bangumi 手动更新 data/bangumi.json）---
   [params.bangumi]
     enable = true                             # 是否启用追番页；关闭时手动更新命令也不拉取数据
-    vmid = ''                                 # 待填写自己的 Bilibili UID；空值时手动更新不联网
+    vmid = '1938855661'                        # 本站 Bilibili UID；npm run update:bangumi 手动更新
     quote = '生命不息，追番不止！'              # 页面引言
 
   # --- Excalidraw 画板文章（content/excalidraw/<slug>/index.md + *.excalidraw）---

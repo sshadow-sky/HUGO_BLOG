@@ -158,6 +158,8 @@
 
 **本次验证：** 无两份缓存时 `npm run build` 成功生成 55 个页面、664 个静态文件；追番显示三个空状态，友链产物不含 RSS 数据节点。403 个信封/字体目录文件校验值不变，友链、追番、留言页及信封图片、字体样式共 8 个本地地址返回 HTTP 200；预览已恢复。证据位于 `D:\new_blog\.runtime\p1-1\data-removal-*`。缓存由 Git 忽略，其删除发生在本地工作文件中，不产生 Git 删除条目。
 
+**随后接入用户账号：** 用户提供 Bilibili UID `1938855661`，已配置并执行 `npm run update:bangumi`。三个分类均返回“用户隐私设置未公开”，未获取到有效条目；脚本生成了该 UID 的空列表缓存，追番页 HTTP 200 且显示空状态。这是访问受限，不代表账号真实列表为空。日志：`D:\new_blog\.runtime\p1-1\user-bangumi-update.log`。如用户之后自行公开列表，再手动更新；自动抓取仍关闭。
+
 ### P2：清理身份、内容和素材引用
 
 **修改：** `hugo.toml`、`data/links.yaml`、`content/about.md`、各栏目 `_index.md`、`friend-link-notice.html`、`signature-inline.html`、`static/signature/signature.js`、`package.json`、`package-lock.json`、`wrangler.toml`。
