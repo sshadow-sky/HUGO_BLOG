@@ -1,5 +1,7 @@
 # HUGO_BLOG
 
+本地评论服务已接入开发预览：先 `npm run comments:install`，再 `npm run comments:start`；博客仍通过 `npm run dev` 启动。数据库保存在被忽略的 `.local/twikoo/`，运行及迁移说明见 [本地评论服务](services/twikoo/README.md)。生产评论后端尚未部署。
+
 本项目使用独立私有仓库 [sshadow-sky/HUGO_BLOG](https://github.com/sshadow-sky/HUGO_BLOG)，工作分支为 `best`。仓库根目录即 Hugo 项目，使用 AIOVTUE Hugo 主题；不包含 Astro 项目或其提交历史。项目目录及工程名称为 `HUGO_BLOG`，npm 包名与部署标识为 `hugo-blog`。
 
 本站名称为 **ShadowSky（影是光的拓印）**，作者 **ShadowSky**，介绍为 “Through code we inscribe the tomorrow we yearn”。正式域名配置为 `https://shadowssky.com/`，备案号使用站长提供的 `冀ICP备2026041770号-1`；本地配置不代表已经部署上线。头像取自 GitHub `sshadow-sky` 并保存到 `static/site/github-avatar.jpg`。

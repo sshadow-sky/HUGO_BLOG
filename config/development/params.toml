@@ -1,0 +1,3 @@
+# Only `hugo server` / the development environment uses this endpoint.
+[twikoo]
+envId = 'http://127.0.0.1:8080'

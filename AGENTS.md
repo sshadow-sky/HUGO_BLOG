@@ -76,4 +76,5 @@
 - 已完成 P2.1：删除四篇原作者文章、一篇示例画板及其数据，备份位于 `D:\new_blog\.backups\p21-articles-20260930`；保留共享静态素材和文章展示能力，增加文章相关空状态，旧文章地址返回 404、本站 RSS 为零条目。详见 `docs/superpowers/plans/2026-09-30-p2-1-article-cleanup.md`。未新增欢迎或演示文章。
 - 已完成 P2.2：删除三条原作者示例动态，保留栏目配置、memos/cards 两种布局、评论组件和共用素材；空状态改为“暂无动态，敬请期待。”。备份位于 `D:\new_blog\.backups\p22-moments-20260930`；两种布局空/非空构建及桌面/手机浏览器验证通过，详见 `docs/superpowers/plans/2026-09-30-p2-2-moments-cleanup.md`。
 - 已完成 P2.4：友链两个分组内的四张旧卡片清空为 `linkGroups: []`，页面显示“暂无友链，欢迎交流。”；RSS 开关和手动更新保留，空来源生成零 feeds。备份与执行记录见 `docs/superpowers/plans/2026-09-30-p2-4-links-cleanup.md`。相册按用户指令保留，P2.3 跳过。
-- 尚未执行：P1.2 评论与统计关闭方案已暂停；其余服务及 P2–P6 剩余调整待逐项确认。Twikoo 服务异常尚未解决；不推送或部署。
+- 用户随后要求先在本地启动评论服务：已使用 `tkserver@1.7.12` 与现有前端同版接通本地预览，仅监听 `127.0.0.1:8080`。数据在被忽略的 `.local/twikoo`，开发端点在 `config/development/params.toml`；正式环境仍未部署。构建、浏览器评论提交/PJAX/手机、重启持久性与测试记录清除均通过；记录见 `docs/superpowers/plans/2026-09-30-local-comments.md`。数据库及管理员凭据须单独备份，不提交 Git。
+- 尚未执行：P1.2 评论与统计关闭方案已暂停；其余服务及 P2–P6 剩余调整待逐项确认。Twikoo 本地服务已接通，公网服务尚未部署；不推送远端。

@@ -1,0 +1,8 @@
+{
+  "name": "shadowsky-comments",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local Twikoo service for ShadowSky",
+  "scripts": { "start": "node start.cjs" },
+  "dependencies": { "tkserver": "1.7.12" }
+}

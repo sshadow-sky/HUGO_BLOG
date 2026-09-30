@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "hugo server -D --disableFastRender",
+    "comments:install": "npm ci --prefix services/twikoo --ignore-scripts --no-audit --no-fund",
+    "comments:start": "npm start --prefix services/twikoo",
     "update:links": "node scripts/fetch-links-rss.mjs",
     "update:bangumi": "node scripts/fetch-bangumi.mjs",
     "compress-mouse": "node scripts/compress-mouse-assets.mjs",
