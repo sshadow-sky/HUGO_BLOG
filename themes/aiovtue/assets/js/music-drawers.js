@@ -5,10 +5,10 @@ export function mountMusicDrawers(root, onChange) {
   const tabs = [...root.querySelectorAll('[data-music-tab]')]
   const reduced = matchMedia('(prefers-reduced-motion: reduce)')
   const titles = { search: '搜索音乐', lyrics: '歌词时光', queue: '播放队列' }
-  let active = '', pageAnimation, distance = 0, geometry = ''
+  let active = '', pageAnimation, paperAnimation, distance = 0, geometry = ''
   const compact = () => root.classList.contains('is-music-compact')
   const targetTransform = () => `translateX(${active ? distance : 0}px)`
-  function cancelAnimation() { pageAnimation?.cancel(); pageAnimation = null }
+  function cancelAnimation() { pageAnimation?.cancel(); paperAnimation?.cancel(); pageAnimation = null; paperAnimation = null }
   function syncMain() {
     const covered = compact() && !!active
     main.inert = covered
@@ -41,6 +41,8 @@ export function mountMusicDrawers(root, onChange) {
   function show(name, immediate = false) {
     const previous = active
     const start = getComputedStyle(sheet).transform
+    const paperStart = getComputedStyle(drawer).transform
+    const shadeStart = getComputedStyle(drawer).filter
     active = name
     if (name) {
       drawer.dataset.page = name
@@ -60,9 +62,22 @@ export function mountMusicDrawers(root, onChange) {
     // An already extracted page stays put when only its contents change.
     if (previous && name) return
     cancelAnimation(); drawer.hidden = false
-    const animation = sheet.animate([{ transform: start }, { transform: targetTransform() }], {
-      duration: name ? 460 : 320, easing: 'cubic-bezier(.22,.7,.18,1)', fill: 'both',
-    })
+    const tactile = matchMedia('(hover: hover) and (pointer: fine)').matches
+    const duration = name ? 620 : 420
+    // A two-pixel overshoot stays within the eight-pixel overlap with the cover.
+    const frames = tactile && name
+      ? [{ transform: start }, { transform: `translateX(${distance + Math.sign(distance) * 2}px)`, offset: .82 }, { transform: targetTransform() }]
+      : [{ transform: start }, { transform: targetTransform() }]
+    const animation = sheet.animate(frames, { duration, easing: 'cubic-bezier(.22,.7,.18,1)', fill: 'both' })
+    if (tactile) {
+      const direction = Math.sign(distance) * (name ? 1 : -1)
+      paperAnimation = drawer.animate([
+        { transform: paperStart, filter: shadeStart },
+        { transform: `perspective(900px) rotateY(${direction * 3}deg) skewY(${direction * .2}deg)`, filter: 'drop-shadow(0 5px 7px rgba(65,39,9,.18))', offset: .38 },
+        { transform: `perspective(900px) rotateY(${-direction * .5}deg)`, filter: 'drop-shadow(0 1px 2px rgba(65,39,9,.06))', offset: .82 },
+        { transform: 'none', filter: 'none' },
+      ], { duration, easing: 'ease-in-out', fill: 'both' })
+    }
     pageAnimation = animation
     animation.onfinish = () => {
       if (pageAnimation !== animation) return
