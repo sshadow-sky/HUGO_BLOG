@@ -13,7 +13,7 @@
   <div class="moments-page moments-page--{{ $layout }}"{{ if eq $layout "cards" }} style="--moments-card-max-width: {{ $cardMaxWidth }};"{{ end }}>
     <div class="moments-feed" id="moments-feed">
       {{- if not $entries -}}
-        <p class="moments-feed__empty">还没有动态，去 content/moments/ 新建 Markdown 文件吧。</p>
+        <p class="moments-feed__empty">暂无动态，敬请期待。</p>
       {{- else -}}
         {{- range $index, $page := $visible -}}
           {{- partial "moments/page-entry.html" (dict
