@@ -70,6 +70,7 @@ function fitMusicPanelInViewport(root, panel, toggle) {
   }
 
   panel.classList.add('is-fitted')
+  root.dispatchEvent(new Event('music:layout'))
 }
 
 function scheduleMusicPanelFit(root, panel, toggle) {
@@ -330,7 +331,7 @@ export function initMusicPlayer() {
     root.classList.toggle('is-open', open)
     root.classList.toggle('is-edge-expanded', open)
     if (open) { scheduleMusicPanelFit(root, panel, toggle); view.focus() }
-    else resetMusicPanelPosition(panel)
+    else { view.close(); resetMusicPanelPosition(panel) }
     writeState(storageKey, { ...readState(storageKey), panelOpen: open })
   }
   toggle.addEventListener('click', event => {
@@ -342,7 +343,10 @@ export function initMusicPlayer() {
   // Queue actions can remove their button before this event reaches document.
   document.addEventListener('click', event => { if (open && !event.composedPath().includes(root)) setOpen(false) })
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && open) { setOpen(false); toggle.focus() }
+    if (event.key === 'Escape' && open) {
+      if (view.escape()) return
+      setOpen(false); toggle.focus()
+    }
   })
   window.addEventListener('resize', () => {
     if (root.classList.contains('is-custom-position')) {

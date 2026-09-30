@@ -7,7 +7,7 @@ export function createMusicController({ api, audio, storage, source, onChange = 
   let searchController, playController, playTimer, searchSequence = 0, playSequence = 0
   const cleanTrack = t => {
     if (!t || t.source !== source || typeof t.id !== 'string' || !t.id || typeof t.title !== 'string') return null
-    return { id: t.id.slice(0, 200), playId: String(t.playId || t.id).slice(0, 200), source, title: t.title.slice(0, 300), artist: String(t.artist || '').slice(0, 300), album: String(t.album || '').slice(0, 300), picId: String(t.picId || '').slice(0, 200) }
+    return { id: t.id.slice(0, 200), playId: String(t.playId || t.id).slice(0, 200), lyricId: String(t.lyricId || t.id).slice(0, 200), source, title: t.title.slice(0, 300), artist: String(t.artist || '').slice(0, 300), album: String(t.album || '').slice(0, 300), picId: String(t.picId || '').slice(0, 200) }
   }
   try {
     const saved = JSON.parse(storage?.getItem(STORAGE_KEY) || 'null')

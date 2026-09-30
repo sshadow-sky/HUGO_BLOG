@@ -38,7 +38,7 @@ export function createMusicApi({ endpoint, source, fetcher = (...args) => fetch(
       const data = await request({ types: 'search', name: keyword, count: '10', pages: '1' }, signal)
       if (!Array.isArray(data)) throw new Error('音乐服务返回格式异常')
       return data.filter(t => t && (typeof t.id === 'string' || typeof t.id === 'number') && typeof t.name === 'string').slice(0, 10).map(t => ({
-        id: String(t.id), playId: String(t.url_id || t.id), source,
+        id: String(t.id), playId: String(t.url_id || t.id), lyricId: String(t.lyric_id || t.id), source,
         title: t.name, artist: Array.isArray(t.artist) ? t.artist.join(' / ') : '',
         album: typeof t.album === 'string' ? t.album : '', picId: String(t.pic_id || ''),
       }))
@@ -48,6 +48,11 @@ export function createMusicApi({ endpoint, source, fetcher = (...args) => fetch(
       const url = mediaUrl(data?.url)
       if (!url) throw new Error('暂无可用播放地址，请换一首或稍后重试')
       return url
+    },
+    async resolveLyrics(track, signal) {
+      const data = await request({ types: 'lyric', id: track.lyricId || track.id }, signal)
+      if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('歌词返回格式异常')
+      return typeof data.lyric === 'string' ? data.lyric : ''
     },
     async resolveCover(track, signal) {
       if (!track.picId) return ''

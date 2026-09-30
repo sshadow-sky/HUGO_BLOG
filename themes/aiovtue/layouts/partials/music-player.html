@@ -8,34 +8,57 @@
   data-draggable="{{ if $music.draggable }}true{{ else }}false{{ end }}"
   data-endpoint="{{ $music.endpoint }}" data-source="{{ $music.source }}">
   <section class="sakura-music__panel" id="sakura-music-panel" aria-label="音乐播放器" aria-hidden="true">
+    <div class="music-main-card">
     <header class="sakura-music__panel-head">
       <span class="sakura-music__panel-title">随心听</span>
       <button type="button" class="sakura-music__panel-close" id="sakura-music-close" aria-label="收起播放器"><iconify-icon icon="ri:arrow-down-s-line" aria-hidden="true"></iconify-icon></button>
     </header>
     <div class="music-search-player">
-      <form class="music-search" data-music-form role="search" aria-label="搜索音乐">
-        <input type="search" data-music-query aria-label="歌名或歌手" placeholder="搜索歌名或歌手" maxlength="100" autocomplete="off">
-        <button type="submit" aria-label="搜索歌曲"><iconify-icon icon="ri:search-line" aria-hidden="true"></iconify-icon></button>
-      </form>
-      <p class="music-hint" data-music-search-status role="status">搜索一首想听的歌</p>
-      <ul class="music-list music-results" data-music-results aria-label="搜索结果" hidden></ul>
       <div class="music-now">
-        <div class="music-cover music-cover--large" data-music-cover><iconify-icon icon="ri:music-2-line" aria-hidden="true"></iconify-icon></div>
-        <div class="music-track-info"><strong data-music-title>还没有正在播放的歌曲</strong><span data-music-artist>从搜索结果中选择，开始聆听</span></div>
+        <div class="music-art"><div class="music-cover music-cover--large" data-music-cover><iconify-icon icon="ri:music-2-line" aria-hidden="true"></iconify-icon></div></div>
+        <div class="music-track-info"><small class="music-eyebrow" data-music-state>随时，随心</small><strong data-music-title>还没有正在播放的歌曲</strong><span data-music-artist>从搜索结果中选择，开始聆听</span></div>
       </div>
       <div class="music-progress"><time data-music-time>00:00</time><input type="range" data-music-seek aria-label="播放进度" min="0" max="100" step="0.1" value="0" disabled><time data-music-duration>00:00</time></div>
       <div class="music-controls">
+        <button type="button" class="music-mode" data-music-mode aria-label="当前顺序播放，切换播放模式">顺序</button>
+        <div class="music-transport">
         <button type="button" data-music-prev aria-label="上一首" disabled><iconify-icon icon="ri:skip-back-fill" aria-hidden="true"></iconify-icon></button>
         <button type="button" class="music-play" data-music-play aria-label="播放" disabled><iconify-icon icon="ri:play-fill" aria-hidden="true"></iconify-icon></button>
         <button type="button" data-music-next aria-label="下一首" disabled><iconify-icon icon="ri:skip-forward-fill" aria-hidden="true"></iconify-icon></button>
-        <button type="button" class="music-mode" data-music-mode aria-label="当前顺序播放，切换播放模式">顺序</button>
+        </div>
+        <div class="music-volume">
+          <button type="button" data-music-volume-toggle aria-label="调整音量" aria-expanded="false" aria-controls="music-volume-pop"><iconify-icon icon="ri:volume-up-line" aria-hidden="true"></iconify-icon></button>
+          <div class="music-volume-pop" id="music-volume-pop" hidden><input type="range" data-music-volume aria-label="音量" min="0" max="1" step="0.01" value="0.7"></div>
+        </div>
       </div>
-      <div class="music-volume"><iconify-icon icon="ri:volume-up-line" aria-hidden="true"></iconify-icon><input type="range" data-music-volume aria-label="音量" min="0" max="1" step="0.01" value="0.7"></div>
       <p class="music-hint music-error" data-music-error role="status" hidden></p>
-      <div class="music-queue-heading"><span data-music-count>播放队列 · 0</span><button type="button" data-music-clear disabled>清空</button></div>
-      <p class="music-hint" data-music-empty>喜欢的歌，加入这里慢慢听</p>
-      <ul class="music-list music-queue" data-music-queue aria-label="播放队列"></ul>
       <audio data-music-audio preload="none"></audio>
+    </div>
+    </div>
+    <nav class="music-bookmarks" aria-label="音乐栏目">
+      <button type="button" data-music-tab="search" aria-expanded="false" aria-controls="music-drawer-search" title="搜索：悬浮预览，点击固定"><iconify-icon icon="ri:search-line" aria-hidden="true"></iconify-icon><span>搜索</span></button>
+      <button type="button" data-music-tab="lyrics" aria-expanded="false" aria-controls="music-drawer-lyrics" title="歌词：悬浮预览，点击固定"><iconify-icon icon="ri:file-music-line" aria-hidden="true"></iconify-icon><span>歌词</span></button>
+      <button type="button" data-music-tab="queue" aria-expanded="false" aria-controls="music-drawer-queue" title="队列：悬浮预览，点击固定"><iconify-icon icon="ri:play-list-2-line" aria-hidden="true"></iconify-icon><span>队列</span><small data-music-badge>0</small></button>
+    </nav>
+    <div class="music-drawer music-search-player" data-music-drawer hidden>
+      <header class="music-drawer-head"><strong data-music-drawer-title>搜索音乐</strong><div><button type="button" data-music-pin aria-label="固定抽屉" aria-pressed="false" title="固定抽屉"><iconify-icon icon="ri:pushpin-line" aria-hidden="true"></iconify-icon></button><button type="button" data-music-drawer-close aria-label="关闭栏目"><iconify-icon icon="ri:close-line" aria-hidden="true"></iconify-icon></button></div></header>
+      <section class="music-drawer-body" id="music-drawer-search" data-music-pane="search" aria-label="搜索音乐" hidden>
+        <form class="music-search" data-music-form role="search" aria-label="搜索音乐">
+          <input type="search" data-music-query aria-label="歌名或歌手" placeholder="搜索歌名或歌手" maxlength="100" autocomplete="off">
+          <button type="submit" aria-label="搜索歌曲"><iconify-icon icon="ri:search-line" aria-hidden="true"></iconify-icon></button>
+        </form>
+        <p class="music-hint" data-music-search-status role="status">搜索一首想听的歌</p>
+        <ul class="music-list music-results" data-music-results aria-label="搜索结果" hidden></ul>
+      </section>
+      <section class="music-drawer-body" id="music-drawer-lyrics" data-music-pane="lyrics" aria-label="歌曲歌词" hidden>
+        <div class="music-lyrics-tools"><span class="music-hint" data-music-lyrics-status role="status">选一首歌，让文字随音乐流动</span><button type="button" data-music-lyrics-retry hidden>重试</button><button type="button" data-music-lyrics-follow hidden>回到当前句</button></div>
+        <div class="music-lyrics" data-music-lyrics tabindex="0" aria-label="滚动歌词"></div>
+      </section>
+      <section class="music-drawer-body" id="music-drawer-queue" data-music-pane="queue" aria-label="播放队列" hidden>
+        <div class="music-queue-heading"><span data-music-count>播放队列 · 0</span><button type="button" data-music-clear disabled>清空</button></div>
+        <p class="music-hint" data-music-empty>喜欢的歌，加入这里慢慢听</p>
+        <ul class="music-list music-queue" data-music-queue aria-label="播放队列"></ul>
+      </section>
     </div>
   </section>
   <button type="button" class="sakura-music__toggle" id="sakura-music-toggle" aria-label="打开音乐播放器" aria-expanded="false" aria-controls="sakura-music-panel"><span class="sakura-music__toggle-disc" aria-hidden="true"><iconify-icon icon="ri:disc-line" width="28" height="28"></iconify-icon></span></button>
