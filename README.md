@@ -2,7 +2,7 @@
 
 本项目使用独立私有仓库 [sshadow-sky/HUGO_BLOG](https://github.com/sshadow-sky/HUGO_BLOG)，工作分支为 `best`。仓库根目录即 Hugo 项目，使用 AIOVTUE Hugo 主题；不包含 Astro 项目或其提交历史。项目目录及展示名称为 `HUGO_BLOG`，npm 包名与部署标识为 `hugo-blog`。
 
-当前已完成 P0 基线备份；个人内容与外部服务清理（P1–P6）尚未执行。协作规则见 [项目宪章](AGENTS.md)，阶段安排见 [清理计划](docs/superpowers/plans/2026-09-30-blog-cleanup-plan.md)。下方保留上游使用说明与来源链接。
+当前已完成 P0 基线备份；P1.1 已取消启动和构建时的自动补资源、RSS 与追番抓取，业务数据改为手动更新。其他个人内容与外部服务清理尚未执行。协作规则见 [项目宪章](AGENTS.md)，阶段安排见 [清理计划](docs/superpowers/plans/2026-09-30-blog-cleanup-plan.md)。下方保留上游使用说明与来源链接。
 
 参考butterfly、sakura等，基于**Hugo** 的静态博客。
 欢迎前往示例网站参观：[AIOVTUE-XUE](https://daily.yybb.us)
@@ -285,7 +285,7 @@ pnpm dev
 常用操作：
 
 - 改文章 / 页面 → 保存后浏览器刷新
-- 改 `hugo.toml` / `data/links.yaml` → 自动生效
+- 改 `hugo.toml` / `data/links.yaml` → 本地页面自动生效，RSS 缓存需手动更新
 - 按 `Ctrl+C` 停止服务器
 
 ### 本地构建（模拟上线产物）
@@ -295,6 +295,17 @@ pnpm build
 ```
 
 构建结果在 `public/` 目录。`--cleanDestinationDir` 会先清空旧文件，避免已删文章残留。
+
+`npm run dev`、`npm run build` 和 `npm run build:cf` 均不会自动补下载静态资源，也不会抓取 RSS 或追番数据；页面继续使用本地已有资源与缓存。云端构建需要时仍会下载 Hugo 官方发行版，浏览器端外部服务的关闭将在后续步骤处理。
+
+### 手动更新业务数据
+
+```bash
+npm run update:links    # 按 data/links.yaml 中的 RSS 源更新 data/links_rss.json
+npm run update:bangumi  # 按 hugo.toml 中的追番 UID 更新 data/bangumi.json
+```
+
+这两个命令只有手动运行时才会执行。RSS 功能关闭、没有 RSS 源（包括缺少 `data/links.yaml`），或追番功能关闭、UID 为空时，不发起对应业务请求，并写入空结果。当前账号、订阅源和页面功能开关尚未清理；手动执行前请检查配置。
 
 本地预览构建结果（可选）：
 
@@ -341,4 +352,6 @@ netlify新建项目，选择连接github，选择本项目，配置界面直接�
 ```bash
 pnpm dev     # 本地开发预览
 pnpm build   # 构建到 public/（部署用）
+pnpm run update:links    # 手动更新 RSS 缓存
+pnpm run update:bangumi  # 手动更新追番缓存
 ```

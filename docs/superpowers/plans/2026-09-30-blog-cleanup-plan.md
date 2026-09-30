@@ -9,7 +9,7 @@
 **Tech Stack:** Hugo Extended 0.163.3、Node.js、Hugo templates、SCSS、JavaScript、TOML/YAML/Markdown。
 
 **日期：** 2026-09-30  
-**状态：** P0 基线记录、备份与验证已完成；P1–P6 尚未执行。  
+**状态：** P0 与 P1.1 已完成；P1 其余任务和 P2–P6 尚未执行。
 **项目：** `D:\new_blog\HUGO_BLOG`；独立私有仓库 `sshadow-sky/HUGO_BLOG`，分支 `best`。  
 **盘点基线：** `ce0c48debbdfb5ad77677cfe16613060d649cc7e`  
 **已确认方向：** 用户选择“保留展示能力，清空个人数据并关闭外部服务”。
@@ -143,12 +143,14 @@
 
 - [ ] 全局关闭音乐、Live2D、远程一言、RSS 聚合、追番抓取、赞助和签名；清空 UID、歌单 ID、API 列表及评论端点。
 - [ ] 删除不蒜子脚本和统计 DOM；同时处理配套样式中的失效选择器，不遗留“加载中”。
-- [ ] 取消 dev/build 对补资源、RSS、追番脚本的默认调用。保留后两者为手动更新工具，增加 `npm run update:links`、`npm run update:bangumi`；关闭或缺配置时不得 fetch，也不得恢复作者数据。
+- [x] P1.1：取消 dev/build 对补资源、RSS、追番脚本的默认调用。保留后两者为手动更新工具，增加 `npm run update:links`、`npm run update:bangumi`；关闭或缺配置时不得 fetch，也不得恢复作者数据。
 - [ ] 检查 Hugo 模板与 JS 的默认值：去掉作者地址、第三方公网服务的隐式回退。不能只把 `hugo.toml` 清空，因为现有 JS/模板会重新填回默认地址。
 - [ ] 布尔开关统一使用已有 `bool-param.html` 或显式布尔判断，避免 `default true` 导致显式关闭未生效；全局关闭优先于单页覆盖。
 - [ ] 删除对应外部 `preconnect`、`dns-prefetch`，避免功能关闭但页面仍联系外域。
 
 **验收：** 默认启动不补回原作者资源、不更新原作者 RSS/追番；服务按钮与统计占位隐藏。此阶段开源展示组件 CDN 可以暂时存在，但必须列入 P4 的剩余项。
+
+**P1.1 执行记录：** [取消自动抓取与手动更新验证](2026-09-30-p1-1-manual-updates.md)。构建及开发预览通过，8 种关闭/缺配置场景无网络请求，项目两份缓存的 SHA-256 和修改时间不变。页面服务开关、账号和现有缓存内容尚未清理；上方 P1 的完整验收尚未完成。
 
 ### P2：清理身份、内容和素材引用
 

@@ -91,10 +91,6 @@ function runStep(label, command, args, options = {}) {
 
 ensureBuildReady();
 
-runStep("fetch-static", process.execPath, ["scripts/fetch-missing-static.mjs"]);
-runStep("fetch-links-rss", process.execPath, ["scripts/fetch-links-rss.mjs"]);
-runStep("fetch-bangumi", process.execPath, ["scripts/fetch-bangumi.mjs"]);
-
 const hugoBin = resolveHugoBin();
 const hugoArgs = ["--cleanDestinationDir", "--minify"];
 

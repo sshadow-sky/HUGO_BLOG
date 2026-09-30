@@ -1,0 +1,39 @@
+# P1.1：取消启动和构建时的自动抓取
+
+日期：2026-09-30。项目：`D:\new_blog\HUGO_BLOG`，分支：`best`。
+
+## 方向与边界
+
+用户已明确授权本小步。取消启动和构建中的业务抓取，避免后续清理的数据或素材被自动补回；保留手动更新能力。沿用已经安装的 Hugo、本地资源与缓存，页面外观基本不变。
+
+本次不修改页面服务开关、原作者账号、正文、模板或现有缓存。云端环境必要时下载 Hugo 官方发行版的逻辑保留；本地验证不代表云端构建或浏览器端完全离线。
+
+## 实际修改
+
+- `package.json`：`dev` 直接启动 Hugo；删除 `fetch-static`，增加 `update:links`、`update:bangumi`。
+- `scripts/build.mjs`：删除补资源、RSS、追番三项调用；`build` 和 `build:cf` 共用该入口，保留锁检查、Hugo 安装及部署域名处理。
+- 删除 `scripts/fetch-missing-static.mjs`，停止自动从原作者 GitHub 下载缺失资源。
+- `scripts/fetch-links-rss.mjs`：缺少 `data/links.yaml` 时视为空来源列表，不联网，写入空 RSS 结果。
+- README 与 `hugo.toml` 的相关说明同步为手动更新；未改变配置值。
+
+手动命令在功能启用且具备来源/UID 时仍会按配置联网。当前配置仍含原作者信息，后续小步再清理。功能关闭或缺配置时，命令沿用写入空数据的行为；本次仅在临时副本中验证，不对项目实际缓存执行更新。
+
+## 验证结果
+
+| 检查 | 结果 |
+|---|---|
+| `npm run build` | 成功，55 个页面、664 个静态文件；Node 网络调用拦截开启，Hugo HTTP URL 允许列表设为 `^$` |
+| `npm run dev -- --bind 127.0.0.1 --port 1313 --baseURL http://localhost:1313/` | 成功，首页 HTTP 200，预览已恢复 |
+| 手动更新脚本 | 8 个关闭/缺配置场景全部通过，未触发 Node 网络调用 |
+| 两份原业务缓存 | SHA-256、字节数及修改时间均保持一致 |
+| JS 语法及差异检查 | 修改脚本语法检查、`git diff --check` 通过 |
+
+8 个场景为：RSS 关闭但有来源、RSS 开关缺失、RSS 开启但来源文件缺失、RSS 空来源列表；追番关闭但有 UID、追番开启但 UID 缺失、UID 空白、追番配置缺失。缺少 RSS 文件的场景在修改前复现 `ENOENT`，修改后通过。
+
+验证工具及日志位于工作区发布目录之外的 `D:\new_blog\.runtime\p1-1`：`build.log`、`dev.stdout.log`、`dev.stderr.log`、`preview.json`、`manual-results.json`、`cache-before.json`、`cache-after.json`。测试未访问真实 RSS 或 Bilibili 服务，也未执行云端 Hugo 下载分支。
+
+## 回退与后续
+
+本步前的 Git 基线为 `5562e0fe8a1636457674f24482067c7c7f9235f7`。本步完成后形成独立本地提交，可通过反向提交回退；不推送远端或部署。被 Git 忽略的两份缓存未改变，P0 文件备份继续保留。
+
+下一小步先说明默认外部服务关闭范围，再按用户指令执行。桌宠、音乐、评论、统计及浏览器端 CDN 等仍处于原有状态，P1 整体尚未完成。

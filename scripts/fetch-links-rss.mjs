@@ -205,7 +205,7 @@ function parseFirstGroupRssLinks(yamlText) {
 }
 
 async function buildLinksRssData() {
-  const yamlText = readFileSync(LINKS_YAML, 'utf8')
+  const yamlText = existsSync(LINKS_YAML) ? readFileSync(LINKS_YAML, 'utf8') : ''
   const sources = parseFirstGroupRssLinks(yamlText)
   const feeds = []
 
