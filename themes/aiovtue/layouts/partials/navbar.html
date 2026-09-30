@@ -12,7 +12,7 @@
         {{- $brand := delimit (.Site.Params.navbar.titleParts | default slice) "" | default .Site.Title -}}
         <span class="navbar-title">
           <a class="logo-link brand-mark shadow-light" data-shadow-light href="{{ `/` | relLangURL }}" title="{{ .Site.Title }}" aria-label="{{ $brand }} · 返回首页">
-            <span class="brand-mark__text">{{ $brand }}</span>
+            <span class="brand-mark__text cyber-word"><span class="cyber-word__fill">{{ $brand }}</span></span>
             <span class="shadow-light__shadow" data-text="{{ $brand }}" aria-hidden="true"></span>
           </a>
           <span class="navbar-subtitle">{{ .Site.Params.navbar.subTitle }}</span>

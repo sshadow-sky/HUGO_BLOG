@@ -293,6 +293,64 @@ img.sakura-lazy-img.is-loaded { opacity: 1; }
   .sakura-navbar-brand .navbar-title { font-size: 24px; }
 }
 .brand-mark__text { position: relative; }
+.cyber-word {
+  --cyber-cyan: #087e9b;
+  --cyber-blue: #4159c8;
+  --cyber-violet: #8b37b2;
+  --cyber-shift: 0.6px;
+  --cyber-rest-filter: drop-shadow(0 0 0 transparent);
+  display: inline-block;
+  filter: var(--cyber-rest-filter);
+}
+.sakura-hero__title .cyber-word,
+.dark .brand-mark .cyber-word,
+html.is-home .navbar-content:not(.active-header) .brand-mark .cyber-word {
+  --cyber-cyan: #8cf4ff;
+  --cyber-blue: #b4c5ff;
+  --cyber-violet: #efb2ff;
+}
+.sakura-hero__title .cyber-word {
+  --cyber-shift: 1.2px;
+  --cyber-rest-filter: drop-shadow(0 2px 4px rgba(10, 16, 35, 0.45));
+}
+.cyber-word__fill {
+  display: block;
+  color: var(--cyber-cyan);
+  text-shadow: none;
+}
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .cyber-word__fill {
+    background-image: linear-gradient(110deg, var(--cyber-cyan), var(--cyber-blue), var(--cyber-violet), var(--cyber-cyan));
+    background-size: 300% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cyber-word__fill { animation: cyber-color-flow 9s ease-in-out infinite; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .shadow-light:is(:hover, :focus-visible) .cyber-word {
+    animation: cyber-shiver 0.36s steps(1, end) 1;
+  }
+}
+@keyframes cyber-color-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes cyber-shiver {
+  0%, 100% { transform: translate(0, 0); filter: var(--cyber-rest-filter); }
+  18% {
+    transform: translate(calc(-1 * var(--cyber-shift)), 0);
+    filter: var(--cyber-rest-filter) drop-shadow(-1px 0 0 #00d9ff) drop-shadow(1px 0 0 #e879f9);
+  }
+  36% { transform: translate(var(--cyber-shift), calc(-0.5 * var(--cyber-shift))); }
+  54% { transform: translate(calc(-0.5 * var(--cyber-shift)), var(--cyber-shift)); }
+  72% { transform: translate(var(--cyber-shift), 0); }
+  86% { transform: translate(0, 0); filter: var(--cyber-rest-filter); }
+}
 .shadow-light { isolation: isolate; }
 .shadow-light__shadow {
   position: absolute;
