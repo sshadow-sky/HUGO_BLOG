@@ -60,10 +60,11 @@ function fitMusicPanelInViewport(root, panel, toggle) {
   panel.style.top = 'auto'
 
   const panelRect = panel.getBoundingClientRect()
-  if (panelRect.top < margin) {
+  const topMargin = 42 // Keep the exposed bookmark tips inside the viewport.
+  if (panelRect.top < topMargin) {
     panel.style.bottom = 'auto'
     const panelHeight = panel.offsetHeight
-    const minTop = margin - rootRect.top
+    const minTop = topMargin - rootRect.top
     const maxTop = window.innerHeight - margin - panelHeight - rootRect.top
     const belowTop = toggleRect.bottom + gap - rootRect.top
     panel.style.top = `${clamp(belowTop, minTop, Math.max(minTop, maxTop))}px`

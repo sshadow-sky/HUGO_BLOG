@@ -36,12 +36,12 @@
     </div>
     </div>
     <nav class="music-bookmarks" aria-label="音乐栏目">
-      <button type="button" data-music-tab="search" aria-expanded="false" aria-controls="music-drawer-search" title="搜索：悬浮预览，点击固定"><iconify-icon icon="ri:search-line" aria-hidden="true"></iconify-icon><span>搜索</span></button>
-      <button type="button" data-music-tab="lyrics" aria-expanded="false" aria-controls="music-drawer-lyrics" title="歌词：悬浮预览，点击固定"><iconify-icon icon="ri:file-music-line" aria-hidden="true"></iconify-icon><span>歌词</span></button>
-      <button type="button" data-music-tab="queue" aria-expanded="false" aria-controls="music-drawer-queue" title="队列：悬浮预览，点击固定"><iconify-icon icon="ri:play-list-2-line" aria-hidden="true"></iconify-icon><span>队列</span><small data-music-badge>0</small></button>
+      <button type="button" data-music-tab="search" aria-expanded="false" aria-controls="music-drawer-search" title="点击展开搜索，再次点击收回"><iconify-icon icon="ri:search-line" aria-hidden="true"></iconify-icon><span>搜索</span></button>
+      <button type="button" data-music-tab="lyrics" aria-expanded="false" aria-controls="music-drawer-lyrics" title="点击展开歌词，再次点击收回"><iconify-icon icon="ri:file-music-line" aria-hidden="true"></iconify-icon><span>歌词</span></button>
+      <button type="button" data-music-tab="queue" aria-expanded="false" aria-controls="music-drawer-queue" title="点击展开队列，再次点击收回"><iconify-icon icon="ri:play-list-2-line" aria-hidden="true"></iconify-icon><span>队列</span><small data-music-badge>0</small></button>
     </nav>
     <div class="music-drawer music-search-player" data-music-drawer hidden>
-      <header class="music-drawer-head"><strong data-music-drawer-title>搜索音乐</strong><div><button type="button" data-music-pin aria-label="固定抽屉" aria-pressed="false" title="固定抽屉"><iconify-icon icon="ri:pushpin-line" aria-hidden="true"></iconify-icon></button><button type="button" data-music-drawer-close aria-label="关闭栏目"><iconify-icon icon="ri:close-line" aria-hidden="true"></iconify-icon></button></div></header>
+      <header class="music-drawer-head"><strong data-music-drawer-title>搜索音乐</strong><button type="button" data-music-drawer-close aria-label="收回书页"><iconify-icon icon="ri:close-line" aria-hidden="true"></iconify-icon></button></header>
       <section class="music-drawer-body" id="music-drawer-search" data-music-pane="search" aria-label="搜索音乐" hidden>
         <form class="music-search" data-music-form role="search" aria-label="搜索音乐">
           <input type="search" data-music-query aria-label="歌名或歌手" placeholder="搜索歌名或歌手" maxlength="100" autocomplete="off">
