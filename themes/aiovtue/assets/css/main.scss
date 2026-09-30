@@ -321,17 +321,24 @@ img.sakura-lazy-img.is-loaded { opacity: 1; }
   }
 }
 .sakura-navbar-brand .logo-link:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 5px;
+  outline: none;
+}
+.sakura-navbar-brand .logo-link:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: -3px -5px -17px;
+  border: 2px solid currentColor;
+  border-radius: 6px;
+  pointer-events: none;
 }
 .sakura-navbar-brand .navbar-subtitle {
   position: absolute;
-  top: calc(100% + 3px);
+  top: calc(100% - 3px);
   left: 0;
   width: 100%;
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 1.4;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
   text-align: center;
   letter-spacing: 0.04em;
   color: inherit;
@@ -1238,9 +1245,13 @@ html.is-home.hero-style-grid .sakura-home-layout.is-layout-list {
   display: flex; align-items: center; justify-content: space-between;
   margin: 1rem 1.25rem 0;
 }
-.sakura-social-card a[aria-label='icon'] {
+.sakura-hero-social-row > a {
   display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; flex-shrink: 0;
   text-decoration: none; line-height: 1;
+}
+.sakura-hero-social-row iconify-icon.sakura-icon {
+  display: block; font-size: 22px; line-height: 1;
 }
 .sakura-icon {
   width: 22px; height: 22px;
