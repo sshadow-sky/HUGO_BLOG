@@ -11,5 +11,7 @@
     "PageLayout" $layout
     "ShuffleDefault" $shuffleDefault
   ) -}}
+  {{ else }}
+    {{- partial "content-empty.html" "暂无友链，欢迎交流。" -}}
   {{ end }}
 </div>
