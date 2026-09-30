@@ -8,6 +8,7 @@
 <article class="sakura-page sakura-taxonomy-page sakura-categories-page{{ if $listArchives }} is-list-archives{{ end }}{{ if eq $homeLayout "list" }} is-layout-list{{ end }}{{ if $mobileCardsList }} is-mobile-cards-list{{ end }}">
   {{- partial "page-header.html" . -}}
   <div class="sakura-page-content">
+    {{ if .Data.Terms }}
     <div id="categories-chart" class="sakura-stat-chart sakura-categories-chart" data-echarts-url="{{ `/vendor/echarts/echarts.min.js` | relURL }}"></div>
     <script type="application/json" id="categories-chart-data">{{ $data := slice }}{{ range .Data.Terms.ByCount }}{{ $data = $data | append (dict "name" .Page.Title "value" .Count "categoryKey" .Term) }}{{ end }}{{ $data | jsonify | safeHTML }}</script>
     <div class="sakura-tag-buttons sakura-categories-list">
@@ -47,6 +48,9 @@
       </div>
       {{ end }}
     </div>
+    {{ else }}
+      {{- partial "content-empty.html" "暂无文章分类。" -}}
+    {{ end }}
   </div>
 </article>
 {{ end }}

@@ -4,7 +4,7 @@
 
 本站名称为 **ShadowSky（影是光的拓印）**，作者 **ShadowSky**，介绍为 “Through code we inscribe the tomorrow we yearn”。正式域名配置为 `https://shadowssky.com/`，备案号使用站长提供的 `冀ICP备2026041770号-1`；本地配置不代表已经部署上线。头像取自 GitHub `sshadow-sky` 并保存到 `static/site/github-avatar.jpg`。
 
-社交区提供 GitHub、QQ 邮箱、Gmail 和“订阅本站 RSS”，沿用 Remix Icon 线条图标。本站订阅地址为 `/index.xml`（正式部署后为 `https://shadowssky.com/index.xml`），由 Hugo 随构建生成，无需额外 RSS 服务。读者可将它添加到 RSS 阅读器；该订阅只收录有标题和独立链接的文章、画板文章，与友链页抓取其他博客的“朋友动态”独立。现有示例正文尚未清理，也会进入订阅，部署前需继续完成内容整理。
+社交区提供 GitHub、QQ 邮箱、Gmail 和“订阅本站 RSS”，沿用 Remix Icon 线条图标。本站订阅地址为 `/index.xml`（正式部署后为 `https://shadowssky.com/index.xml`），由 Hugo 随构建生成，无需额外 RSS 服务。读者可将它添加到 RSS 阅读器；该订阅只收录有标题和独立链接的文章、画板文章，与友链页抓取其他博客的“朋友动态”独立。原示例文章与画板已清理，目前订阅为空；新增自己的文章后会自动收录。原动态、相册和友链仍待后续整理。
 
 当前已完成 P0 基线备份；P1.1 已取消启动和构建时的自动补资源、RSS 与追番抓取，业务数据改为手动更新。其他个人内容与外部服务清理尚未执行。协作规则见 [项目宪章](AGENTS.md)，阶段安排见 [清理计划](docs/superpowers/plans/2026-09-30-blog-cleanup-plan.md)。下方保留上游使用说明与来源链接。
 

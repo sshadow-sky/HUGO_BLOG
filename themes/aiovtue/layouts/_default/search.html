@@ -22,7 +22,7 @@
         <input id="search-page-input" type="search" placeholder="输入关键词搜索..." autocomplete="off">
       </div>
     </div>
-    <div id="search-results" class="search-results"></div>
+    <div id="search-results" class="search-results">{{ if not $items }}{{ partial "content-empty.html" "暂无文章可供搜索。" }}{{ end }}</div>
   </div>
   <script type="application/json" id="search-index-data">{{ $items | jsonify | safeJS }}</script>
 </article>

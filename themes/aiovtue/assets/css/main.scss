@@ -351,6 +351,14 @@ html.is-home .navbar-content:not(.active-header) .brand-mark .cyber-word {
   72% { transform: translate(var(--cyber-shift), 0); }
   86% { transform: translate(0, 0); filter: var(--cyber-rest-filter); }
 }
+.sakura-content-empty {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 3rem 1rem;
+  margin: 0;
+  text-align: center;
+  color: var(--sakura-color-text);
+}
 .shadow-light { isolation: isolate; }
 .shadow-light__shadow {
   position: absolute;

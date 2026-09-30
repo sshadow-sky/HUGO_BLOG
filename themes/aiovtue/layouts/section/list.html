@@ -6,6 +6,8 @@
       {{ $pages := partial "posts-sorted.html" (dict "Pages" .Pages) }}
       {{ range $index, $page := $pages }}
         {{- partial "post-card.html" (dict "Page" $page "Site" $.Site "Index" $index) -}}
+      {{ else }}
+        {{- partial "content-empty.html" "暂无文章，敬请期待。" -}}
       {{ end }}
     </div>
   </div>

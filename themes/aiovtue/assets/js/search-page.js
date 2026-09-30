@@ -67,6 +67,8 @@ export async function initSearchPage() {
   const input = document.getElementById('search-page-input')
   const results = document.getElementById('search-results')
   if (!dataEl || !input || !results) return
+  const list = parseJsonData(dataEl)
+  if (!list.length) return
 
   let Fuse
   try {
@@ -79,7 +81,6 @@ export async function initSearchPage() {
   if (!Fuse) return
 
   try {
-    const list = parseJsonData(dataEl)
     const fuse = new Fuse(list, {
       keys: ['title', 'tags', 'categories', 'excerpt'],
       threshold: Number.parseFloat(document.documentElement.dataset.searchThreshold || '') || 0.35,

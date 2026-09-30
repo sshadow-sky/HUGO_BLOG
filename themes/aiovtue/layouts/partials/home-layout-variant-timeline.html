@@ -24,6 +24,9 @@
           {{- partial "post-card-timeline.html" (dict "Page" $page "Site" $pageCtx.Site "Index" $index) -}}
         {{- end -}}
       </ol>
+      {{- if not $posts -}}
+        {{- partial "content-empty.html" "暂无文章，敬请期待。" -}}
+      {{- end -}}
       {{- if and $isFirstPage $remaining -}}
         {{- $morePosts := slice -}}
         {{- range $index, $page := $remaining -}}

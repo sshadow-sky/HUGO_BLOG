@@ -18,6 +18,8 @@
     <div class="post-list-container post-list-container--cards{{ if $mobileCardsList }} post-list-container--mobile-list{{ end }} home-cards-list">
       {{- range $index, $page := $paginator.Pages -}}
         {{- partial "post-card.html" (dict "Page" $page "Site" $pageCtx.Site "Index" $index) -}}
+      {{- else -}}
+        {{- partial "content-empty.html" "暂无文章，敬请期待。" -}}
       {{- end -}}
     </div>
     {{- if $renderPagination -}}

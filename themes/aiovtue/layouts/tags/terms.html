@@ -10,6 +10,7 @@
 <article class="sakura-page sakura-taxonomy-page sakura-tags-page{{ if $listArchives }} is-list-archives{{ end }}{{ if eq $homeLayout "list" }} is-layout-list{{ end }}{{ if $mobileCardsList }} is-mobile-cards-list{{ end }}">
   {{- partial "page-header.html" . -}}
   <div class="sakura-page-content">
+    {{ if $tagItems }}
     <div id="tags-chart" class="sakura-stat-chart sakura-tags-chart" data-echarts-url="{{ `/vendor/echarts/echarts.min.js` | relURL }}"></div>
     <script type="application/json" id="tags-chart-data">{{ $data := slice }}{{ range $i, $item := first $limit $tagItems }}{{ $data = $data | append (dict "name" $item.name "value" $item.count "tagKey" $item.term) }}{{ end }}{{ $data | jsonify | safeHTML }}</script>
     <div class="sakura-tag-buttons sakura-tags-list">
@@ -49,6 +50,9 @@
       </div>
       {{ end }}
     </div>
+    {{ else }}
+      {{- partial "content-empty.html" "暂无文章标签。" -}}
+    {{ end }}
   </div>
 </article>
 {{ end }}
