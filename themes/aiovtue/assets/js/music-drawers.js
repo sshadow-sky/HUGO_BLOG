@@ -3,7 +3,7 @@ export function mountMusicDrawers(root, onChange) {
   const drawer = root.querySelector('[data-music-drawer]')
   const tabs = [...root.querySelectorAll('[data-music-tab]')]
   const pin = root.querySelector('[data-music-pin]')
-  let active = '', pinned = false, timer
+  let active = '', pinned = false, timer, pageAnimation
   const titles = { search: '搜索音乐', lyrics: '歌词时光', queue: '播放队列' }
   const compact = () => root.classList.contains('is-music-compact')
   function layout() {
@@ -13,25 +13,44 @@ export function mountMusicDrawers(root, onChange) {
     root.classList.toggle('is-music-compact', window.innerWidth < 760 || (!leftFits && !rightFits))
     root.classList.toggle('is-drawer-right', !leftFits && rightFits)
     if (!compact()) {
-      const height = Math.min(400, window.innerHeight - 24)
+      const height = root.querySelector('.music-main-card').getBoundingClientRect().height
       drawer.style.left = `${leftFits ? rect.left - 360 : rect.right + 40}px`
-      drawer.style.top = `${Math.max(12, Math.min(rect.bottom - height, window.innerHeight - height - 12))}px`
+      drawer.style.top = `${rect.top}px`
       drawer.style.height = `${height}px`
     } else { drawer.style.left = ''; drawer.style.top = ''; drawer.style.height = '' }
   }
-  function show(name, fixed = false) {
+  function animatePage(open) {
+    pageAnimation?.cancel(); pageAnimation = null
+    if (compact() || matchMedia('(prefers-reduced-motion: reduce)').matches || typeof drawer.animate !== 'function') { drawer.hidden = !open; return }
+    drawer.hidden = false
+    const right = root.classList.contains('is-drawer-right')
+    const folded = { clipPath: right ? 'inset(0 100% 0 0 round 12px)' : 'inset(0 0 0 100% round 12px)', transform: `translateX(${right ? -24 : 24}px)`, opacity: .5 }
+    const unfolded = { clipPath: 'inset(0 0 0 0 round 12px)', transform: 'translateX(0)', opacity: 1 }
+    const animation = drawer.animate(open ? [folded, unfolded] : [unfolded, folded], { duration: open ? 420 : 240, easing: 'cubic-bezier(.22,.7,.18,1)', fill: 'both' })
+    pageAnimation = animation
+    animation.onfinish = () => {
+      if (pageAnimation !== animation) return
+      drawer.hidden = !open; animation.cancel(); pageAnimation = null
+    }
+  }
+  function show(name, fixed = false, replay = false, immediate = false) {
+    const previous = active
     clearTimeout(timer); active = name; pinned = !!name && fixed
-    drawer.hidden = !name
+    if (name) { drawer.hidden = false; drawer.dataset.page = name }
+    drawer.inert = !name
+    drawer.setAttribute('aria-hidden', String(!name))
     tabs.forEach(tab => {
       const selected = tab.dataset.musicTab === name
       tab.classList.toggle('is-active', selected); tab.classList.toggle('is-pinned', selected && pinned)
       tab.setAttribute('aria-expanded', String(selected))
     })
-    root.querySelectorAll('[data-music-pane]').forEach(p => { p.hidden = p.dataset.musicPane !== name })
+    if (name) root.querySelectorAll('[data-music-pane]').forEach(p => { p.hidden = p.dataset.musicPane !== name })
     if (name) root.querySelector('[data-music-drawer-title]').textContent = titles[name]
     pin.setAttribute('aria-pressed', String(pinned)); pin.title = pinned ? '取消固定' : '固定抽屉'
     pin.setAttribute('aria-label', pin.title)
     layout(); onChange(name)
+    if (immediate) { pageAnimation?.cancel(); pageAnimation = null; drawer.hidden = !name }
+    else if (previous !== name || replay) animatePage(!!name)
   }
   const scheduleClose = () => {
     clearTimeout(timer)
@@ -46,7 +65,7 @@ export function mountMusicDrawers(root, onChange) {
     tab.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse' && !compact() && !pinned) show(name) })
     tab.addEventListener('click', () => {
       if (active === name && pinned) show('')
-      else { show(name, true); if (name === 'search') root.querySelector('[data-music-query]').focus({ preventScroll: true }) }
+      else { show(name, true, true); if (name === 'search') root.querySelector('[data-music-query]').focus({ preventScroll: true }) }
     })
   })
   panel.addEventListener('pointerenter', () => clearTimeout(timer))
@@ -60,7 +79,7 @@ export function mountMusicDrawers(root, onChange) {
   root.addEventListener('music:layout', layout)
   return {
     get active() { return active },
-    close() { show('') },
+    close() { show('', false, false, true) },
     escape() { if (!active) return false; close(); return true },
     focus() { tabs[0]?.focus({ preventScroll: true }) },
   }
