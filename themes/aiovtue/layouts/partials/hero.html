@@ -37,7 +37,7 @@
           <div class="sakura-hero-social-row">
             <img class="sakura-icon sakura-hero-media-arrow is-prev" id="hero-media-prev" src="{{ `img/hero-media-arrow.svg` | relURL }}" alt="Previous media" width="22" height="22" role="button" tabindex="0">
             {{ range .Site.Params.social }}
-            <a href="{{ if hasPrefix .link `http` }}{{ .link }}{{ else }}{{ .link | relURL }}{{ end }}" aria-label="icon" target="_blank" rel="noopener" title="{{ .name }}" style="{{ with .color }}--sakura-color-icon: {{ . }}; color: {{ . }};{{ end }}">
+            <a href="{{ if or (hasPrefix .link `http`) (hasPrefix .link `mailto:`) }}{{ .link }}{{ else }}{{ .link | relURL }}{{ end }}" aria-label="{{ .name }}" target="_blank" rel="noopener" title="{{ .name }}" style="{{ with .color }}--sakura-color-icon: {{ . }}; color: {{ . }};{{ end }}">
               {{ printf `<iconify-icon icon="%s" class="sakura-icon"></iconify-icon>` .icon | safeHTML }}
             </a>
             {{ end }}

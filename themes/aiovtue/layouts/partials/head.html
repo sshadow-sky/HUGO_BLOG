@@ -8,7 +8,7 @@
 <meta name="sakura-signature-script" content="{{ `/signature/signature.js` | relURL }}">
 {{- end -}}
 {{- $favicon := .Site.Params.favicon | default `/favicon.png` -}}
-<link rel="icon" href="{{ $favicon | relURL }}" type="image/png">
+<link rel="icon" href="{{ $favicon | relURL }}">
 {{- partial "loader-head.html" . -}}
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{ if .IsHome }}{{ .Site.Title }}{{ else if eq .Kind "404" }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>

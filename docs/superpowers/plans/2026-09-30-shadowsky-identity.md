@@ -1,0 +1,39 @@
+# ShadowSky 站点身份设置
+
+用户于 2026-09-30 提供本站资料。本步将身份配置应用到现有 Hugo 展示能力，保留已确认的评论、统计、桌宠、音乐、RSS 朋友动态及追番功能；未部署或推送远程。
+
+## 应用信息
+
+| 项目 | 配置 |
+|---|---|
+| 站点名称 | ShadowSky (影是光的拓印) |
+| 作者 | ShadowSky |
+| 简介 | Through code we inscribe the tomorrow we yearn |
+| 正式域名 | https://shadowssky.com/ |
+| 备案号 | 冀ICP备2026041770号-1，按用户提供的信息填写，链接工信部备案入口 |
+| GitHub | https://github.com/sshadow-sky |
+| QQ 邮箱 | 1046894796@qq.com |
+| Gmail | entelal916@gmail.com |
+| 本站订阅 | /index.xml；正式部署后为 https://shadowssky.com/index.xml |
+
+GitHub API 已返回账号 `sshadow-sky` 的头像，保存为 `static/site/github-avatar.jpg`，供作者头像、加载页和 favicon 使用；不会随启动自动从 GitHub 更新。来源及校验记录在 `D:\new_blog\.runtime\identity\avatar-source.json`。社交图标继续使用原有 Remix Icon 风格：`ri:rss-line`、`ri:github-line`、`ri:qq-line`、`ri:google-line`。
+
+## 修改范围
+
+- 修改站点配置、顶栏和首页身份、域名公告、版权署名、邮箱及备案；建站日期未提供，清空旧日期。工程名 `HUGO_BLOG` 和主题来源说明保留。
+- 关于页只使用用户已提供的资料，不编造个人经历。友链申请区的本站头像、简介改为读取配置，未提供本站截图时省略该项。
+- 首页使用用户固定简介并保留打字机效果；关闭随机一言替换，组件代码保留。原有签名开关已经为 false，当前 Hugo 实测正确尊重 false，没有修改开关模板。
+- 原收款方式和推广入口已解除配置；赞助组件保留，待有本站收款信息时启用。旧素材文件本步未批量删除。
+- 新增 `layouts/home.rss.xml`，只订阅首页相同栏目的文章和画板文章，跳过没有标题或独立链接的内容。RSS 随构建自动生成，不依赖额外订阅服务；本地预览链接仍为 localhost，生产构建使用正式域名。
+
+RSS 模板位置与 XML 输出参考 [Hugo RSS 官方说明](https://gohugo.io/templates/rss/)。现有默认订阅包含无标题/无链接动态，校验已先复现失败；新首页订阅输出 5 个有效条目，空内容场景也能生成合法订阅。
+
+## 验证结果
+
+- 生产 `npm run build` 通过：55 个页面、665 个静态文件。
+- 生产 RSS XML 校验通过，5 个条目有标题、链接和一致的 GUID，使用 `https://shadowssky.com/`；无文章的隔离样例生成 0 条目合法 RSS。
+- 桌面 1440×1000 与手机 390×844 浏览器检查通过：名称、完整简介、头像加载、4 个社交图标与链接、备案、版权署名正确，无横向溢出。
+- 首页、关于、友链、留言、追番及本地头像 HTTP 200；本地 RSS 5 个有效条目，预览已恢复。
+- 验证日志、XML 副本及截图位于 `D:\new_blog\.runtime\identity`，未纳入 Git。
+
+原有文章、动态、相册、背景图及友链卡片仍待下一步清理，现有示例文章也会出现在本站 RSS 中。本步没有将“去个人化”标记为全部完成。评论占位接口、统计既有问题及 B 站列表隐私限制保持此前状态。
