@@ -2,13 +2,17 @@ export function mountMusicDrawers(root, onChange) {
   const main = root.querySelector('.music-main-card')
   const drawer = root.querySelector('[data-music-drawer]')
   const sheet = root.querySelector('[data-music-sheet]')
+  const paperLight = root.querySelector('.music-paper-light')
   const tabs = [...root.querySelectorAll('[data-music-tab]')]
   const reduced = matchMedia('(prefers-reduced-motion: reduce)')
   const titles = { search: '搜索音乐', lyrics: '歌词时光', queue: '播放队列' }
-  let active = '', pageAnimation, paperAnimation, distance = 0, geometry = ''
+  let active = '', pageAnimation, paperAnimation, lightAnimation, distance = 0, geometry = ''
   const compact = () => root.classList.contains('is-music-compact')
   const targetTransform = () => `translateX(${active ? distance : 0}px)`
-  function cancelAnimation() { pageAnimation?.cancel(); paperAnimation?.cancel(); pageAnimation = null; paperAnimation = null }
+  function cancelAnimation() {
+    pageAnimation?.cancel(); paperAnimation?.cancel(); lightAnimation?.cancel()
+    pageAnimation = null; paperAnimation = null; lightAnimation = null
+  }
   function syncMain() {
     const covered = compact() && !!active
     main.inert = covered
@@ -41,8 +45,9 @@ export function mountMusicDrawers(root, onChange) {
   function show(name, immediate = false) {
     const previous = active
     const start = getComputedStyle(sheet).transform
-    const paperStart = getComputedStyle(drawer).transform
-    const shadeStart = getComputedStyle(drawer).filter
+    const shadeStart = getComputedStyle(drawer).boxShadow
+    const lightStart = getComputedStyle(paperLight).opacity
+    const lightTransform = getComputedStyle(paperLight).transform
     active = name
     if (name) {
       drawer.dataset.page = name
@@ -63,19 +68,26 @@ export function mountMusicDrawers(root, onChange) {
     if (previous && name) return
     cancelAnimation(); drawer.hidden = false
     const tactile = matchMedia('(hover: hover) and (pointer: fine)').matches
-    const duration = name ? 620 : 420
-    // A two-pixel overshoot stays within the eight-pixel overlap with the cover.
-    const frames = tactile && name
-      ? [{ transform: start }, { transform: `translateX(${distance + Math.sign(distance) * 2}px)`, offset: .82 }, { transform: targetTransform() }]
-      : [{ transform: start }, { transform: targetTransform() }]
-    const animation = sheet.animate(frames, { duration, easing: 'cubic-bezier(.22,.7,.18,1)', fill: 'both' })
+    // Preserve position on reversal, and shorten the return for a partly extracted page.
+    const remaining = Math.min(1, Math.abs((name ? distance : 0) - new DOMMatrixReadOnly(start).m41) / Math.max(1, Math.abs(distance)))
+    const duration = Math.max(120, (name ? 600 : 420) * Math.sqrt(remaining))
+    const animation = sheet.animate([{ transform: start }, { transform: targetTransform() }], {
+      duration, easing: 'cubic-bezier(.22,.78,.2,1)', fill: 'both',
+    })
     if (tactile) {
-      const direction = Math.sign(distance) * (name ? 1 : -1)
+      const direction = Math.sign(distance)
+      const shadeRest = getComputedStyle(drawer).boxShadow
       paperAnimation = drawer.animate([
-        { transform: paperStart, filter: shadeStart },
-        { transform: `perspective(900px) rotateY(${direction * 3}deg) skewY(${direction * .2}deg)`, filter: 'drop-shadow(0 5px 7px rgba(65,39,9,.18))', offset: .38 },
-        { transform: `perspective(900px) rotateY(${-direction * .5}deg)`, filter: 'drop-shadow(0 1px 2px rgba(65,39,9,.06))', offset: .82 },
-        { transform: 'none', filter: 'none' },
+        { boxShadow: shadeStart },
+        { boxShadow: '0 3px 0 -1px var(--book-paper), 0 4px 0 -1px var(--book-edge), 0 14px 28px rgba(48,32,19,.18)', offset: .35 },
+        { boxShadow: shadeRest },
+      ], { duration, easing: 'ease-in-out', fill: 'both' })
+      // Only the decorative layer bends/lightens; text and tab attachment stay stable.
+      lightAnimation = paperLight.animate([
+        { opacity: lightStart, transform: lightTransform },
+        { opacity: name ? .75 : .4, transform: `translateX(${direction * 3}px) scaleX(.98)`, offset: .3 },
+        { opacity: .2, transform: 'translateX(0) scaleX(1)', offset: .75 },
+        { opacity: 0, transform: 'none' },
       ], { duration, easing: 'ease-in-out', fill: 'both' })
     }
     pageAnimation = animation
