@@ -1,5 +1,7 @@
 # 第三方统计接入整理
 
+**当前状态：** 本地接入整理已完成；用户要求暂时搁置统计工作，正式域名验收独立列入 [部署后 TODO](../../post-deployment-todo.md)。清单尚未执行，不因本地测试通过而标记线上完成。
+
 用户选择继续使用第三方统计。沿用 busuanzi.cc 提供的今日/全站 PV、UV，不部署统计后端。
 
 服务方更新记录明确列出 localhost、127.0.0.1、IPv4、IPv6 禁止接入：https://www.busuanzi.cc/update.php 。使用字段见 https://www.busuanzi.cc/doc.php 。当前脚本实际向同域 /api.php POST `{url, referrer}`，响应字段名对应页面 DOM ID。

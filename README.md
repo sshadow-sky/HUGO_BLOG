@@ -1,5 +1,7 @@
 # HUGO_BLOG
 
+正式上线后需要继续验证的事项集中在 [部署后 TODO](docs/post-deployment-todo.md)。第三方访问统计的线上验证已转入此清单，当前先推进其他去个人化清理。
+
 本地评论服务已接入开发预览：先 `npm run comments:install`，再 `npm run comments:start`；博客仍通过 `npm run dev` 启动。数据库保存在被忽略的 `.local/twikoo/`，运行及迁移说明见 [本地评论服务](services/twikoo/README.md)。生产评论后端尚未部署。
 
 整站统计继续使用第三方 busuanzi.cc，地址和开关集中在 `hugo.toml` 的 `params.statistics`。开发预览不上报、显示“—”，正式构建启用；成功返回数字后显示计数，失败仍显示“—”。文章访问量优先使用 Twikoo，第三方文章显示需显式开启 `articleEnable`。详见 [第三方统计接入记录](docs/superpowers/plans/2026-09-30-third-party-statistics.md)。正式域名统计需上线后验证。
