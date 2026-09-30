@@ -19,6 +19,7 @@ import {
 } from './navbar.js'
 import { initSidebar } from './sidebar.js'
 import { initSearchModal } from './search-modal.js'
+import { initShadowLight } from './shadow-light.js'
 import {
   getActiveHomeVariant,
   scrollToPostList,
@@ -137,6 +138,7 @@ export function bootShell({ mountPage, unmountPage }) {
   initNavbarLinkScroll()
   initNavbarDropdown()
   initSearchModal()
+  const resetShadowLight = initShadowLight()
   scheduleLive2dInit()
   scheduleMouseStyleInit()
   scheduleSiteEffectsInitLazy()
@@ -190,6 +192,7 @@ export function bootShell({ mountPage, unmountPage }) {
       return null
     },
     onNavigateComplete() {
+      resetShadowLight()
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur()
       }

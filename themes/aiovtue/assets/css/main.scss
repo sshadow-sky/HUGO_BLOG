@@ -293,30 +293,32 @@ img.sakura-lazy-img.is-loaded { opacity: 1; }
   .sakura-navbar-brand .navbar-title { font-size: 24px; }
 }
 .brand-mark__text { position: relative; }
-.brand-mark__effect {
+.shadow-light { isolation: isolate; }
+.shadow-light__shadow {
   position: absolute;
   inset: 0;
+  z-index: -1;
   pointer-events: none;
   user-select: none;
 }
-.brand-mark__effect::before,
-.brand-mark__effect::after {
+.shadow-light__shadow::before {
   content: attr(data-text);
-  position: absolute;
-  inset: 0;
+  display: block;
+  color: var(--shadow-color, currentColor);
+  text-shadow: 0 0 0.08em var(--shadow-color, currentColor);
+  filter: blur(0.02em);
   opacity: 0;
+  transform: translate(0, 0);
 }
-.brand-mark__effect::before {
-  color: currentColor;
-  filter: blur(0.6px);
-}
-.brand-mark__effect::after {
-  color: transparent;
-  background: linear-gradient(105deg, transparent 36%, #bfe9ff 46%, #fff 50%, var(--sakura-color-primary) 54%, transparent 64%);
-  background-size: 250% 100%;
-  background-position: 100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .shadow-light__shadow::before {
+    opacity: calc(var(--shadow-opacity, 0) * var(--shadow-strength, 0.42));
+    transform: translate(var(--shadow-x, 0em), var(--shadow-y, 0em));
+    transition: transform 0.35s ease-out, opacity 0.35s ease-out;
+  }
+  .shadow-light.is-shadow-active .shadow-light__shadow::before {
+    transition: transform 0.12s ease-out, opacity 0.2s ease-out;
+  }
 }
 .sakura-navbar-brand .logo-link:focus-visible {
   outline: 2px solid currentColor;
@@ -347,24 +349,6 @@ img.sakura-lazy-img.is-loaded { opacity: 1; }
     opacity: 1;
     transform: translateY(0);
   }
-}
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .brand-mark:is(:hover, :focus-visible) .brand-mark__effect::after {
-    animation: brand-light-sweep 0.7s ease-out 1;
-  }
-  .brand-mark:is(:hover, :focus-visible) .brand-mark__effect::before {
-    animation: brand-shadow-trace 0.7s ease-out 1;
-  }
-}
-@keyframes brand-light-sweep {
-  0% { background-position: 100% 0; opacity: 0; }
-  12%, 78% { opacity: 1; }
-  100% { background-position: 0% 0; opacity: 0; }
-}
-@keyframes brand-shadow-trace {
-  0%, 18% { transform: translate(0, 0); opacity: 0; }
-  45% { transform: translate(2px, 1px); opacity: 0.28; }
-  100% { transform: translate(5px, 2px); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sakura-navbar-brand .navbar-title,
@@ -1203,6 +1187,8 @@ html.is-home.hero-style-grid .sakura-home-layout.is-layout-list {
   font-family: var(--va-font-serif); font-weight: 700;
 }
 .sakura-hero__title {
+  --shadow-color: #101525;
+  --shadow-strength: 0.75;
   color: #fff;
   font-family: var(--va-font-serif);
   font-size: 4rem; font-weight: 700; line-height: initial;
@@ -1217,32 +1203,6 @@ html.is-home.hero-style-grid .sakura-home-layout.is-layout-list {
 @media screen and (min-width: 1024px) {
   .sakura-hero__title { font-size: 6rem; }
 }
-.sakura-hero__title-shadow {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  user-select: none;
-}
-.sakura-hero__title-shadow::before {
-  content: attr(data-text);
-  display: block;
-  color: #101525;
-  text-shadow: 0.025em 0.035em 0.12em rgba(10, 16, 35, 0.65);
-  transform: translate(0.06em, 0.08em);
-  filter: blur(0.015em);
-  opacity: 0.3;
-}
-@media (prefers-reduced-motion: no-preference) {
-  body:not(.sakura-loading) .sakura-hero__title-shadow::before {
-    animation: sakura-hero-shadow-breathe 4.8s ease-in-out infinite;
-  }
-}
-@keyframes sakura-hero-shadow-breathe {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 0.7; }
-}
-
 .sakura-hero-info-overlay {
   display: flex; flex-direction: column; align-items: center;
   font-family: var(--va-font-serif); font-weight: 700;
