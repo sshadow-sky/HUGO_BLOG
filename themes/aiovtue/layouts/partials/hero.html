@@ -12,7 +12,10 @@
   </div>
   <div class="sakura-hero__content info-overlay">
     <div class="sakura-hero-info-overlay">
-      <h1 class="sakura-hero__title sakura-glitch-text sakura-fade-in-down" data-text="{{ .Site.Params.hero.title }}">{{ .Site.Params.hero.title }}</h1>
+      <h1 class="sakura-hero__title sakura-fade-in-down">
+        {{- .Site.Params.hero.title -}}
+        <span class="sakura-hero__title-shadow" data-text="{{ .Site.Params.hero.title }}" aria-hidden="true"></span>
+      </h1>
       <div class="sakura-slit-in-horizontal sakura-info-card">
         <div class="sakura-social-card">
           <div class="sakura-hitokoto-quote">
