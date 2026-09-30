@@ -305,7 +305,11 @@ npm run update:links    # 按 data/links.yaml 中的 RSS 源更新 data/links_rs
 npm run update:bangumi  # 按 hugo.toml 中的追番 UID 更新 data/bangumi.json
 ```
 
-这两个命令只有手动运行时才会执行。RSS 功能关闭、没有 RSS 源（包括缺少 `data/links.yaml`），或追番功能关闭、UID 为空时，不发起对应业务请求，并写入空结果。当前账号、订阅源和页面功能开关尚未清理；手动执行前请检查配置。
+这两个命令只有手动运行时才会执行。RSS 功能关闭、没有 RSS 源（包括缺少 `data/links.yaml`），或追番功能关闭、UID 为空时，不发起对应业务请求，并写入空结果。原 RSS 订阅地址、追番 UID 已清空，旧 `data/links_rss.json`、`data/bangumi.json` 已删除；没有缓存时朋友动态隐藏、追番显示空列表。其他友链资料与个人信息仍待后续清理。
+
+朋友动态和追番展示功能保持启用。后续在 `data/links.yaml` 的第一个分组中配置自己的友链及 `rss` 地址，执行 `npm run update:links`；追番填写 `params.bangumi.vmid` 后执行 `npm run update:bangumi`。本地预览会读取新缓存，正式站点需要重新构建并发布。两个生成的 JSON 文件由 Git 忽略。
+
+留言页信封图片和霞鹜文楷字体继续作为本站本地静态资源保留，包含原有许可说明。若这些资源缺失，需要从自己的备份或受控资源源补齐；默认启动和构建不会再从原作者仓库自动下载。
 
 本地预览构建结果（可选）：
 
