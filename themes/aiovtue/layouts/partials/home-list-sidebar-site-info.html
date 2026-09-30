@@ -11,8 +11,6 @@
   <p class="home-list-sidebar-site-info__name">
     <a href="{{ `/about/` | relLangURL }}">{{ .Site.Params.author.name }}</a>
   </p>
-  <p class="home-list-sidebar-site-info__subtitle">{{ .Site.Title }}</p>
-  <p class="home-list-sidebar-site-info__desc">{{ .Site.Params.description }}</p>
   <div class="home-list-sidebar-site-info__stats">
     <a class="home-list-sidebar-site-info__stat" href="{{ `/archives/` | relLangURL }}">
       <span class="home-list-sidebar-site-info__stat-value">{{ len $posts }}</span>
