@@ -8,6 +8,7 @@
   data-draggable="{{ if $music.draggable }}true{{ else }}false{{ end }}"
   data-endpoint="{{ $music.endpoint }}" data-source="{{ $music.source }}">
   <section class="sakura-music__panel" id="sakura-music-panel" aria-label="音乐播放器" aria-hidden="true">
+    <div class="music-panel-surface">
     <div class="music-main-card">
     <header class="sakura-music__panel-head">
       <span class="sakura-music__panel-title">随心听</span>
@@ -61,6 +62,7 @@
         <p class="music-hint" data-music-empty>喜欢的歌，加入这里慢慢听</p>
         <ul class="music-list music-queue" data-music-queue aria-label="播放队列"></ul>
       </section>
+    </div>
     </div>
     </div>
   </section>

@@ -21,7 +21,9 @@ export function mountMusicDrawers(root, onChange) {
   }
   function layout() {
     if (!root.classList.contains('is-open')) return
-    const rect = main.getBoundingClientRect()
+    // The book surface can animate; measure its unscaled positioning container.
+    const bounds = root.querySelector('#sakura-music-panel').getBoundingClientRect()
+    const rect = { left: bounds.left, right: bounds.right, width: main.offsetWidth, height: main.offsetHeight }
     const pageWidth = Math.min(320, rect.width - 28)
     const leftFits = rect.left >= pageWidth - 8 + 68
     const rightFits = window.innerWidth - rect.right >= pageWidth - 8 + 68

@@ -264,6 +264,11 @@
   padding: 10px 12px 0;
 }
 
+// Animate the book independently of its viewport fitting/positioning container.
+.music-panel-surface { position: relative; transform-origin: right bottom; }
+.sakura-music__panel[inert] { pointer-events: none; }
+.sakura-music__panel[inert] * { pointer-events: none !important; }
+
 .sakura-music__panel-title {
   font-size: 0.8125rem;
   color: var(--sakura-color-text-muted);

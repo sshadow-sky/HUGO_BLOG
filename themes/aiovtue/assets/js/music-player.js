@@ -323,18 +323,60 @@ export function initMusicPlayer() {
   bindEdgeDock(root)
   bindMusicDrag(root, storageKey, toggle, panel)
   const view = mountMusicView(root)
+  const surface = panel.querySelector('.music-panel-surface')
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)')
+  let panelAnimation
   let open = false
+  let foldedTransform = 'translate(0, 12px) scale(.96)'
+  const settlePanel = () => {
+    panelAnimation?.cancel(); panelAnimation = null
+    if (open) fitMusicPanelInViewport(root, panel, toggle)
+    else {
+      // Keep the extracted paper in place until the whole book has faded out.
+      panel.classList.remove('is-visible')
+      view.close(); resetMusicPanelPosition(panel)
+      root.classList.remove('is-edge-expanded')
+    }
+  }
   const setOpen = value => {
+    if (value === open) return
+    const visible = panel.classList.contains('is-visible')
+    const current = getComputedStyle(surface)
+    const start = { opacity: visible ? current.opacity : '0', transform: current.transform }
+    panelAnimation?.cancel(); panelAnimation = null
     open = value
-    panel.classList.toggle('is-visible', open)
+    if (!open && panel.contains(document.activeElement)) toggle.focus({ preventScroll: true })
+    panel.inert = !open
     panel.setAttribute('aria-hidden', String(!open))
     toggle.setAttribute('aria-expanded', String(open))
     root.classList.toggle('is-open', open)
-    root.classList.toggle('is-edge-expanded', open)
-    if (open) { scheduleMusicPanelFit(root, panel, toggle); view.focus() }
-    else { view.close(); resetMusicPanelPosition(panel) }
+    if (open) {
+      panel.classList.add('is-visible'); root.classList.add('is-edge-expanded')
+      fitMusicPanelInViewport(root, panel, toggle)
+      if (!visible) {
+        const book = panel.getBoundingClientRect(), icon = toggle.getBoundingClientRect()
+        const x = clamp(icon.left + icon.width / 2 - book.left, 0, book.width)
+        const below = icon.top + icon.height / 2 >= book.top + book.height / 2
+        surface.style.transformOrigin = `${x}px ${below ? book.height : 0}px`
+        const compact = matchMedia('(pointer: coarse)').matches
+        foldedTransform = `translate(${x > book.width / 2 ? 3 : -3}px, ${(below ? 1 : -1) * (compact ? 8 : 12)}px) scale(${compact ? .985 : .96})`
+        start.transform = foldedTransform
+      }
+      view.focus()
+    }
     writeState(storageKey, { ...readState(storageKey), panelOpen: open })
+    if (reduced.matches || typeof surface.animate !== 'function') { settlePanel(); return }
+    const compact = matchMedia('(pointer: coarse)').matches
+    const duration = (open ? (compact ? 260 : 380) : (compact ? 180 : 220))
+      * Math.max(.25, open ? 1 - Number(start.opacity) : Number(start.opacity))
+    const animation = surface.animate([start, {
+      opacity: open ? 1 : 0, transform: open ? 'none' : foldedTransform,
+    }], { duration, easing: open ? 'cubic-bezier(.22,.78,.2,1)' : 'cubic-bezier(.4,0,.6,1)', fill: 'both' })
+    panelAnimation = animation
+    animation.onfinish = () => { if (panelAnimation === animation) settlePanel() }
   }
+  panel.inert = true
+  reduced.addEventListener('change', () => { if (reduced.matches) settlePanel() })
   toggle.addEventListener('click', event => {
     event.stopPropagation()
     if (root.dataset.dragMoved === '1') { root.dataset.dragMoved = '0'; return }
@@ -350,6 +392,7 @@ export function initMusicPlayer() {
     }
   })
   window.addEventListener('resize', () => {
+    if (panelAnimation) settlePanel()
     if (root.classList.contains('is-custom-position')) {
       const rect = root.getBoundingClientRect()
       const { x, y } = clampMusicRootPosition(root, rect.left, rect.top)
