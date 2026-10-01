@@ -1,6 +1,6 @@
 +++
 draft = true
-title = 'A1.2 保存请求中的版本'
+title = 'A1.2 保存期间继续输入'
 date = '2026-10-01T13:30:45+08:00'
 math = true
 description = '仅用于后台验收，完成后删除。'
@@ -25,3 +25,6 @@ $$
 {{< figure src="/uploads/mup507ug-oim5q95l.png" title="临时图片" >}}
 
 <details><summary>展开</summary>保留 HTML</details>
+
+
+保存期间追加的正文。
