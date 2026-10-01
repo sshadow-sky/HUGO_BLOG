@@ -1,6 +1,6 @@
 +++
 draft = true
-title = 'A1.2 临时验收草稿（第二次保存）'
+title = 'A1.2 并发版本验证'
 date = '2026-10-01T13:30:45+08:00'
 math = true
 description = '仅用于后台验收，完成后删除。'
