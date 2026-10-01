@@ -1,0 +1,42 @@
+{
+  "role": {
+    "current_user": "pagescms",
+    "rolsuper": false,
+    "rolcreatedb": false
+  },
+  "schema": {
+    "tables": 12
+  },
+  "http": [
+    {
+      "path": "/sign-in",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/sshadow-sky/HUGO_BLOG/best/files/content%2Fabout.md",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/sshadow-sky/Blog/best/files/content%2Fabout.md",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "path": "/api/sshadow-sky/HUGO_BLOG/other/files/content%2Fabout.md",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "path": "/api/auth/sign-in/email-otp",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "path": "/api/sshadow-sky/HUGO_BLOG/best/actions",
+      "status": 403,
+      "expected": 403
+    }
+  ]
+}
