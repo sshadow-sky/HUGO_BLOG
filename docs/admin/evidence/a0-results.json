@@ -1,0 +1,89 @@
+{
+  "upstreamVersion": "2.1.8",
+  "hashes": {
+    "lib/serialization.ts": "e611302c67547ee778a33b9375040872897a3c24f0bd84c9d2146595a103795a",
+    "lib/schema.ts": "6b1344a4ea98c7de5b66bf147179477b2121adb8b474e8c0da4b5fcd53d4b6ad",
+    "app/api/[owner]/[repo]/[branch]/files/[path]/route.ts": "5bceb6ca856febda5b0785dc6fad44b966c035232120af8f4bb0446f139938bf",
+    "components/ui/editor/index.tsx": "f8cfa05d6c1cc9b3ed5250580bd7eda02e26b6f2e1c9bee732e994e6b6f8adc3",
+    "fields/core/date/index.ts": "1260e5f849ade01df66d9e35c8eb482f310f2da993c00e6ba51a02c5209d708a"
+  },
+  "limitations": [
+    "No GitHub App login or remote save",
+    "Save probes call actual serialization plus extracted merge/sanitize functions; only date field hooks are separately probed, the complete HTTP route is not executed",
+    "Rich-text probe uses document schema libraries, not the complete React editor"
+  ],
+  "observations": [
+    {
+      "name": "中文普通文章",
+      "bodyExact": true,
+      "falsePreserved": true,
+      "unknownPreserved": true,
+      "emptyArrayPreserved": false,
+      "dateBefore": "2026-10-01T08:30:00+08:00",
+      "dateAfter": "2026-10-01T08:30:00+08:00",
+      "frontmatterCommentPreserved": false
+    },
+    {
+      "name": "画廊文章",
+      "bodyExact": true,
+      "falsePreserved": true,
+      "unknownPreserved": true,
+      "emptyArrayPreserved": false,
+      "dateBefore": "2026-10-01T08:30:00+08:00",
+      "dateAfter": "2026-10-01T08:30:00+08:00",
+      "frontmatterCommentPreserved": false
+    },
+    {
+      "name": "画板文章",
+      "bodyExact": true,
+      "falsePreserved": true,
+      "unknownPreserved": true,
+      "emptyArrayPreserved": false,
+      "dateBefore": "2026-10-01T08:30:00+08:00",
+      "dateAfter": "2026-10-01T08:30:00+08:00",
+      "frontmatterCommentPreserved": false
+    },
+    {
+      "name": "merge-and-sanitize",
+      "unknownWithMerge": "保留未知字段",
+      "unknownWithoutMerge": false,
+      "emptyTagsKeySurvives": false,
+      "oldTagsGone": true,
+      "falseSurvives": true
+    },
+    {
+      "name": "mixed-format",
+      "titleRecognizedWithWrongSchema": false,
+      "wholeFileBecomesBody": true
+    },
+    {
+      "name": "date-field-hooks",
+      "original": "2026-10-01T08:30:45+08:00",
+      "defaultFieldValue": "",
+      "configuredInput": "2026-10-01T08:30",
+      "configuredSaved": "2026-10-01T08:30:00+08:00",
+      "secondsPreserved": false
+    },
+    {
+      "name": "whole-config",
+      "commentsBefore": 123,
+      "commentsAfter": 0,
+      "emptySignatureSrcSurvives": false
+    },
+    {
+      "name": "rss-key-order",
+      "originalCount": 1,
+      "reorderedCount": 0
+    },
+    {
+      "name": "richtext-schema-probe",
+      "exact": false,
+      "inlineDollars": true,
+      "backslashDelimiters": false,
+      "latexFraction": true,
+      "shortcodeExact": true,
+      "htmlDetailsPreserved": false,
+      "imagePathPreserved": true
+    }
+  ]
+}
