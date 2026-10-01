@@ -1,10 +1,10 @@
 # ShadowSky：配合本站 HUGO_BLOG_ADMIN 使用；保存到 GitHub 不等于发布网站。
 media:
   - name: uploads
-    label: 文章图片
+    label: 文章素材
     input: static/uploads
     output: /uploads
-    extensions: [png, jpg, jpeg, webp]
+    extensions: [png, jpg, jpeg, webp, gif, mp4, webm]
     rename: random
 
 content:
