@@ -140,3 +140,17 @@ HTML 行内 <u>下划线</u>、H<sub>2</sub>O 与 x<sup>2</sup>。
 <video controls preload="metadata" src="/uploads/muprh6g6-p85li1l1.mp4"></video>
 
 <video controls preload="metadata" src="/uploads/muprh6g7-ujp3vb84.webm"></video>
+
+
+
+## 脚注与定义列表（源码模式）
+
+这是一条真实脚注[^note]。
+
+[^note]: 脚注正文，包含 **加粗**。
+
+术语一
+: 定义说明一。
+
+术语二
+: 定义说明二。
