@@ -3,6 +3,7 @@ import { registerPageCleanup } from './page-cleanup.js'
 import { preservePjaxHistoryState, parseJsonData } from './utils.js'
 import { initLazyImages } from './lazy-images.js'
 import { refreshMobileCardsListPage } from './home.js'
+import { buildArchiveSeries } from './archive-series.js'
 
 let echartsScriptPromise = null
 
@@ -332,22 +333,7 @@ export async function initCharts() {
   if (archivesEl && archivesData) {
     try {
       const posts = parseJsonData(archivesData)
-      const start = archivesEl.dataset.start || '2024-01'
-      const months = []
-      const counts = {}
-      const [sy, sm] = start.split('-').map(Number)
-      const now = new Date()
-      let y = sy; let m = sm
-      while (y < now.getFullYear() || (y === now.getFullYear() && m <= now.getMonth() + 1)) {
-        const key = `${y}-${String(m).padStart(2, '0')}`
-        months.push(key)
-        counts[key] = 0
-        m++; if (m > 12) { m = 1; y++ }
-      }
-      posts.forEach((p) => {
-        const key = String(p.date || '').replace(/^"+|"+$/g, '').slice(0, 7)
-        if (counts[key] !== undefined) counts[key]++
-      })
+      const { months, counts } = buildArchiveSeries(posts, { startMonth: archivesEl.dataset.start })
       const chart = echartsLib.init(archivesEl)
       chart.setOption({
         title: { text: '文章发布统计图', left: 'center', textStyle: { color: textColor } },
@@ -355,7 +341,7 @@ export async function initCharts() {
         xAxis: { type: 'category', data: months, axisLabel: { color: textColor } },
         yAxis: { type: 'value', axisLabel: { color: textColor } },
         series: [{
-          type: 'line', smooth: true, data: months.map(k => counts[k]),
+          type: 'line', smooth: true, data: counts,
           areaStyle: { color: 'rgba(223, 145, 147, 0.25)' },
           itemStyle: { color: primary },
           lineStyle: { color: primary },

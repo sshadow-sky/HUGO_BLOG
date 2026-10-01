@@ -12,6 +12,8 @@
   {{- if eq .autoplay false }}{{ $autoplay = false }}{{ end -}}
   {{- with .prose }}{{ $prose = . }}{{ end -}}
 {{- end -}}
+{{- $src := site.Params.signature.src | default "" -}}
+{{- if $src -}}
 <span class="signature-inline{{ if $prose }} signature-inline--prose{{ end }}{{ if $primary }} signature-inline--primary{{ end }}"><span class="signature-widget"
       role="img"
       aria-label="{{ site.Params.author.name | default `手写签名` }}"
@@ -22,4 +24,7 @@
       {{- with $cropLeft }} data-crop-left="{{ . }}"{{ end }}
       {{- with $cropTop }} data-crop-top="{{ . }}"{{ end }}
       {{- with $cropBottom }} data-crop-bottom="{{ . }}"{{ end }}
-      data-signature-src="{{ `/signature/绘图.svg` | relURL }}"></span></span>
+      data-signature-src="{{ $src | relURL }}"></span></span>
+{{- else -}}
+<span class="signature-text">{{ site.Params.author.name }}</span>
+{{- end -}}

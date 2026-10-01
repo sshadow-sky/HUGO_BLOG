@@ -3,7 +3,7 @@
  *
  * 用法：
  *   <link rel="stylesheet" href="signature.css">
- *   <div class="signature-widget" data-signature-src="绘图.svg"></div>
+ *   <div class="signature-widget" data-signature-src="/signature/site-signature.svg"></div>
  *   <script src="signature.js"></script>
  *
  * data-speed：全局速度 px/ms（总路径长 / speed = 总时长 ms）
@@ -13,7 +13,7 @@
 
   var NS = 'http://www.w3.org/2000/svg';
   var DEFAULT_DURATION = 1500;
-  var DEFAULT_SRC = '绘图.svg';
+  var DEFAULT_SRC = '';
   var MIN_LEN = 0.01;
   var VIEW_PAD = 2;
 
@@ -560,6 +560,11 @@
       return Promise.resolve();
     }
 
+    if (!src) {
+      showFallback();
+      finishLoading();
+      return Promise.resolve();
+    }
     return loadSvg(src).then(setup).catch(function (err) {
       console.error('[signature]', err.message);
       if (inlineSvg) {

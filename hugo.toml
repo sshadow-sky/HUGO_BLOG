@@ -243,7 +243,7 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
 
   # --- 归档 / 标签页 ECharts 图表 ---
   [params.charts]
-    archivesStartMonth = '2024-03'   # 归档图起始月份
+    archivesStartMonth = ''         # 留空从最早文章月份开始；可指定 YYYY-MM 提前起点，不截掉已有文章
     tagsChartLength = 10             # 标签图显示 Top N
 
   # --- 文章页底部赞助按钮 ---
@@ -264,6 +264,7 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
   # footerEnable：全站页脚 copyright 区「by xxx」处的签名动画（关闭后显示 author.name 文字）
   # 不影响正文 Markdown 中 [签名](signature:) 的签名效果
   [params.signature]
+    src = ''                       # 本站签名 SVG 路径；未提供时显示作者昵称，不请求默认图片
     postCopyrightEnable = false
     footerEnable = false
 

@@ -68,7 +68,7 @@
     <span>by</span>
 
     <span itemprop="copyrightHolder">
-      {{- if default true .Site.Params.signature.footerEnable -}}
+      {{- if and (default true .Site.Params.signature.footerEnable) .Site.Params.signature.src -}}
       <span class="sakura-copyright-signature">
         <span class="sakura-copyright-author-fallback">{{ .Site.Params.author.name }}</span>
         {{- partial "signature-inline.html" (dict) -}}

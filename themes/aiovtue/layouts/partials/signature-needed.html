@@ -5,4 +5,4 @@
   {{- $raw := .RawContent | default "" -}}
   {{- $inlineInContent = or (findRE `\[签名\]` $raw) (findRE `!\[签名\]` $raw) (findRE `signature:|#signature` $raw) -}}
 {{- end -}}
-{{- return (or $footer $postCopyright $inlineInContent) -}}
+{{- return (and (ne (site.Params.signature.src | default "") "") (or $footer $postCopyright $inlineInContent)) -}}
