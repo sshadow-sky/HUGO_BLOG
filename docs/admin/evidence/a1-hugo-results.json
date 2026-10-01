@@ -1,0 +1,20 @@
+[
+  {
+    "route": "posts/a0-中文文章",
+    "articleHtmlIdentical": true,
+    "formulas": 4,
+    "draftExcluded": true
+  },
+  {
+    "route": "posts/a0-gallery",
+    "articleHtmlIdentical": true,
+    "formulas": 0,
+    "draftExcluded": true
+  },
+  {
+    "route": "excalidraw/a0-board",
+    "articleHtmlIdentical": true,
+    "formulas": 0,
+    "draftExcluded": true
+  }
+]

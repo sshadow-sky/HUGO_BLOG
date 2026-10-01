@@ -1,0 +1,83 @@
+# ShadowSky：配合本站 HUGO_BLOG_ADMIN 使用；保存到 GitHub 不等于发布网站。
+media:
+  - name: uploads
+    label: 文章图片
+    input: static/uploads
+    output: /uploads
+    extensions: [png, jpg, jpeg, webp]
+    rename: random
+
+content:
+  - name: posts
+    label: 文章
+    description: 普通文章使用元信息表单与 Markdown 源码。新建默认为草稿；画廊和画板专用入口将在后续开放。
+    type: collection
+    path: content/posts
+    format: toml-frontmatter
+    subfolders: true
+    filename:
+      template: '{year}-{month}-{day}-{hour}{minute}{second}/index.md'
+      field: false
+    exclude: [_index.md, .gitkeep]
+    operations:
+      create: true
+      rename: false
+      delete: true
+    view:
+      layout: list
+      primary: title
+      fields: [title, date, draft, categories, tags]
+      search: [title, categories, tags]
+      sort: [date, title, draft]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+      - name: date
+        label: 文章日期
+        type: string
+        required: true
+        description: '完整日期与时区，例如 2026-10-01T08:30:45+08:00；保留秒数，不自动改写已有日期。'
+        pattern:
+          regex: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$'
+          message: 请填写包含秒数和时区的 ISO 日期。
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: true
+        description: 草稿不进入正式站点；关闭草稿仍需后续构建和部署才会上线。
+      - name: math
+        label: 启用数学公式
+        type: boolean
+        default: false
+      - name: description
+        label: 简介
+        type: text
+      - name: cover
+        label: 封面图片路径
+        type: string
+        description: 从文章图片库复制 /uploads/ 路径，也可保留现有站内路径或 HTTPS 图片链接。
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+      - name: body
+        label: 正文（Markdown 源码）
+        type: code
+        description: 支持 Markdown、LaTeX、Hugo 短代码和 HTML；正文图片使用 ![图片说明](/uploads/文件名)。
+        options:
+          format: markdown
+
+settings:
+  config: true
+  cache: false
+  content:
+    merge: true
