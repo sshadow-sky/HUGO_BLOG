@@ -132,3 +132,11 @@ HTML 行内 <u>下划线</u>、H<sub>2</sub>O 与 x<sup>2</sup>。
 {{< figure src="/uploads/muprh6g7-46thzisc.jpg" alt="短代码图片" caption="Hugo figure 图注" >}}
 
 结尾文字：保存、重新打开后本句仍然存在。
+
+<figure data-shadow-image="true"><img src="/uploads/muprh6g6-ahxjzqz1.gif" alt=""><figcaption>GIF 图注验收</figcaption></figure>
+
+<figure data-shadow-image="true"><img src="/uploads/muprh6g6-ahxjzqz1.gif" alt="素材库选择 GIF"><figcaption>GIF 图注验收</figcaption></figure>
+
+<video controls preload="metadata" src="/uploads/muprh6g6-p85li1l1.mp4"></video>
+
+<video controls preload="metadata" src="/uploads/muprh6g7-ujp3vb84.webm"></video>
