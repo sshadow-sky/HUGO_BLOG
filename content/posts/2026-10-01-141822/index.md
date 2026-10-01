@@ -1,6 +1,6 @@
 +++
 draft = true
-title = 'A1.2 冲突验收远端版本'
+title = 'A1.2 保存请求中的版本'
 date = '2026-10-01T13:30:45+08:00'
 math = true
 description = '仅用于后台验收，完成后删除。'
