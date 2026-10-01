@@ -1,9 +1,9 @@
 +++
 draft = true
-title = 'A1.2 临时验收草稿'
+title = 'A1.2 临时验收草稿（第二次保存）'
 date = '2026-10-01T13:30:45+08:00'
 math = true
-description = ''
+description = '仅用于后台验收，完成后删除。'
 cover = '/uploads/mup507ug-oim5q95l.png'
 categories = [
 ]
