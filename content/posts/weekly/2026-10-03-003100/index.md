@@ -1,11 +1,11 @@
 +++
 draft = true
-title = 'ShadowSky 周报 01｜技术与开源拾遗（测试草稿）ShadowSky 周报 01｜技术与开源拾遗（测试草稿）'
+title = 'ShadowSky 周报 01｜技术与开源拾遗（测试草稿）'
 issue = 1.0
 weekly_kind = 'mixed'
 date = '2026-10-02T16:27:47.503Z'
 math = false
-description = '从中文技术周刊、Git 开源动态和视频工程实践中各选一条，检查原创与资讯混合组稿的阅读效果。从中文技术周刊、Git 开源动态和视频工程实践中各选一条，检查原创与资讯混合组稿的阅读效果。'
+description = '从中文技术周刊、Git 开源动态和视频工程实践中各选一条，检查原创与资讯混合组稿的阅读效果。'
 cover = ''
 categories = [
 ]
