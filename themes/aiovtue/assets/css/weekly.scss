@@ -1,11 +1,12 @@
-.sakura-weekly-page {
+.sakura-weekly-page,
+.sakura-weekly-post {
   --weekly-paper: var(--sakura-color-background);
   --weekly-ink: var(--sakura-color-text-deep);
   --weekly-muted: var(--sakura-color-text-muted);
-  --weekly-accent: var(--sakura-color-primary);
+  --weekly-accent: var(--weekly-accent-a);
   --weekly-rule: color-mix(in srgb, var(--sakura-color-text) 14%, transparent);
-  --weekly-accent-a: #d65757;
-  --weekly-accent-b: #607d96;
+  --weekly-accent-a: #087f9b;
+  --weekly-accent-b: #7850bd;
   --weekly-card-shadow:
     0 10px 24px color-mix(in srgb, #000 10%, transparent),
     0 2px 8px color-mix(in srgb, #000 6%, transparent);
@@ -13,6 +14,9 @@
     0 14px 30px color-mix(in srgb, #000 13%, transparent),
     0 4px 12px color-mix(in srgb, #000 7%, transparent);
 
+}
+
+.sakura-weekly-page {
   .sakura-page-content {
     width: 100%;
     max-width: calc(var(--sakura-content-max-width) + 80px);
@@ -22,9 +26,10 @@
   }
 }
 
-html.dark .sakura-weekly-page {
-  --weekly-accent-a: #e07070;
-  --weekly-accent-b: #7a9ab3;
+html.dark .sakura-weekly-page,
+html.dark .sakura-weekly-post {
+  --weekly-accent-a: #67d5e9;
+  --weekly-accent-b: #bea3ef;
   --weekly-card-shadow:
     0 12px 26px color-mix(in srgb, #000 24%, transparent),
     0 2px 8px color-mix(in srgb, #000 16%, transparent);
@@ -39,6 +44,93 @@ html.dark .sakura-weekly-page {
   border: 1px dashed var(--sakura-color-divider);
   color: var(--weekly-muted);
   line-height: 1.7;
+  text-align: center;
+  background: var(--weekly-paper);
+
+  h2 { color: var(--weekly-ink); font-size: 1.1rem; }
+  p { margin-bottom: 0; }
+}
+
+.weekly-masthead__eyebrow {
+  margin: 18px 0 10px;
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  color: var(--weekly-accent);
+}
+
+.weekly-masthead__description {
+  max-width: 36rem;
+  margin: 14px auto;
+  color: var(--weekly-muted);
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.weekly-masthead__rss {
+  display: inline-block;
+  margin: 14px 0 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--weekly-rule);
+  border-radius: 4px;
+  color: var(--weekly-accent);
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+.weekly-card__kind {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--weekly-accent-b) 35%, transparent);
+  border-radius: 3px;
+  color: var(--weekly-accent-b);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.weekly-card__summary {
+  margin: 12px 0;
+  color: var(--weekly-muted);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.weekly-card__guide {
+  padding-top: 10px;
+  margin-bottom: 14px;
+  border-top: 1px dashed var(--weekly-rule);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--weekly-muted);
+
+  h3 { margin: 0 0 6px; font-size: 0.72rem; color: var(--weekly-accent); }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { overflow-wrap: anywhere; }
+}
+
+.weekly-post-nav {
+  --weekly-card-accent: var(--weekly-accent);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin: 0 0 24px;
+  padding: 14px 0;
+  border-block: 1px solid var(--weekly-rule);
+  color: var(--weekly-muted);
+  font-size: 0.8rem;
+
+  a { margin-right: auto; color: var(--weekly-accent); text-decoration: none; }
+  .weekly-post-nav__rss { margin-right: 0; }
+  .weekly-card__issue-num { font-size: 1rem; }
+}
+
+.sakura-weekly-page a:focus-visible,
+.weekly-post-nav a:focus-visible {
+  outline: 2px solid var(--weekly-accent);
+  outline-offset: -3px;
 }
 
 .weekly-masthead {
@@ -233,57 +325,6 @@ html.dark .weekly-card--mag {
     }
   }
 
-  .weekly-card__content--featured {
-    position: relative;
-    max-height: clamp(110px, 16vw, 180px);
-    overflow: hidden;
-
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 36px;
-      background: linear-gradient(to bottom, transparent, #fff);
-      pointer-events: none;
-    }
-
-    .markdown-body {
-      font-size: 0.82rem;
-      line-height: 1.68;
-      color: var(--weekly-muted);
-    }
-
-    .markdown-body > :first-child {
-      margin-top: 0;
-    }
-
-    .markdown-body h2,
-    .markdown-body h3 {
-      margin: 0.55em 0 0.35em;
-      font-size: 0.88rem;
-      line-height: 1.45;
-      color: var(--weekly-ink);
-    }
-
-    .markdown-body ul,
-    .markdown-body ol {
-      margin: 0.45em 0;
-      padding-left: 1.2em;
-    }
-
-    .markdown-body li + li {
-      margin-top: 0.25em;
-    }
-
-    .markdown-body a {
-      color: var(--weekly-card-accent);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-  }
-
   a.weekly-card__read-more {
     text-decoration: none;
 
@@ -309,14 +350,6 @@ html.dark .weekly-card--mag {
 
 html.dark .weekly-card--featured {
   background: color-mix(in srgb, var(--sakura-color-background) 92%, #fff);
-
-  .weekly-card__content--featured::after {
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      color-mix(in srgb, var(--sakura-color-background) 92%, #fff)
-    );
-  }
 }
 
 .weekly-card__link {
@@ -461,6 +494,7 @@ html.dark .weekly-card__body {
 .weekly-card__label-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 2px;
   padding-bottom: 12px;
@@ -487,14 +521,17 @@ html.dark .weekly-card__body {
   display: inline-flex;
   align-items: baseline;
   gap: 7px;
+  min-width: 0;
+  flex-wrap: wrap;
+  overflow-wrap: anywhere;
   font-family: var(--va-font-serif);
   line-height: 1;
 }
 
 .weekly-card__issue-label {
-  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
+  font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.12em;
   color: var(--weekly-card-accent);
 }
 
@@ -503,6 +540,7 @@ html.dark .weekly-card__body {
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--weekly-card-accent);
+  overflow-wrap: anywhere;
 }
 
 .weekly-card__title {
@@ -512,6 +550,7 @@ html.dark .weekly-card__body {
   line-height: 1.45;
   font-weight: 700;
   color: var(--weekly-ink);
+  overflow-wrap: anywhere;
 }
 
 .weekly-card__excerpt {
@@ -721,10 +760,6 @@ html.dark .weekly-card__body {
     padding: 16px;
   }
 
-  .weekly-card--featured .weekly-card__content--featured {
-    max-height: 140px;
-  }
-
   .weekly-card--layout-a .weekly-card__link,
   .weekly-card--layout-b .weekly-card__link {
     grid-template-columns: 1fr;
@@ -793,5 +828,28 @@ html.dark .weekly-card__body {
 
   .weekly-masthead__title {
     letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 480px) {
+  .weekly-masthead { padding-inline: 0; }
+  .weekly-masthead__title { font-size: 1.45rem; letter-spacing: 0.04em; }
+  .weekly-card--featured .weekly-card__label-row--featured { gap: 8px; }
+  .weekly-card__featured-date { margin-left: auto; }
+  .weekly-post-nav { gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weekly-card,
+  .weekly-card *,
+  .weekly-masthead a {
+    transition: none !important;
+    animation: none !important;
+  }
+  .weekly-card:hover,
+  .weekly-card:hover .weekly-card__cover-img,
+  .weekly-card:hover .weekly-card__media img,
+  .weekly-card:hover .weekly-card__media video {
+    transform: none;
   }
 }

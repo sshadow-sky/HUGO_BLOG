@@ -7,6 +7,7 @@ const WEEKDAYS_CN = ['日', '一', '二', '三', '四', '五', '六']
 const MONTHS_EN = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']
 
 let weeklyCleanup = null
+let weeklyRoot = null
 let weeklyInitAttempts = 0
 
 function renderWeeklyTagsHtml(tags) {
@@ -34,8 +35,8 @@ function getMonthEn(dateTime) {
 
 function getWeekdayIdx(dateTime) {
   if (!dateTime) return 0
-  const date = new Date(dateTime)
-  return Number.isNaN(date.getTime()) ? 0 : date.getDay()
+  const date = new Date(`${dateTime.slice(0, 10)}T00:00:00Z`)
+  return Number.isNaN(date.getTime()) ? 0 : date.getUTCDay()
 }
 
 function formatCompactDate(dateTime) {
@@ -44,11 +45,11 @@ function formatCompactDate(dateTime) {
 }
 
 function renderMagDateHtml(post) {
-  const issue = String(post.issue || '1').padStart(2, '0')
+  const issue = String(post.issue ?? '—')
   const day = post.dateDay || ''
   const year = post.dateYear || ''
   const monthEn = getMonthEn(post.dateTime)
-  const weekdayIdx = getWeekdayIdx(post.dateTime)
+  const weekdayIdx = post.weekdayIndex ?? getWeekdayIdx(post.dateTime)
   const weekdayCn = WEEKDAYS_CN[weekdayIdx] || ''
   const weekdayEn = WEEKDAYS_EN[weekdayIdx] || ''
 
@@ -91,7 +92,7 @@ function renderArchStrokeHtml(curve) {
 
 function renderMagCard(post) {
   const isReverse = (post.index % 2) === 1
-  const issue = post.issue ? String(post.issue) : '1'
+  const issue = String(post.issue ?? '—')
   const tagsHtml = renderWeeklyTagsHtml(post.tags)
   const pinHtml = post.pinned
     ? '<span class="sakura-post-pin" title="置顶" aria-label="置顶"><iconify-icon icon="mdi:pin" aria-hidden="true"></iconify-icon></span>'
@@ -102,8 +103,9 @@ function renderMagCard(post) {
       <div class="weekly-card__label-row">
         <span class="weekly-card__issue">
           <span class="weekly-card__issue-label">ISSUE</span>
-          <span class="weekly-card__issue-num">${escapeHtml(issue.padStart(2, '0'))}</span>
+          <span class="weekly-card__issue-num">${escapeHtml(issue)}</span>
         </span>
+        <span class="weekly-card__kind">${escapeHtml(post.kindLabel || '周报')}</span>
         <time class="weekly-card__mobile-date" datetime="${escapeHtml(post.dateTime || '')}"${post.dateOnly ? ' data-date-only="true"' : ''}>${escapeHtml(formatCompactDate(post.dateTime))}</time>
       </div>
       <h2 class="weekly-card__title">${escapeHtml(post.title || '')}</h2>
@@ -154,11 +156,16 @@ export function bootstrapWeeklyLoadMore() {
 }
 
 export function initWeeklyLoadMore() {
+  const root = document.getElementById('weekly-posts')
+  // DOMContentLoaded and window.load can initialize the same live page.
+  // Keep its remaining-post cursor instead of appending earlier batches twice.
+  if (root?.isConnected && root === weeklyRoot) return
   weeklyCleanup?.()
   weeklyCleanup = null
 
-  const root = document.getElementById('weekly-posts')
   if (!root) return
+  const loadMoreEnabled = root.dataset.paging === 'loadMore'
+  if (!loadMoreEnabled) return
 
   const list = document.getElementById('weekly-post-list')
   const dataEl = root.querySelector('.weekly-more-data')
@@ -172,9 +179,6 @@ export function initWeeklyLoadMore() {
     return
   }
   weeklyInitAttempts = 0
-
-  const loadMoreEnabled = root.dataset.paging === 'loadMore'
-  if (!loadMoreEnabled) return
 
   let posts = []
   try {
@@ -285,11 +289,13 @@ export function initWeeklyLoadMore() {
     }
   }
 
+  weeklyRoot = root
   syncLoadMoreState()
 
   weeklyCleanup = () => {
     scrollObserver?.disconnect()
     observing = false
+    if (weeklyRoot === root) weeklyRoot = null
   }
 
   registerPageCleanup(() => {

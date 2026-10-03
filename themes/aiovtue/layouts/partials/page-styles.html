@@ -92,7 +92,7 @@
 
 {{- end -}}
 
-{{- if and (eq .Section "posts") (strings.HasSuffix .RelPermalink "/posts/weekly/") -}}
+{{- if partial "weekly-context.html" . -}}
 
   {{- partial "stylesheet.html" (dict "name" "css/weekly.scss" "key" "weekly") -}}
 

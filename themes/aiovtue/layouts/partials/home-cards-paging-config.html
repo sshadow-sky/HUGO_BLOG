@@ -1,9 +1,10 @@
 {{- /*
   统一读取 cards / list 模式的分页配置（全端共用）。
-  入参：Site；WeeklyFollowHome（可选，默认 true，为 false 时仅读 params.home）
+  入参：Site；WeeklyFollowHome（可选，默认 true，为 false 时读取 params.weekly）
 */ -}}
 {{- $site := .Site -}}
-{{- $followHome := .WeeklyFollowHome | default true -}}
+{{- $followHome := true -}}
+{{- if isset . "WeeklyFollowHome" -}}{{- $followHome = .WeeklyFollowHome -}}{{- end -}}
 {{- $home := default dict $site.Params.home -}}
 {{- $paging := $home.cardsPaging | default $home.mobileCardsPaging | default $home.desktopCardsPaging | default "pagination" -}}
 {{- $batchSize := $home.cardsBatchSize | default $home.mobileCardsBatchSize | default $home.desktopCardsBatchSize | default 10 -}}

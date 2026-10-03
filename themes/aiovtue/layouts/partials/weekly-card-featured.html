@@ -1,10 +1,7 @@
 {{- $page := .Page -}}
-{{- $index := .Index | default 0 -}}
 {{- $cover := partial "post-cover.html" $page -}}
-{{- $modifiedDate := partial "post-modified-date.html" $page -}}
-{{- $dateTime := $modifiedDate.datetime -}}
-{{- $dateOnly := $modifiedDate.dateOnly -}}
-{{- $issue := $page.Params.issue | default (add 1 $index) -}}
+{{- $dateTime := $page.Date.Format "2006-01-02T15:04:05Z07:00" -}}
+{{- $meta := partial "weekly-meta.html" $page -}}
 <article class="weekly-card weekly-card--featured{{ if $page.Params.pinned }} is-pinned{{ end }}">
   {{- partial "post-pinned-badge.html" (dict "Page" $page) -}}
   <div class="weekly-card__link">
@@ -20,17 +17,20 @@
     <div class="weekly-card__body">
       <div class="weekly-card__label-row weekly-card__label-row--featured">
         <span class="weekly-card__issue">
-          <span class="weekly-card__issue-label">ISSUE</span>
-          <span class="weekly-card__issue-num">{{ printf "%02d" (int $issue) }}</span>
+          <span class="weekly-card__issue-label">最新一期 · ISSUE</span>
+          <span class="weekly-card__issue-num">{{ $meta.issue }}</span>
         </span>
-        <time class="weekly-card__featured-date" datetime="{{ $dateTime }}"{{ if $dateOnly }} data-date-only="true"{{ end }}>{{ $page.Date.Format "2006.01.02" }}</time>
+        <span class="weekly-card__kind">{{ $meta.kindLabel }}</span>
+        <time class="weekly-card__featured-date" datetime="{{ $dateTime }}" data-date-only="true">{{ $page.Date.Format "2006.01.02" }}</time>
       </div>
       <h2 class="weekly-card__title weekly-card__title--featured">
         <a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a>
       </h2>
-      <div class="weekly-card__content weekly-card__content--featured">
-        {{ partial "post-content.html" $page }}
-      </div>
+      <p class="weekly-card__summary">{{ partial "post-card-excerpt.html" $page }}</p>
+      {{- $headings := partial "weekly-headings.html" $page.Fragments.Headings -}}
+      {{- with first 3 $headings -}}
+        <div class="weekly-card__guide"><h3>本期导读</h3><ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul></div>
+      {{- end -}}
       <div class="weekly-card__meta-row">
         {{- with $page.Params.tags -}}
           <div class="weekly-card__tags">

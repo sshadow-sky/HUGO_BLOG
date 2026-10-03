@@ -1,0 +1,13 @@
+{{- $meta := partial "weekly-meta.html" . -}}
+<nav class="weekly-post-nav" aria-label="周报导航">
+  {{- with .Site.GetPage "/posts/weekly" -}}
+    <a href="{{ .RelPermalink }}">← 返回周报</a>
+  {{- end -}}
+  <span class="weekly-card__issue">ISSUE <span class="weekly-card__issue-num">{{ $meta.issue }}</span></span>
+  <span class="weekly-card__kind">{{ $meta.kindLabel }}</span>
+  {{- with .Site.GetPage "/posts/weekly" -}}
+    {{- with .OutputFormats.Get "RSS" -}}
+      <a class="weekly-post-nav__rss" href="{{ .RelPermalink }}" type="application/rss+xml">订阅 RSS</a>
+    {{- end -}}
+  {{- end -}}
+</nav>

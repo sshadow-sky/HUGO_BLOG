@@ -342,6 +342,12 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
     enable = true
     threshold = 0.35       # 匹配灵敏度（越小越严格）
 
+  # --- 周报：独立于首页的分页 ---
+  [params.weekly]
+    followHome = false
+    paging = 'pagination'
+    batchSize = 6
+
   # --- 顶栏 / 侧栏导航菜单 ---
   # weight 越小越靠前；带 items 的项会展开子菜单
   [[params.menu.main]]
@@ -368,11 +374,16 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
       url = '/tags/'
       icon = 'ant-design:tags-filled'
   [[params.menu.main]]
+    name = '周报'
+    url = '/posts/weekly/'
+    icon = 'ri:newspaper-line'
+    weight = 3
+  [[params.menu.main]]
     name = '个人'
     url = '/moments/'
     icon = 'ant-design:user-outlined'
     navGroup = 'personal'
-    weight = 3
+    weight = 4
     [[params.menu.main.items]]
       name = '相册'
       url = '/gallery/'
@@ -389,17 +400,17 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
     name = '留言'
     url = '/comment/'
     icon = 'ant-design:message-filled'
-    weight = 4
+    weight = 5
   [[params.menu.main]]
     name = '友链'
     url = '/links/'
     icon = 'ant-design:global-outlined'
-    weight = 5
+    weight = 6
   [[params.menu.main]]
     name = '关于'
     url = '/about/'
     icon = 'ant-design:idcard-filled'
-    weight = 6
+    weight = 7
 
 # --- 搜索式音乐播放器（原生 Audio + GD 协议接口）---
   # enable：是否显示播放器；单页可在 front matter 写 musicPlayer: false 关闭

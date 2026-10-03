@@ -478,7 +478,7 @@ html.is-home .navbar-content:not(.active-header) .brand-mark .cyber-word {
 // 顶栏一级菜单：红 → 金 → 橙 → 黄 渐变
 .sakura-navbar-link-item > .sakura-nav-link[data-nav="/"] { --nav-icon-color: #e03131; }
 .sakura-navbar-link-item > .sakura-nav-link[data-nav-group="posts"] { --nav-icon-color: #f03e3e; }
-.sakura-navbar-link-item > .sakura-nav-link[data-nav="/posts/weekly/"] { --nav-icon-color: #ff6b6b; }
+.sakura-navbar-link-item > .sakura-nav-link[data-nav="/posts/weekly/"] { --nav-icon-color: #0891b2; }
 .sakura-navbar-link-item > .sakura-nav-link[data-nav-group="personal"] { --nav-icon-color: #fab005; }
 .sakura-navbar-link-item > .sakura-nav-link[data-nav="/comment/"] { --nav-icon-color: #fd7e14; }
 .sakura-navbar-link-item > .sakura-nav-link[data-nav="/links/"] { --nav-icon-color: #fcc419; }
@@ -495,7 +495,7 @@ html.is-home .navbar-content:not(.active-header) .brand-mark .cyber-word {
 // 侧栏一级菜单
 .sakura-sidebar-link-items > li > .sakura-nav-link[data-nav="/"] { --nav-icon-color: #e03131; }
 .sidebar-nav-group__toggle[data-nav-group="posts"] { --nav-icon-color: #f03e3e; }
-.sakura-sidebar-link-items > li > .sakura-nav-link[data-nav="/posts/weekly/"] { --nav-icon-color: #ff6b6b; }
+.sakura-sidebar-link-items > li > .sakura-nav-link[data-nav="/posts/weekly/"] { --nav-icon-color: #0891b2; }
 .sidebar-nav-group__toggle[data-nav-group="personal"] { --nav-icon-color: #fab005; }
 .sakura-sidebar-link-items > li > .sakura-nav-link[data-nav="/comment/"] { --nav-icon-color: #fd7e14; }
 .sakura-sidebar-link-items > li > .sakura-nav-link[data-nav="/links/"] { --nav-icon-color: #fcc419; }
