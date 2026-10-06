@@ -3,7 +3,7 @@
   {{- $needs = true -}}
 {{- else if eq .Section "moments" -}}
   {{- $needs = true -}}
-{{- else if or (eq .Section "posts") (eq .Section "excalidraw") (eq .Layout "gallery-post") -}}
+{{- else if or (in (slice "posts" "weekly") .Section) (eq .Section "excalidraw") (eq .Layout "gallery-post") -}}
   {{- if ne .Params.comment false -}}
     {{- $needs = true -}}
   {{- end -}}

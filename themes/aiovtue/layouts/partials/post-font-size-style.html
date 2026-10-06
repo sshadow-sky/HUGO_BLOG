@@ -1,4 +1,4 @@
-{{- if or (and (eq .Section "posts") .IsPage) (eq .Layout "about") (eq .Layout "gallery-post") -}}
+{{- if or (and (in (slice "posts" "weekly") .Section) .IsPage) (eq .Layout "about") (eq .Layout "gallery-post") -}}
 {{- $fontSize := "1rem" -}}
 {{- with site.Params.post -}}
   {{- with .fontsize -}}

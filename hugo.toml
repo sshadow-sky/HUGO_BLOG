@@ -54,7 +54,7 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
 
 # --- 输出格式（首页与文章栏目额外生成 RSS）---
 [outputs]
-  home = ['HTML', 'RSS']
+  home = ["HTML", "RSS", "LegacyWeeklyRSS"]
   section = ['HTML', 'RSS']
 
 # --- Markdown 渲染 ---
@@ -375,7 +375,7 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
       icon = 'ant-design:tags-filled'
   [[params.menu.main]]
     name = '周报'
-    url = '/posts/weekly/'
+    url = '/weekly/'
     icon = 'ri:newspaper-line'
     weight = 3
   [[params.menu.main]]
@@ -473,3 +473,10 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
     enable = true
     fadeDuration = 200                            # 内容区淡入淡出时长（毫秒）
     mountDelay = 120                              # 页内跳转：CSS/JS 就绪后额外等待（毫秒），减少布局突变
+
+[outputFormats.LegacyWeeklyRSS]
+  mediaType = "application/rss+xml"
+  baseName = "index"
+  path = "posts/weekly"
+  isPlainText = false
+  notAlternative = true

@@ -3,7 +3,9 @@
   {{- partial "page-header.html" . -}}
   <div class="sakura-page-content">
     <div class="post-list-container">
-      {{ $pages := partial "posts-sorted.html" (dict "Pages" .Pages) }}
+      {{ $pages := .RegularPagesRecursive }}
+      {{ if eq .Section "posts" }}{{ $pages = partial "article-pages.html" $pages }}{{ end }}
+      {{ $pages = partial "posts-sorted.html" (dict "Pages" $pages) }}
       {{ range $index, $page := $pages }}
         {{- partial "post-card.html" (dict "Page" $page "Site" $.Site "Index" $index) -}}
       {{ else }}

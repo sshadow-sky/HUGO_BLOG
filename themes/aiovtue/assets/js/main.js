@@ -40,6 +40,7 @@ import { isPjaxContentMounting } from './page-nav.js'
 import { initSearchPage } from './search-page.js'
 import { initEnvelope, initEnvelopeDanmaku } from './envelope.js'
 import { initWeeklyLoadMore, bootstrapWeeklyLoadMore } from './weekly.js'
+import { initWeeklyCards } from './weekly-cards.js'
 import { cancelTypeWriter } from './typewriter.js'
 import { bootSignatureWidget } from './signature-boot.js'
 
@@ -81,6 +82,7 @@ function mountPage() {
   initHomeCardsLoadMore()
   scheduleHomeCardsLoadMoreSync()
   initWeeklyLoadMore()
+  initWeeklyCards()
   initPostToc()
   initPageComments({
     onTwikooReady: () => {

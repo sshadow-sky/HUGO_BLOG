@@ -853,3 +853,120 @@ html.dark .weekly-card__body {
     transform: none;
   }
 }
+
+// A stationary outer card keeps pointer measurements stable while its surface moves.
+.sakura-weekly-page {
+  .weekly-masthead { margin-bottom:28px; padding-block:4px 8px; }
+  .weekly-masthead__eyebrow { margin-top:12px; }
+  .weekly-masthead__description { margin-block:10px; }
+  .weekly-masthead__rss { margin-block:10px 4px; border-radius:999px; }
+  .weekly-post-list { gap:30px; }
+
+  .weekly-card {
+    perspective:1400px;
+    &, &:hover, &.is-pinned, &.is-pinned:hover {
+      background:transparent;
+      border:0;
+      box-shadow:none;
+      overflow:visible;
+      transform:none;
+    }
+  }
+
+  .weekly-card__surface {
+    position:relative;
+    isolation:isolate;
+    min-width:0;
+    border:1px solid var(--weekly-rule);
+    border-radius:14px;
+    overflow:hidden;
+    background:var(--weekly-paper);
+    box-shadow:0 4px 8px #00000004, 0 14px 38px #0000000c;
+    transform:rotateX(var(--weekly-rotate-x, 0deg)) rotateY(var(--weekly-rotate-y, 0deg));
+    transition:transform .42s cubic-bezier(.2,.75,.25,1), box-shadow .3s, border-color .3s;
+
+    &::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+      opacity:0;
+      background:radial-gradient(ellipse at var(--weekly-light-x,50%) var(--weekly-light-y,50%), color-mix(in srgb,var(--weekly-card-accent) 16%,transparent),transparent 65%);
+      transition:opacity .35s;
+    }
+    &::after {
+      content:"";
+      position:absolute;
+      inset:0 12% auto;
+      height:1px;
+      pointer-events:none;
+      background:linear-gradient(90deg,transparent,var(--weekly-accent-a),var(--weekly-accent-b),transparent);
+      opacity:.55;
+    }
+    > .sakura-post-pin { position:absolute; top:10px; left:10px; z-index:5; }
+  }
+  .weekly-card.is-interacting .weekly-card__surface { transition:transform .12s ease-out,box-shadow .3s,border-color .3s; }
+  .weekly-card:focus-within .weekly-card__surface,
+  .weekly-card.is-interacting .weekly-card__surface {
+    border-color:color-mix(in srgb,var(--weekly-card-accent) 55%,var(--weekly-rule));
+    box-shadow:0 8px 16px #00000006,0 22px 48px color-mix(in srgb,var(--weekly-card-accent) 14%,transparent);
+    &::before { opacity:1; }
+  }
+  .weekly-card.is-pinned .weekly-card__surface { border-left:3px solid var(--weekly-card-accent); }
+  .weekly-card--featured .weekly-card__link { grid-template-columns:minmax(240px,38%) minmax(0,1fr); }
+  .weekly-card--featured .weekly-card__media--rect {
+    margin:18px 0 18px 18px;
+    width:calc(100% - 18px);
+    min-height:270px;
+    overflow:hidden;
+    border-radius:9px;
+  }
+  .weekly-card--featured .weekly-card__body { padding:26px 28px; }
+  .weekly-card__guide { padding:12px 14px; border:0; border-radius:8px; background:color-mix(in srgb,var(--weekly-card-accent) 4%,transparent); }
+  .weekly-card__guide ul { margin-bottom:0; }
+  .weekly-card__label-row { border-bottom-color:color-mix(in srgb,var(--weekly-card-accent) 18%,transparent); }
+  .weekly-card__kind { border-radius:999px; padding:4px 9px; }
+  .weekly-card__excerpt { -webkit-line-clamp:3; }
+  .weekly-card__read-more { gap:8px; min-height:30px; }
+  .weekly-card__read-more iconify-icon { transition:transform .25s ease; }
+  .weekly-card:is(:hover,:focus-within) .weekly-card__read-more iconify-icon { transform:translateX(4px); }
+  .weekly-mag-date { background:linear-gradient(135deg,color-mix(in srgb,var(--weekly-card-accent) 5%,transparent),transparent); }
+}
+
+html.dark .sakura-weekly-page .weekly-card { background:transparent; }
+html.dark .sakura-weekly-page .weekly-card__surface { background:color-mix(in srgb,var(--weekly-paper) 94%,#fff); box-shadow:0 12px 36px #0003; }
+html.dark .sakura-weekly-page .weekly-card:is(:focus-within,.is-interacting) .weekly-card__surface { box-shadow:0 16px 40px #0004,0 0 24px color-mix(in srgb,var(--weekly-card-accent) 9%,transparent); }
+
+@supports (animation-timeline: view()) {
+  @media (min-width:901px) and (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+    .sakura-weekly-page .weekly-card--mag { animation:weekly-card-arrive linear both; animation-timeline:view(); animation-range:entry 0% entry 90%; }
+  }
+}
+@keyframes weekly-card-arrive { from { opacity:.25; translate:0 24px; } to { opacity:1; translate:0 0; } }
+
+@media (max-width:900px) {
+  .sakura-weekly-page {
+    .weekly-card--featured .weekly-card__link { grid-template-columns:minmax(0,1fr); }
+    .weekly-card--featured .weekly-card__media--rect { margin:12px 12px 0; width:calc(100% - 24px); min-height:200px; height:clamp(200px,48vw,330px); }
+    .weekly-card--featured .weekly-card__body { padding:20px; }
+    .weekly-post-list { gap:22px; }
+  }
+}
+@media (prefers-reduced-motion:reduce), (hover:none), (pointer:coarse) {
+  .sakura-weekly-page .weekly-card__surface { transform:none; }
+  .sakura-weekly-page .weekly-card .weekly-card__read-more iconify-icon { transform:none; }
+}
+
+@import "weekly-editorial";
+
+.home-latest-weekly {
+  width: 100%;
+  max-width: calc(var(--sakura-content-max-width) + 80px);
+  margin: 36px auto 24px;
+  padding: 0 var(--sakura-content-padding-x);
+  box-sizing: border-box;
+}
+.home-latest-weekly__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.home-latest-weekly__heading h2 { margin: 0; font-size: 1.35rem; }
+.home-latest-weekly__heading a { color: var(--weekly-accent); }

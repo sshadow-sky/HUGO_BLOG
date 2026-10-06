@@ -32,7 +32,7 @@
 
 {{- end -}}
 
-{{- if and .IsPage (eq .Section "posts") .Params.ai -}}
+{{- if and .IsPage (in (slice "posts" "weekly") .Section) .Params.ai -}}
 
   {{- partial "stylesheet.html" (dict "name" "css/post-ai-summary.scss" "key" "post-ai-summary") -}}
 
@@ -92,7 +92,7 @@
 
 {{- end -}}
 
-{{- if partial "weekly-context.html" . -}}
+{{- if or .IsHome (partial "weekly-context.html" .) -}}
 
   {{- partial "stylesheet.html" (dict "name" "css/weekly.scss" "key" "weekly") -}}
 

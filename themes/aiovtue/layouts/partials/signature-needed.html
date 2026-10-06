@@ -1,5 +1,5 @@
 {{- $footer := default true site.Params.signature.footerEnable -}}
-{{- $postCopyright := and .IsPage (eq .Section "posts") (default true site.Params.signature.postCopyrightEnable) -}}
+{{- $postCopyright := and .IsPage (in (slice "posts" "weekly") .Section) (default true site.Params.signature.postCopyrightEnable) -}}
 {{- $inlineInContent := false -}}
 {{- if .IsPage -}}
   {{- $raw := .RawContent | default "" -}}

@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{ $posts := where .Site.RegularPages "Section" "in" (slice "posts" "excalidraw") }}
+{{ $posts := partial "article-pages.html" .Site.RegularPages }}
 {{ $posts = partial "posts-sorted.html" (dict "Pages" $posts) }}
 {{ $limit := .Site.Params.charts.tagsChartLength | default 10 }}
 {{ $homeLayout := .Site.Params.home.layout | default "cards" }}

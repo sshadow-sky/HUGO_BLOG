@@ -1,6 +1,7 @@
 {{ define "main" }}
-{{ $posts := where .Site.RegularPages "Section" "in" (slice "posts" "excalidraw") }}
+{{ $posts := partial "article-pages.html" .Site.RegularPages }}
 {{ $posts = partial "posts-sorted.html" (dict "Pages" $posts) }}
+{{ $categoryItems := partial "posts-taxonomy-items.html" .Site.Taxonomies.categories }}
 {{ $homeLayout := .Site.Params.home.layout | default "cards" }}
 {{ if not (in (slice "cards" "timeline" "list") $homeLayout) }}{{ $homeLayout = "cards" }}{{ end }}
 {{ $listArchives := eq $homeLayout "timeline" }}
@@ -8,12 +9,12 @@
 <article class="sakura-page sakura-taxonomy-page sakura-categories-page{{ if $listArchives }} is-list-archives{{ end }}{{ if eq $homeLayout "list" }} is-layout-list{{ end }}{{ if $mobileCardsList }} is-mobile-cards-list{{ end }}">
   {{- partial "page-header.html" . -}}
   <div class="sakura-page-content">
-    {{ if .Data.Terms }}
+    {{ if $categoryItems }}
     <div id="categories-chart" class="sakura-stat-chart sakura-categories-chart" data-echarts-url="{{ `/vendor/echarts/echarts.min.js` | relURL }}"></div>
-    <script type="application/json" id="categories-chart-data">{{ $data := slice }}{{ range .Data.Terms.ByCount }}{{ $data = $data | append (dict "name" .Page.Title "value" .Count "categoryKey" .Term) }}{{ end }}{{ $data | jsonify | safeHTML }}</script>
+    <script type="application/json" id="categories-chart-data">{{ $data := slice }}{{ range $categoryItems }}{{ $data = $data | append (dict "name" .name "value" .count "categoryKey" .term) }}{{ end }}{{ $data | jsonify | safeHTML }}</script>
     <div class="sakura-tag-buttons sakura-categories-list">
-      {{ range .Data.Terms.ByCount }}
-      <button type="button" class="sakura-tag-button" data-category="{{ .Term }}">{{ .Page.Title }} [{{ .Count }}]</button>
+      {{ range $categoryItems }}
+      <button type="button" class="sakura-tag-button" data-category="{{ .term }}">{{ .name }} [{{ .count }}]</button>
       {{ end }}
     </div>
     <div id="categories-post-section" class="sakura-categories-posts" data-list-layout="{{ if $listArchives }}archives{{ else }}cards{{ end }}" hidden>
@@ -35,7 +36,7 @@
           {{ range $index, $page := $posts }}
           {{ $cats := slice }}
           {{ range ($page.GetTerms "categories") }}
-            {{ $cats = $cats | append .Data.Term }}
+            {{ $cats = $cats | append .Data.term }}
           {{ end }}
           {{ if not $cats }}
             {{ $cats = $page.Params.categories | default slice }}

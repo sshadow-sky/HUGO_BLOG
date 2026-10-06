@@ -1,10 +1,11 @@
 {{ define "main" }}
-{{- $pages := where .Site.RegularPages "Section" "in" (slice "posts" "excalidraw") -}}
+{{- $pages := union (partial "article-pages.html" .Site.RegularPages) (where .Site.RegularPages "Section" "weekly") -}}
 {{- $pages = partial "posts-sorted.html" (dict "Pages" $pages) -}}
 {{- $items := slice -}}
 {{- range $p := $pages -}}
   {{- $items = $items | append (dict
     "title" $p.Title
+    "kind" (cond (eq $p.Section "weekly") "weekly" "article")
     "url" $p.RelPermalink
     "cover" (partial "post-cover.html" $p)
     "date" ($p.Date.Format "2006-01-02")

@@ -1,4 +1,7 @@
 +++
+aliases = ["/posts/weekly/2026-10-03-003100/"]
+weekly_previous_path = "content/posts/weekly/2026-10-03-003100/index.md"
+comment_path = "/posts/weekly/2026-10-03-003100/"
 draft = true
 title = 'ShadowSky 周报 01｜技术与开源拾遗（测试草稿）'
 issue = 1.0

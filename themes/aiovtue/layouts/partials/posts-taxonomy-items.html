@@ -1,0 +1,8 @@
+{{- $items := slice -}}
+{{- range .ByCount -}}
+  {{- $count := len (partial "article-pages.html" .Pages) -}}
+  {{- if gt $count 0 -}}
+    {{- $items = $items | append (dict "name" .Page.Title "count" $count "term" .Term) -}}
+  {{- end -}}
+{{- end -}}
+{{- return (sort $items "count" "desc") -}}

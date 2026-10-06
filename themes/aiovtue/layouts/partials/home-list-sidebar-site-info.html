@@ -1,4 +1,4 @@
-{{- $posts := where .Site.RegularPages "Section" "in" (slice "posts" "excalidraw") -}}
+{{- $posts := partial "article-pages.html" .Site.RegularPages -}}
 <div class="home-list-sidebar-card home-list-sidebar-site-info">
   <a href="{{ `/about/` | relLangURL }}" class="home-list-sidebar-site-info__avatar">
     {{- partial "author-avatar.html" (dict
@@ -17,7 +17,7 @@
       <span class="home-list-sidebar-site-info__stat-label">文章</span>
     </a>
     <a class="home-list-sidebar-site-info__stat" href="{{ `/categories/` | relLangURL }}">
-      <span class="home-list-sidebar-site-info__stat-value">{{ len .Site.Taxonomies.categories }}</span>
+      <span class="home-list-sidebar-site-info__stat-value">{{ len (partial "posts-taxonomy-items.html" .Site.Taxonomies.categories) }}</span>
       <span class="home-list-sidebar-site-info__stat-label">分类</span>
     </a>
     <a class="home-list-sidebar-site-info__stat" href="{{ `/tags/` | relLangURL }}">

@@ -3,9 +3,10 @@
 {{- $dateTime := $page.Date.Format "2006-01-02T15:04:05Z07:00" -}}
 {{- $meta := partial "weekly-meta.html" $page -}}
 <article class="weekly-card weekly-card--featured{{ if $page.Params.pinned }} is-pinned{{ end }}">
+  <div class="weekly-card__surface">
   {{- partial "post-pinned-badge.html" (dict "Page" $page) -}}
-  <div class="weekly-card__link">
-    <a class="weekly-card__media weekly-card__media--rect" href="{{ $page.RelPermalink }}" aria-hidden="true" tabindex="-1">
+  <a class="weekly-card__link" href="{{ $page.RelPermalink }}" aria-label="阅读全文：{{ $page.Title }}">
+    <div class="weekly-card__media weekly-card__media--rect">
       <div class="weekly-card__media-shape">
         {{- if $cover -}}
           {{- partial "cover-list-media.html" (dict "cover" $cover "title" $page.Title "class" "weekly-card__cover-img") -}}
@@ -13,7 +14,9 @@
           <div class="weekly-card__cover-placeholder" aria-hidden="true"></div>
         {{- end -}}
       </div>
-    </a>
+      <span class="weekly-cover-stamp" aria-hidden="true">SHADOWSKY JOURNAL<span>本周刊物 · 精选与记录</span></span>
+      <span class="weekly-cover-issue" aria-hidden="true"><small>VOL.</small>{{ $meta.issue }}</span>
+    </div>
     <div class="weekly-card__body">
       <div class="weekly-card__label-row weekly-card__label-row--featured">
         <span class="weekly-card__issue">
@@ -24,7 +27,7 @@
         <time class="weekly-card__featured-date" datetime="{{ $dateTime }}" data-date-only="true">{{ $page.Date.Format "2006.01.02" }}</time>
       </div>
       <h2 class="weekly-card__title weekly-card__title--featured">
-        <a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a>
+        {{ $page.Title }}
       </h2>
       <p class="weekly-card__summary">{{ partial "post-card-excerpt.html" $page }}</p>
       {{- $headings := partial "weekly-headings.html" $page.Fragments.Headings -}}
@@ -45,8 +48,9 @@
         {{- else -}}
           <div class="weekly-card__tags"></div>
         {{- end -}}
-        <a class="weekly-card__read-more" href="{{ $page.RelPermalink }}">继续阅读<iconify-icon icon="ri:arrow-right-line" class="sakura-icon" aria-hidden="true"></iconify-icon></a>
+        <span class="weekly-card__read-more">翻开本期<iconify-icon icon="ri:arrow-right-line" class="sakura-icon" aria-hidden="true"></iconify-icon></span>
       </div>
     </div>
+  </a>
   </div>
 </article>

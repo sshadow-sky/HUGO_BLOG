@@ -142,7 +142,7 @@ function createWeeklyCardItem(post) {
   const article = document.createElement('article')
   const layoutClass = (post.index % 2) === 1 ? ' weekly-card--layout-b' : ' weekly-card--layout-a'
   article.className = `weekly-card weekly-card--mag${layoutClass}${post.pinned ? ' is-pinned' : ''}`
-  article.innerHTML = renderMagCard(post)
+  article.innerHTML = `<div class="weekly-card__surface"><span class="weekly-card__folio" aria-hidden="true">${escapeHtml(String(post.issue ?? '—'))}</span>${renderMagCard(post)}</div>`
   return article
 }
 

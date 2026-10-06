@@ -1,7 +1,1 @@
-{{- $isWeekly := false -}}
-{{- with .CurrentSection -}}
-  {{- with .File -}}
-    {{- $isWeekly = eq (replace .Path "\\" "/") "posts/weekly/_index.md" -}}
-  {{- end -}}
-{{- end -}}
-{{- return $isWeekly -}}
+{{- return (eq .Section "weekly") -}}

@@ -7,6 +7,8 @@
 {{- $issue := $meta.issue -}}
 {{- $isReverse := eq (mod $index 2) 1 -}}
 <article class="weekly-card weekly-card--mag{{ if $isReverse }} weekly-card--layout-b{{ else }} weekly-card--layout-a{{ end }}{{ if $page.Params.pinned }} is-pinned{{ end }}">
+  <div class="weekly-card__surface">
+  <span class="weekly-card__folio" aria-hidden="true">{{ $issue }}</span>
   {{- partial "post-pinned-badge.html" (dict "Page" $page) -}}
   <a class="weekly-card__link" href="{{ $page.RelPermalink }}" aria-label="阅读全文：{{ $page.Title }}">
     {{- if not $isReverse -}}
@@ -65,4 +67,5 @@
     {{- end -}}
   </a>
   {{- partial "weekly-card-arch-stroke.html" (dict "Side" (cond $isReverse "right" "left")) -}}
+  </div>
 </article>
