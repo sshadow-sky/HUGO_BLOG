@@ -2061,7 +2061,8 @@ html.dark .notice-board-wrap__notice { border-color: var(--sakura-color-divider)
 }
 
 .home-list-sidebar-tags {
-  align-self: start;
+  align-self: stretch;
+  min-width: 0;
   padding: 14px 14px 12px;
 }
 
@@ -2115,8 +2116,8 @@ html.dark .notice-board-wrap__notice { border-color: var(--sakura-color-divider)
 }
 
 .home-list-random-sidebar__archives + .home-list-random-sidebar__paper {
-  margin-top: 14px;
-  padding-top: 14px;
+  margin-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid var(--sakura-color-divider);
 }
 
@@ -2160,7 +2161,7 @@ html.dark .notice-board-wrap__notice { border-color: var(--sakura-color-divider)
 .home-list-random-sidebar__link {
   position: relative;
   display: block;
-  padding: 12px 0;
+  padding: 8px 0;
   color: inherit;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -2171,10 +2172,12 @@ html.dark .notice-board-wrap__notice { border-color: var(--sakura-color-divider)
 }
 
 .home-list-random-sidebar__post-title {
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   margin: 0;
   padding-right: 4px;
-  padding-bottom: 18px;
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.45;
@@ -2183,9 +2186,7 @@ html.dark .notice-board-wrap__notice { border-color: var(--sakura-color-divider)
 }
 
 .home-list-random-sidebar__date {
-  position: absolute;
-  left: 0;
-  bottom: 12px;
+  margin-top: 4px;
   display: block;
   font-family: var(--va-font-mono);
   font-size: 0.6875rem;
@@ -3341,20 +3342,16 @@ html.dark .notice-board-wrap__notice { border-color: var(--sakura-color-divider)
   }
 
   .sakura-home-layout.is-layout-list .home-list-random-sidebar {
-    align-self: stretch;
-    position: sticky;
-    top: calc(var(--sakura-navbar-layout-offset) + 16px);
+    align-self: start;
+    position: static;
     z-index: 3;
     height: auto;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
     transform: translateX(0);
-    max-height: calc(100svh - var(--sakura-navbar-layout-offset) - 32px);
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: auto;
-    scrollbar-width: thin;
+    max-height: none;
+    overflow: visible;
   }
 }
 
@@ -6089,3 +6086,6 @@ html.dark .not-found {
   text-shadow: 0 5px 10px rgba(0, 0, 0, 0.45), 0 20px 20px rgba(0, 0, 0, 0.35);
 }
 
+
+@import "home-clock";
+@import "home-welcome";

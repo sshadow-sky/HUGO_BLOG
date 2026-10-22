@@ -16,6 +16,7 @@ import {
 } from './post-content.js'
 import { initNoticeBoard } from './notice-board.js'
 import { initSiteRuntime } from './site-runtime.js'
+import { initHomeClock } from './home-clock.js'
 import { initStatistics, cleanupStatistics } from './statistics.js'
 import {
   initHomeLayoutRandom,
@@ -78,6 +79,7 @@ function mountPage() {
   initHomeListFeatured()
   initHomeListRandomSidebar()
   initHomeListArchiveHeatmap()
+  initHomeClock()
   refreshMobileCardsListPage()
   initHomeCardsLoadMore()
   scheduleHomeCardsLoadMoreSync()

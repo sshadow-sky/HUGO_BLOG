@@ -18,3 +18,9 @@ Thumbs.db
 
 # Local comment database, credentials and runtime logs.
 /.local/
+
+# Workspace-only caches, helpers and backups are never source artifacts.
+/.cache/
+/.runtime/
+/.tools/
+/.backups/

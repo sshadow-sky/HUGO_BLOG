@@ -18,6 +18,7 @@
       {{- partial "home-list-sidebar.html" $pageCtx -}}
     {{- end -}}
     <div class="home-list-main">
+      {{- if eq $paginator.PageNumber 1 -}}{{- partial "home-latest-weekly.html" (dict "PageCtx" $pageCtx "ID" (cond $postListId "home-latest-weekly" (printf "home-latest-weekly-%s" (printf "list-%v" $isDouble)))) -}}{{- end -}}
       <div class="sakura-post-list home-post-list"{{ if $postListId }} id="home-post-list"{{ end }}>
         {{- partial "home-mobile-notice-ticker.html" $pageCtx -}}
         {{- if and .FeaturedPool (not (.SkipFeatured | default false)) -}}
@@ -35,7 +36,7 @@
         {{- end -}}
       </div>
     </div>
-    {{- if and (not $isDouble) $posts -}}
+    {{- if not $isDouble -}}
       {{- partial "home-list-random-sidebar.html" (dict "Pages" $posts) -}}
     {{- end -}}
   </div>

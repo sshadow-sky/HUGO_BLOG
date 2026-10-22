@@ -14,6 +14,7 @@
   <div class="home-layout-notice home-layout-notice--cards">
     {{- partial "notice-board.html" $pageCtx -}}
   </div>
+  {{- if eq $paginator.PageNumber 1 -}}{{- partial "home-latest-weekly.html" (dict "PageCtx" $pageCtx "ID" (cond $postListId "home-latest-weekly" (printf "home-latest-weekly-%s" "cards"))) -}}{{- end -}}
   <div class="sakura-post-list home-post-list"{{ if $postListId }} id="home-post-list"{{ end }}>
     <div class="post-list-container post-list-container--cards{{ if $mobileCardsList }} post-list-container--mobile-list{{ end }} home-cards-list">
       {{- range $index, $page := $paginator.Pages -}}

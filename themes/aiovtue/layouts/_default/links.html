@@ -1,7 +1,13 @@
 {{ define "main" }}
 {{ $layout := default "preview" site.Params.links.layout }}
 <article class="sakura-page sakura-links-page sakura-links-page--{{ $layout }}">
-  {{- partial "page-header.html" . -}}
+  {{- $title := .Title -}}
+  {{- $params := .Params -}}
+  {{- with hugo.Data.links -}}
+    {{- if isset . "title" -}}{{- $title = .title -}}{{- end -}}
+    {{- if isset . "cover" -}}{{- $params = merge $params (dict "cover" .cover) -}}{{- end -}}
+  {{- end -}}
+  {{- partial "page-header.html" (dict "Title" $title "Params" $params "Section" .Section "Description" .Description) -}}
   <div class="sakura-links-main">
     <div class="content sakura-page-content">
       {{- if partial "links-rss-enabled.html" . -}}

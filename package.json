@@ -19,5 +19,8 @@
     "onlyBuiltDependencies": [
       "sharp"
     ]
+  },
+  "dependencies": {
+    "yaml": "2.8.3"
   }
 }

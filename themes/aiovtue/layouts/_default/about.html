@@ -6,6 +6,12 @@
     <div class="sakura-post-main">
       <div class="sakura-page-content sakura-post-body">
         {{- partial "post-content.html" . -}}
+        {{- if partial "bool-param.html" (dict "Param" "home.sidebarClock" "Map" (site.Params.home | default dict) "Key" "sidebarClock" "Default" true) -}}
+        <section aria-label="天气数据来源">
+          <h3>天气数据来源</h3>
+          <p>本站天气由 <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> 提供，数据遵循 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>。访客授权后的近似位置仅用于天气查询与页面内距离计算，本站不保存位置；天气状态和温度经归类、取整后展示。</p>
+        </section>
+        {{- end -}}
         {{- partial "sponsor.html" . -}}
         {{ if ne .Params.comment false }}
         {{- partial "comment-section.html" . -}}

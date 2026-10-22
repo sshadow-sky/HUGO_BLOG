@@ -11,8 +11,6 @@ ShadowSky 的个人博客，用于记录技术笔记、分享开源资讯，也�
 - **内容仓库：** [sshadow-sky/HUGO_BLOG](https://github.com/sshadow-sky/HUGO_BLOG)，私有仓库，工作分支 `best`
 - **当前阶段：** 本地开发与功能验收；部署和线上服务验收另行安排。
 
-以下介绍以当前本地开发版本为准，部分功能和开发文档尚未同步到远端；仅更新 README 不代表这些实现已经一并发布。
-
 ## 博客包含什么
 
 | 板块 | 内容与能力 |
@@ -80,7 +78,7 @@ Set-Location D:\new_blog\HUGO_BLOG
   --buildDrafts --disableFastRender
 ```
 
-**这是当前机器专用的预览方式。** `.local/` 不提交到 Git，新克隆的项目应使用上面的常规启动方式。1314 的内容不会随 CMS 保存或主目录 `content/` 的修改自动同步；主题仍取自当前项目。背景说明见 预览与首页结构（本地文档：`docs/admin/32-preview-and-home-structure.md`）。
+**这是当前机器专用的预览方式。** `.local/` 不提交到 Git，新克隆的项目应使用上面的常规启动方式。1314 的内容不会随 CMS 保存或主目录 `content/` 的修改自动同步；主题仍取自当前项目。背景说明见 [预览与首页结构](docs/admin/32-preview-and-home-structure.md)。
 
 ## 可选服务
 
@@ -147,7 +145,7 @@ tags: ["笔记"]
 行内公式：$E = mc^2$
 ```
 
-将示例图片路径替换为实际素材。`draft: true` 的文章仅在启用草稿的预览中显示，正式构建会排除；准备发布时再改为 `false`，并检查日期和资源。三类文章的检查说明见 文章类型草稿（本地文档：`docs/admin/31-article-type-drafts.md`）。
+将示例图片路径替换为实际素材。`draft: true` 的文章仅在启用草稿的预览中显示，正式构建会排除；准备发布时再改为 `false`，并检查日期和资源。三类文章的检查说明见 [文章类型草稿](docs/admin/31-article-type-drafts.md)。
 
 本站内容订阅为 `/index.xml`，周报订阅为 `/weekly/index.xml`，均由 Hugo 构建生成；朋友动态抓取的是其他站点的 RSS，与这两个订阅入口不同。
 
@@ -174,7 +172,9 @@ tags: ["笔记"]
 
 ## 维护说明与致谢
 
-协作约定见 [项目宪章](AGENTS.md)。功能说明可从 [音乐播放器](docs/music-player.md)、可视化编辑器（本地文档：`docs/admin/12-visual-editor-integration.md`）、GIF 与视频上传（本地文档：`docs/admin/13-gif-video-upload.md`）、周报独立栏目（本地文档：`docs/admin/30-weekly-independent-front.md`） 进入。
+CMS 会直接向远端 `best` 保存内容。本地开发前先检查工作区并执行 `git fetch origin best`；工作区干净且本地仅落后时，用 `git merge --ff-only origin/best` 同步。若两边都有新提交，需合并并验证后再推送，不使用强制推送覆盖 CMS 内容。完整说明见 [Git 同步与分叉处理](docs/admin/35-git-history-reconciliation.md)。
+
+协作约定见 [项目宪章](AGENTS.md)。功能说明可从 [音乐播放器](docs/music-player.md)、[可视化编辑器](docs/admin/12-visual-editor-integration.md)、[GIF 与视频上传](docs/admin/13-gif-video-upload.md)、[周报独立栏目](docs/admin/30-weekly-independent-front.md) 进入。
 
 请保留用户待检查的草稿和素材；`.local/`、`.runtime/`、`.tools/`、`.cache/`、备份及环境密钥不上传仓库。正式部署、评论迁移与第三方服务验收按计划单独推进。
 

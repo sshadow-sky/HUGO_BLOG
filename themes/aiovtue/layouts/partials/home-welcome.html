@@ -1,0 +1,7 @@
+{{- if partial "bool-param.html" (dict "Param" "home.sidebarWelcome" "Map" (site.Params.home | default dict) "Key" "sidebarWelcome" "Default" true) -}}
+<section class="home-welcome" data-home-welcome aria-label="来自武汉的欢迎">
+  <h3><iconify-icon icon="mdi:map-marker-distance" aria-hidden="true"></iconify-icon> 有朋自远方来</h3>
+  <div class="home-welcome__meta"><span data-welcome-destination>屏幕那端的你</span><span data-welcome-distance title="基于近似位置估算的直线距离，非行程距离">相逢，不必问远近</span></div>
+  <p class="home-welcome__copy" data-welcome-copy>不问来处，先给你留个座。借武汉热干面的香气，道一声欢迎。</p>
+</section>
+{{- end -}}

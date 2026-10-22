@@ -54,8 +54,16 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
 
 # --- 输出格式（首页与文章栏目额外生成 RSS）---
 [outputs]
-  home = ["HTML", "RSS", "LegacyWeeklyRSS"]
+  home = ['HTML', 'RSS', 'LegacyWeeklyRSS']
   section = ['HTML', 'RSS']
+
+# Keep existing weekly subscribers on a live feed after the section moves.
+[outputFormats.LegacyWeeklyRSS]
+  mediaType = 'application/rss+xml'
+  baseName = 'index'
+  path = 'posts/weekly'
+  isPlainText = false
+  notAlternative = true
 
 # --- Markdown 渲染 ---
 [markup]
@@ -193,6 +201,8 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
   
   
   [params.home]
+    sidebarClock = true # 右栏时钟；浏览器授权定位后自动获取 Open-Meteo 天气
+    sidebarWelcome = true # 时钟下方武汉欢迎语，共用天气定位；城市在本地近似匹配
     layout = 'list'   # （cards，list，timeline）建议不要使用时间线模式，即timeline，不成熟样式
     desktopListColumns = 'single' # （single，double）list模式下单双列样式切换在此配置
     desktopListItemStyle = 'cards' # layout=list时，single模式下选择文章列表为list/cards样式
@@ -203,7 +213,7 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
     # 下列配置在list模式下生效，不建议更改
     archiveHeatmapColumns = 13  # 右侧归档热力图：每行列数
     archiveHeatmapRows = 4      # 右侧归档热力图：行数（格子总数 = 列数 × 行数）
-    randomSidebarCount = 7      # 右侧随机文章显示篇数，不建议过多
+    randomSidebarCount = 3      # 右栏完整展开，随机文章保持精简
     
     # 下方配置不建议动，过大会影响网页性能
     featuredCount = 4           # list 模式推荐区同时可见卡片数
@@ -473,10 +483,3 @@ enableRobotsTXT = true     # 生成 robots.txt（模板在 themes/aiovtue/layout
     enable = true
     fadeDuration = 200                            # 内容区淡入淡出时长（毫秒）
     mountDelay = 120                              # 页内跳转：CSS/JS 就绪后额外等待（毫秒），减少布局突变
-
-[outputFormats.LegacyWeeklyRSS]
-  mediaType = "application/rss+xml"
-  baseName = "index"
-  path = "posts/weekly"
-  isPlainText = false
-  notAlternative = true

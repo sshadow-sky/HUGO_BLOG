@@ -40,7 +40,6 @@
 {{ end }}
 <section class="sakura-home">
   {{- partial "hero.html" . -}}
-  {{- if eq $paginator.PageNumber 1 -}}{{- partial "home-latest-weekly.html" . -}}{{- end -}}
   <div
     class="sakura-home-layout {{ $shellClasses }}"
     id="home-posts"

@@ -960,13 +960,61 @@ html.dark .sakura-weekly-page .weekly-card:is(:focus-within,.is-interacting) .we
 
 @import "weekly-editorial";
 
+
+// The homepage teaser follows the article recommendations' typography and card treatment.
 .home-latest-weekly {
   width: 100%;
-  max-width: calc(var(--sakura-content-max-width) + 80px);
-  margin: 36px auto 24px;
-  padding: 0 var(--sakura-content-padding-x);
+  margin: 0 0 20px;
+  padding: 10px 0 0;
   box-sizing: border-box;
 }
-.home-latest-weekly__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
-.home-latest-weekly__heading h2 { margin: 0; font-size: 1.35rem; }
-.home-latest-weekly__heading a { color: var(--weekly-accent); }
+.home-latest-weekly__heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; min-height: 28px; }
+.home-latest-weekly__heading h2 { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 1rem; font-weight: 700; line-height: 1; color: var(--sakura-color-primary); }
+.home-latest-weekly__heading .sakura-icon { flex-shrink: 0; width: 1em; height: 1em; font-size: 1em; color: inherit; }
+.home-latest-weekly__heading a { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; color: var(--sakura-color-text-muted); font-size: .75rem; }
+.home-latest-weekly__heading a:hover { color: var(--sakura-color-action); }
+.home-weekly-card {
+  border: 1px solid var(--sakura-color-divider);
+  border-radius: 14px;
+  background: var(--sakura-post-card-bg);
+  overflow: hidden;
+  transition: border-color .2s ease, transform .2s ease;
+  &:hover, &:focus-within { border-color: color-mix(in srgb, var(--sakura-color-primary) 45%, var(--sakura-color-divider)); }
+  &:hover h3, &:focus-within h3 { color: var(--sakura-color-action); }
+}
+.home-weekly-card__link {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  align-items: stretch;
+  color: var(--sakura-color-text-deep);
+  text-decoration: none;
+  &:focus-visible { outline: 2px solid var(--sakura-color-action); outline-offset: -3px; border-radius: 14px; }
+}
+.home-weekly-card__cover { min-height: 132px; min-width: 0; position: relative; overflow: hidden; background: color-mix(in srgb, var(--sakura-color-primary) 8%, var(--sakura-post-card-bg)); }
+.home-weekly-card__image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.home-weekly-card__placeholder { display: grid; place-items: center; height: 100%; color: var(--sakura-color-primary); font-size: 2.5rem; font-weight: 600; }
+.home-weekly-card__body { min-width: 0; padding: 16px 20px; align-self: center; }
+.home-weekly-card__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: .6875rem; color: var(--sakura-color-text-muted); }
+.home-weekly-card__meta > span:first-child { color: var(--sakura-color-action); font-weight: 600; background: color-mix(in srgb, var(--sakura-color-primary) 10%, var(--sakura-post-card-bg)); padding: 3px 8px; border-radius: 6px; }
+.home-weekly-card__body h3 { margin: 7px 0 5px; font-size: 1rem; font-weight: 700; line-height: 1.5; color: var(--sakura-color-text-deep); transition: color .2s ease; }
+.home-weekly-card__body p { margin: 0; color: var(--sakura-color-text-muted); font-size: .75rem; line-height: 1.6; }
+.home-weekly-card__body :is(h3,p) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+.home-weekly-empty { margin-block: 0; padding: 14px 16px; border: 1px solid var(--sakura-color-divider); border-radius: 14px; font-size: .85rem; color: var(--sakura-color-text-muted); }
+// Weekly belongs to the central column, sharing the recommendations gutter.
+.sakura-home-layout.is-layout-list .home-latest-weekly { padding-inline: var(--home-list-featured-inline-padding, 12px); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .home-weekly-card:hover { transform: translateY(-2px); }
+}
+@media (max-width: 600px) {
+  .home-latest-weekly { margin-bottom: 16px; }
+  .home-weekly-card__link { grid-template-columns: 96px minmax(0, 1fr); }
+  .home-weekly-card__cover { min-height: 122px; }
+  .home-weekly-card__body { padding: 12px; }
+  .home-weekly-card__meta { gap: 4px 8px; font-size: .65rem; }
+  .home-weekly-card__meta > span:nth-child(2) { display: none; }
+  .home-weekly-card__body h3 { font-size: .875rem; margin: 6px 0 4px; }
+  .home-weekly-card__body p { font-size: .6875rem; -webkit-line-clamp: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-weekly-card, .home-weekly-card__body h3 { transition: none; }
+}

@@ -1,3 +1,4 @@
+import { parseFirstGroupRssLinks } from './lib/links-rss-sources.mjs'
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { isLinksRssEnabled, writeEmptyLinksRss } from './lib/links-rss-config.mjs'
@@ -128,80 +129,6 @@ async function fetchText(url) {
   } finally {
     clearTimeout(timer)
   }
-}
-
-function unquote(value) {
-  const text = String(value || '').trim()
-  if (
-    (text.startsWith('"') && text.endsWith('"'))
-    || (text.startsWith("'") && text.endsWith("'"))
-  ) {
-    return text.slice(1, -1)
-  }
-  return text
-}
-
-function parseFirstGroupRssLinks(yamlText) {
-  const lines = yamlText.split('\n')
-  let groupCount = 0
-  let inLinks = false
-  let current = null
-  const links = []
-
-  for (const line of lines) {
-    if (/^\s*- name:/.test(line)) {
-      if (current?.rss) links.push(current)
-      current = null
-      groupCount += 1
-      inLinks = false
-      if (groupCount > 1) break
-      continue
-    }
-
-    if (groupCount !== 1) continue
-
-    if (/^\s*links:\s*$/.test(line)) {
-      inLinks = true
-      continue
-    }
-
-    if (!inLinks) continue
-
-    const urlMatch = line.match(/^\s*- url:\s*(.+)\s*$/)
-    if (urlMatch) {
-      if (current?.rss) links.push(current)
-      current = {
-        url: unquote(urlMatch[1]),
-        name: '',
-        blog: '',
-        desc: '',
-        color: '#0078e7',
-        avatar: '',
-        rss: '',
-      }
-      continue
-    }
-
-    if (!current) continue
-
-    const pairs = [
-      ['name', /^\s*name:\s*(.+)\s*$/],
-      ['blog', /^\s*blog:\s*(.+)\s*$/],
-      ['desc', /^\s*desc:\s*(.+)\s*$/],
-      ['color', /^\s*color:\s*(.+)\s*$/],
-      ['avatar', /^\s*avatar:\s*(.+)\s*$/],
-      ['rss', /^\s*rss:\s*(.+)\s*$/],
-    ]
-
-    for (const [key, re] of pairs) {
-      const match = line.match(re)
-      if (match) current[key] = unquote(match[1])
-    }
-  }
-
-  if (current?.rss) links.push(current)
-
-  return links.filter((item) => /^https?:\/\//i.test(String(item.rss || '').trim()))
 }
 
 async function buildLinksRssData() {
