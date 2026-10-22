@@ -1,373 +1,181 @@
-# HUGO_BLOG
+# ShadowSky · HUGO_BLOG
 
-音乐已改为搜索式播放器：保留右下角悬浮入口，访客搜歌后选择播放或加入队列，不再加载模板歌单。队列和音量/模式保存在访客本机，站内切页续播、刷新不自动播放。配置与操作见 [音乐播放器说明](docs/music-player.md)。
+**影是光的拓印**
 
-正式上线后需要继续验证的事项集中在 [部署后 TODO](docs/post-deployment-todo.md)。第三方访问统计的线上验证已转入此清单，当前先推进其他去个人化清理。
+Through code we inscribe the tomorrow we yearn
 
-本地评论服务已接入开发预览：先 `npm run comments:install`，再 `npm run comments:start`；博客仍通过 `npm run dev` 启动。数据库保存在被忽略的 `.local/twikoo/`，运行及迁移说明见 [本地评论服务](services/twikoo/README.md)。生产评论后端尚未部署。
+ShadowSky 的个人博客，用于记录技术笔记、分享开源资讯，也收纳画廊、画板和日常动态。项目基于 Hugo 与 AIOVTUE 主题逐步重构，加入本站的视觉风格、独立周报栏目和可视化内容管理能力。
 
-整站统计继续使用第三方 busuanzi.cc，地址和开关集中在 `hugo.toml` 的 `params.statistics`。开发预览不上报、显示“—”，正式构建启用；成功返回数字后显示计数，失败仍显示“—”。文章访问量优先使用 Twikoo，第三方文章显示需显式开启 `articleEnable`。详见 [第三方统计接入记录](docs/superpowers/plans/2026-09-30-third-party-statistics.md)。正式域名统计需上线后验证。
+- **站长：** ShadowSky / [sshadow-sky](https://github.com/sshadow-sky)
+- **配置域名：** `https://shadowssky.com/`（域名配置不代表已经部署上线）
+- **内容仓库：** [sshadow-sky/HUGO_BLOG](https://github.com/sshadow-sky/HUGO_BLOG)，私有仓库，工作分支 `best`
+- **当前阶段：** 本地开发与功能验收；部署和线上服务验收另行安排。
 
-本项目使用独立私有仓库 [sshadow-sky/HUGO_BLOG](https://github.com/sshadow-sky/HUGO_BLOG)，工作分支为 `best`。仓库根目录即 Hugo 项目，使用 AIOVTUE Hugo 主题；不包含 Astro 项目或其提交历史。项目目录及工程名称为 `HUGO_BLOG`，npm 包名与部署标识为 `hugo-blog`。
+以下介绍以当前本地开发版本为准，部分功能和开发文档尚未同步到远端；仅更新 README 不代表这些实现已经一并发布。
 
-本站名称为 **ShadowSky（影是光的拓印）**，作者 **ShadowSky**，介绍为 “Through code we inscribe the tomorrow we yearn”。正式域名配置为 `https://shadowssky.com/`，备案号使用站长提供的 `冀ICP备2026041770号-1`；本地配置不代表已经部署上线。头像取自 GitHub `sshadow-sky` 并保存到 `static/site/github-avatar.jpg`。
+## 博客包含什么
 
-社交区提供 GitHub、QQ 邮箱、Gmail 和“订阅本站 RSS”，沿用 Remix Icon 线条图标。本站订阅地址为 `/index.xml`（正式部署后为 `https://shadowssky.com/index.xml`），由 Hugo 随构建生成，无需额外 RSS 服务。读者可将它添加到 RSS 阅读器；该订阅只收录有标题和独立链接的文章、画板文章，与友链页抓取其他博客的“朋友动态”独立。原示例文章与画板已清理，目前订阅为空；新增自己的文章后会自动收录。原示例动态已清理，动态页面与发布能力保留；现有相册按站长要求保留，友链暂时清空，后续可添加自己的友链与 RSS 来源。
+| 板块 | 内容与能力 |
+| --- | --- |
+| 文章 | 普通 Markdown 笔记、图片卡片画廊、Excalidraw 画板；支持标题、引用、代码、链接、图片/GIF、视频和按文章开启的数学公式 |
+| 独立周报 | 与文章分开的栏目、交互卡片、期号与导读；后台可组合原创内容与 RSS 资讯候选 |
+| 内容浏览 | 搜索、归档、分类、标签，以及动态、相册、友链和朋友动态 |
+| 随心听 | 搜索歌曲、播放队列与歌词；浏览器保存个人播放状态，刷新不自动播放 |
+| 侧栏 | 时钟、日夜与天气动画、以武汉为起点的距离和城市招待语 |
+| 评论 | Twikoo；本地评论服务可单独启动 |
+| 可视化管理 | 独立的 Pages CMS 定制后台，提供文章编辑、媒体库及部分站点资料管理 |
 
-当前已完成 P0 基线备份；P1.1 已取消启动和构建时的自动补资源、RSS 与追番抓取，业务数据改为手动更新。其他个人内容与外部服务清理尚未执行。协作规则见 [项目宪章](AGENTS.md)，阶段安排见 [清理计划](docs/superpowers/plans/2026-09-30-blog-cleanup-plan.md)。下方保留上游使用说明与来源链接。
+博客前台由 Hugo 生成静态文件；评论服务和管理后台是独立进程。天气、音乐等功能仍依赖外部服务。天气使用浏览器定位权限，拒绝授权时不能取得访客的精确当地天气。桌宠保留现状，后续调整列入 TODO。
 
-参考butterfly、sakura等，基于**Hugo** 的静态博客。
-欢迎前往示例网站参观：[AIOVTUE-XUE](https://daily.yybb.us)
+## 快速启动博客
 
-由于主题多次更新，各更新文档如下，有需要可以访问
-- [主题发布-1.0](https://daily.yybb.us/posts/hugo-theme/aiovtue/hugotheme-aiovtue/)
-- [主题首次大更新-1.5](https://daily.yybb.us/posts/hugo-theme/aiovtue/hugo-aiovtueupdate/)
-- [主题小更新-1.6](https://daily.yybb.us/posts/hugo-theme/aiovtue/theme-aiovtue-up2/)
-- [主题更新-2.0](https://daily.yybb.us/posts/hugo-theme/aiovtue/update-26717/)
+### 环境准备
 
-# 更新说明-1.5
+本地已验证的环境为 **Hugo Extended 0.163.3** 和 **Node.js 24.13.0**，包管理使用 npm。请确保 `hugo`、`node`、`npm` 在终端可用；无需以管理员身份运行。
 
-新增动态页面，双样式  
-文章新增画板（excalidraw）样式  
-文章新增画廊样式  
-文章新增MATH支持  
-文章新增视频格式支持  
-文章新增AI总结  
-所有页面头图视频支持  
-新增番剧页面  
-新增看板娘组件  
-新增网页特效  
-新增网页鼠标样式  
-新增友链页样式  
-新增主页文章列表样式  
-新增左下角音乐播放器  
-新增友链页朋友动态功能  
-新增字体大小自定义功能  
-新增移动端顶栏自动隐藏（手动开启）  
-新增页脚出友链显示功能  
-留言页增加弹幕功能  
+首次获取项目时，需要有私有仓库访问权限：
 
-# 更新说明2.0
-新增主页文章列表样式-list模式，包含单双两种样式  
-优化站点显示样式-grid模式，即网格背景  
-优化音乐悬浮球收纳吸边  
-新增twikoo文章访问数量统计功能，在文章详情页顶部  
-新增友链页面每个分组独立设置显示样式  
-新增周刊功能支持，需手动开启  
-修复文章详情页顶部文字和图标对不齐的问题  
-优化移动端card模式下显示样式  
-修复文章发布时间计算问题，时区问题，影响不大  
-优化页脚底部排列顺序  
-页脚增加分隔线  
-电脑端增加顶栏自动隐藏功能  
-电脑端顶栏增加固定（随页面移出屏幕）效果  
-
-**首次运行请使用管理员身份打开powershell运行pnpm install**
-
-## 博客预览
-主页
-![](https://pic1.imgdb.cn/item/6a3938ff4a893629d992bb61.png)
-![](https://r2tc.20030327.xyz/file/%e5%8d%9a%e5%ae%a2/%e6%96%87%e7%ab%a0/1783701143321_1783701105376.png)
-![](https://r2tc.20030327.xyz/file/%e5%8d%9a%e5%ae%a2/%e6%96%87%e7%ab%a0/1783701137378_1783701080272.png)
----
-文章
-![](https://pic1.imgdb.cn/item/6a3938fe4a893629d992bb5f.png)
----
-友链
-![](https://pic1.imgdb.cn/item/6a3938ff4a893629d992bb60.png)
----
-分类
-![](https://pic1.imgdb.cn/item/6a3938fe4a893629d992bb5d.png)
----
-归档
-![](https://pic1.imgdb.cn/item/6a3938fe4a893629d992bb5e.png)
----
-
-
-## 环境要求
-
-- [Hugo Extended](https://gohugo.io/installation/)（推荐 0.120+，当前使用 0.163）
-
-验证安装：
-
-```bash
-hugo version
-# 输出中应包含 extended
-```
-
-
-## 文章在哪里？
-
-**路径：** `content/posts/`
-
-每篇文章一个 `.md` 文件，文件名即 URL 别名（slug）。例如 `content/posts/memos-web.md` 对应 `/posts/memos-web/`。
-
-### 新建文章
-
-在 `content/posts/` 下新建 `my-new-post.md`：
-
-```markdown
----
-title: "文章标题"
-description: "摘要，用于 SEO 和分享卡片"
-date: 2026-06-20
-lastmod: 2026-06-20          # 可选，最后修改时间
-cover: "https://example.com/cover.jpg"   # 封面图 URL
-categories:
-  - 分类名
-tags:
-  - 标签一
-  - 标签二
-weight: 1                     # 可选，越小越靠前（置顶用）
----
-
-正文使用 **Markdown** 书写。
-
-支持代码块、图片、表格等。图片可写：
-
-![说明](https://example.com/image.jpg)
-```
-
-保存后，本地 `npm run dev` 即可在浏览器预览。
-
-### 编辑 / 删除文章
-
-- **编辑：** 直接改对应的 `content/posts/*.md`
-- **删除：** 删除该 `.md` 文件，然后执行 `npm run build`（会清理 `public/` 中的旧页面）
-
-### 文章 Front Matter 字段说明
-
-| 字段 | 必填 | 说明 |
-|------|------|------|
-| `title` | 是 | 标题 |
-| `date` | 是 | 发布日期 |
-| `description` | 建议 | 摘要（搜索、OG 分享） |
-| `cover` | 建议 | 封面图 |
-| `categories` | 建议 | 分类（自动生成分类页） |
-| `tags` | 建议 | 标签 |
-| `lastmod` | 否 | 最后修改时间 |
-| `weight` | 否 | 排序权重，数字越小越靠前 |
-
----
-
-## 页面在哪里？
-
-Hugo 中「页面」分两类：
-
-### 1. 独立页面（单文件）
-
-位于 `content/` 根目录，通过 front matter 的 `layout` 指定模板：
-
-| 文件 | 访问路径 | layout | 说明 |
-|------|----------|--------|------|
-| `about.md` | `/about/` | `about` | 关于页，正文写在文件里 |
-| `links.md` | `/links/` | `links` | 友链页壳子，卡片在 `data/links.yaml` |
-| `comment.md` | `/comment/` | `comment` | 留言页（Waline + 信封动画） |
-| `search.md` | `/search/` | `search` | 全文搜索页 |
-
-**编辑关于页：** 改 `content/about.md` 的 Markdown 正文即可。
-
-**编辑友链：** 改 `data/links.yaml`（不是 `links.md`）。
-
-### 2. 栏目 / 列表页（目录 + `_index.md`）
-
-| 目录 | 访问路径 | 说明 |
-|------|----------|------|
-| `content/archives/_index.md` | `/archives/` | 归档（含统计图） |
-| `content/categories/_index.md` | `/categories/` | 全部分类 |
-| `content/tags/_index.md` | `/tags/` | 全部标签 |
-| `content/gallery/_index.md` | `/gallery/` | 相册列表 |
-
-分类页、标签详情页由 Hugo 根据文章 front matter **自动生成**，无需手动创建。
-
-### 3. 相册（特殊页面）
-
-```
-content/gallery/
-├── _index.md          # 相册列表（albums 字段控制显示哪些相册）
-├── bizhi/index.md     # 相册「一些壁纸」→ /gallery/bizhi/
-└── jiamio/index.md    # 相册「秘密哦」→ /gallery/jiamio/
-```
-
-**新建相册：**
-
-1. 创建 `content/gallery/新相册名/index.md`
-2. 在 `content/gallery/_index.md` 的 `albums` 列表中加入 `新相册名`
-
-相册 front matter 示例：
-
-```markdown
----
-title: "相册标题"
-date: 2025-08-18
-cover: "https://example.com/cover.jpg"
-desc: "相册描述"
-location: "重庆"
-encrypted: false          # true 时启用密码门
-password: "your-password" # encrypted 为 true 时填写
-source: local
-tags:
-  - 壁纸
-photos:
-  - url: "https://example.com/photo1.jpg"
-    date: 2026-6-1
-  - url: "https://example.com/photo2.jpg"
-    date: 2026-5-20
----
-```
-
-### 3. 友链（特殊页面）
-友链公告文件位置：`themes/aiovtue/layouts/partials/friend-link-notice.html`
-
-### 4. 评论系统
-
-评论出现在**文章详情页**、**友链页**、**留言页**底部，在 `hugo.toml` 中配置。
-
-#### 选择评论服务
-
-```toml
-[params.comment]
-  provider = 'waline'   # waline | twikoo
-```
-
-#### Waline
-
-1. 在 [Waline](https://waline.js.org/) 或托管平台（如 [HouLang 评论服务](https://waline.js.org/) 文档所列）创建站点，获得 **serverURL**。
-2. 填入 `hugo.toml`：
-
-```toml
-[params.waline]
-  # Waline 服务端地址（创建应用后获得，末尾不要加 /）
-  serverURL = 'https://你的地址'
-  placeholder = '分享你的想法...'   # 评论框占位文字（可选）
-```
-
-3. 保存后重新构建部署。评论区会随站点 `html.dark` 类自动切换深浅色。
-
-#### Twikoo
-
-若改 Twikoo，将 `provider` 设为 `twikoo` 并配置：
-
-```toml
-[params.twikoo]
-  envId = 'https://你的-twikoo-地址/'
-```
-
-#### 关闭单篇文章评论
-
-在文章 front matter 中加：
-
-```yaml
-comment: false
-```
-
----
-
-## 站点配置在哪里改？
-
-| 想改什么 | 改哪个文件 |
-|----------|------------|
-| 站点名、域名、导航、Hero、社交、赞助、评论、页脚 | `hugo.toml` |
-| 友链卡片 | `data/links.yaml` |
-| 首页轮播图 / 留言信封图 | `static/hero/`、`static/envelope/` |
-| 网站图标 | `static/favicon.png` |
-| 主题样式、布局 | `themes/aiovtue/`（进阶） |
-
-修改 `hugo.toml` 后，开发服务器会自动热重载；改 `static/` 文件后刷新浏览器即可。
-
-**重要：** 部署前确认 `hugo.toml` 顶部 `baseURL` 与线上域名一致（当前配置为 `https://shadowssky.com/`）。
-
----
-
-## 本地开发与测试
-
-```bash
+```powershell
+git clone --branch best https://github.com/sshadow-sky/HUGO_BLOG.git
 cd HUGO_BLOG
-
-# 安装依赖（管理员运行）
-pnpm install
-
-# 启动网页
-pnpm dev
-
-# 浏览器打开
-# http://localhost:1313
+npm ci
 ```
 
-常用操作：
+已有工作区直接进入 `D:\new_blog\HUGO_BLOG`，不要重新克隆或使用旧副本。依赖未安装或锁文件更新时，再执行 `npm ci`。
 
-- 改文章 / 页面 → 保存后浏览器刷新
-- 改 `hugo.toml` / `data/links.yaml` → 本地页面自动生效，RSS 缓存需手动更新
-- 按 `Ctrl+C` 停止服务器
+### 常规开发预览：1313
 
-### 本地构建（模拟上线产物）
+在项目根目录执行：
 
-```bash
-pnpm build
+```powershell
+hugo version
+npm run dev -- --bind 127.0.0.1 --port 1313 --baseURL http://localhost:1313/
 ```
 
-构建结果在 `public/` 目录。`--cleanDestinationDir` 会先清空旧文件，避免已删文章残留。
+打开 [博客首页](http://localhost:1313/)。此模式读取仓库的 `content/`，包含草稿，修改内容或主题后自动刷新。
 
-`npm run dev`、`npm run build` 和 `npm run build:cf` 均不会自动补下载静态资源，也不会抓取 RSS 或追番数据；页面继续使用本地已有资源与缓存。云端构建需要时仍会下载 Hugo 官方发行版，浏览器端外部服务的关闭将在后续步骤处理。
+保持终端运行；按 `Ctrl+C` 停止服务。关闭终端或重启电脑后需重新启动，这些命令不会安装开机自启服务。
 
-### 手动更新业务数据
+当前 Windows 工作区的 Hugo 位于 `D:\new_blog\.tools\hugo\hugo.exe`。若提示找不到 `hugo`，可先在当前 PowerShell 设置：
 
-```bash
-npm run update:links    # 按 data/links.yaml 中的 RSS 源更新 data/links_rss.json
-npm run update:bangumi  # 按 hugo.toml 中的追番 UID 更新 data/bangumi.json
+```powershell
+$env:PATH = 'D:\new_blog\.tools\hugo;' + $env:PATH
 ```
 
-这两个命令只有手动运行时才会执行。RSS 功能关闭、没有 RSS 源（包括缺少 `data/links.yaml`），或追番功能关闭、UID 为空时，不发起对应业务请求，并写入空结果。原 RSS 订阅地址和旧缓存已清理；本站追番 UID 已替换为用户提供的 `1938855661`。最近一次更新因 Bilibili 返回“用户隐私设置未公开”而未取得条目，当前追番缓存为空；这不表示该账号没有追番。没有缓存时朋友动态隐藏、追番显示空列表。其他友链资料与个人信息仍待后续清理。
+若 PowerShell 的执行策略阻止 `npm.ps1`，将命令中的 `npm` 改为 `npm.cmd` 即可。
 
-朋友动态和追番展示功能保持启用。后续在 `data/links.yaml` 的第一个分组中配置自己的友链及 `rss` 地址，执行 `npm run update:links`；追番填写 `params.bangumi.vmid` 后执行 `npm run update:bangumi`。本地预览会读取新缓存，正式站点需要重新构建并发布。两个生成的 JSON 文件由 Git 忽略。
+### 继续查看现有测试草稿：1314
 
-留言页信封图片和霞鹜文楷字体继续作为本站本地静态资源保留，包含原有许可说明。若这些资源缺失，需要从自己的备份或受控资源源补齐；默认启动和构建不会再从原作者仓库自动下载。
+当前用于检查界面和示例内容的 [1314 预览](http://localhost:1314/) 使用本机 `.local/weekly-preview/` 中的独立内容副本。要恢复相同的预览内容，在 PowerShell 执行：
 
-本地预览构建结果（可选）：
-
-```bash
-npx --yes serve public
-# 或任意静态文件服务器指向 public/
+```powershell
+Set-Location D:\new_blog\HUGO_BLOG
+& D:\new_blog\.tools\hugo\hugo.exe server `
+  --config 'hugo.toml,.local/weekly-preview/config.toml' `
+  --contentDir '.local/weekly-preview/content' `
+  --destination '.local/weekly-preview/server-public' `
+  --cacheDir 'D:/new_blog/HUGO_BLOG/.local/weekly-preview/cache' `
+  --bind 127.0.0.1 --port 1314 `
+  --baseURL 'http://localhost:1314/' `
+  --buildDrafts --disableFastRender
 ```
 
+**这是当前机器专用的预览方式。** `.local/` 不提交到 Git，新克隆的项目应使用上面的常规启动方式。1314 的内容不会随 CMS 保存或主目录 `content/` 的修改自动同步；主题仍取自当前项目。背景说明见 预览与首页结构（本地文档：`docs/admin/32-preview-and-home-structure.md`）。
+
+## 可选服务
+
+### 本地评论
+
+在博客根目录另开一个终端，首次安装后启动：
+
+```powershell
+npm run comments:install
+npm run comments:start
+```
+
+服务监听 `127.0.0.1:8080`，开发配置自动使用该地址。评论数据保存在 `.local/twikoo/`，应单独备份，不提交到 Git。
+
+博客和评论进程需要分别运行。生产评论后端尚需独立部署，不能把本机地址用作线上接口。详细说明见 [Twikoo 本地运行与迁移](services/twikoo/README.md)。
+
+### 可视化后台
+
+后台是独立项目，位于当前机器的 `D:\new_blog\HUGO_BLOG_ADMIN`，不包含在本仓库中。已完成本地环境配置后，在 PowerShell 执行：
+
+```powershell
+Set-Location D:\new_blog\HUGO_BLOG_ADMIN
+.\scripts\start-local.ps1
+```
+
+打开 [后台登录页](http://localhost:3000/sign-in)，使用已授权的 GitHub 账号登录。首次配置或迁移机器请阅读后台目录中的 `LOCAL_SETUP.md`，需要准备数据库及 GitHub App 配置；密钥放在本地环境文件中。
+
+后台保存会写入 GitHub 的 `best` 分支，**不等于已发布，也不会自动更新本机博客或 1314 内容副本**。查看保存后的版本，可使用编辑页中的预览功能；更新本机内容前需先核对并同步 Git 差异，保留未提交工作。
+
+## 写作与内容目录
+
+| 位置 | 用途 |
+| --- | --- |
+| `content/posts/` | 普通文章、画廊文章；画廊使用 `layout: gallery-post` |
+| `content/excalidraw/` | 画板文章 |
+| `content/weekly/` | 独立周报，对应 `/weekly/` |
+| `content/moments/`、`content/gallery/` | 动态、相册 |
+| `static/uploads/` | 文章媒体，正文使用 `/uploads/文件名` 引用 |
+| `data/links.yaml` | 友链资料与朋友 RSS 配置 |
+| `themes/aiovtue/` | 当前使用的主题模板、样式与交互 |
+| `hugo.toml`、`config/development/` | 站点配置、开发环境覆盖配置 |
+| `.pages.yml` | CMS 内容与媒体配置 |
+| `services/twikoo/` | 本地评论服务 |
+| `scripts/`、`docs/` | 维护脚本、开发计划与验收记录 |
+
+普通文章可新建为 `content/posts/my-first-post/index.md`：
+
+```markdown
+---
+title: "第一篇笔记"
+date: 2026-10-22T10:00:00+08:00
+draft: true
+description: "记录学习与创作。"
+math: true
+tags: ["笔记"]
 ---
 
-## 云端部署（Cloudflare Pages）
+## 从这里开始
 
-本站为纯静态站点，构建产物为 `public/` 目录，适合 [Cloudflare Pages](https://pages.cloudflare.com/)。
+正文支持 **Markdown**，也可以插入图片：
 
-1. 将 `hugo-blog/` 推送到 GitHub / GitLab 等
-2. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-3. 选择仓库，配置构建设置：
+![图片说明](/uploads/example.jpg)
 
-| 设置项 | 值 |
-|--------|-----|
-| Framework preset | None（不要直接选hugo，cloudflare的hugo版本太低） |
-| Build command | `npm run build` |
-| Build output directory | `public` |
-
-
-4. 保存并部署。首次成功后获得 `*.pages.dev` 预览地址。
-
-5. **绑定自定义域名：** Pages 项目 → **Custom domains** → 添加你的域名，按提示在 Cloudflare DNS 添加 CNAME。
-
-6. 确认 `hugo.toml` 中 `baseURL` 与最终访问域名一致，改完后重新部署。
-
-## 云端部署（vercel）
-直接选择hugo即可，依旧配置好了，正常会自己跳出来
-vercel新建项目，选择连接github，选择本项目，配置界面直接选hugo即可，如果失败的话，可以手动选择构建命令为`npm run build`, 输出目录`public`, 如何直接部署即可
-
-## 云端部署（netlify）
-直接选择hugo即可，依旧配置好了，正常会自己跳出来
-netlify新建项目，选择连接github，选择本项目，配置界面直接选hugo即可，如果失败的话，可以手动选择构建命令为`npm run build`, 输出目录`public`, 如何直接部署即可
-
-其实都是一样的啦，要么直接选hugo预设，要么手动输入构建命令和输出目录，一通百通~
-
-## 常用命令速查
-
-```bash
-pnpm dev     # 本地开发预览
-pnpm build   # 构建到 public/（部署用）
-pnpm run update:links    # 手动更新 RSS 缓存
-pnpm run update:bangumi  # 手动更新追番缓存
+行内公式：$E = mc^2$
 ```
+
+将示例图片路径替换为实际素材。`draft: true` 的文章仅在启用草稿的预览中显示，正式构建会排除；准备发布时再改为 `false`，并检查日期和资源。三类文章的检查说明见 文章类型草稿（本地文档：`docs/admin/31-article-type-drafts.md`）。
+
+本站内容订阅为 `/index.xml`，周报订阅为 `/weekly/index.xml`，均由 Hugo 构建生成；朋友动态抓取的是其他站点的 RSS，与这两个订阅入口不同。
+
+## 构建与手动更新
+
+以下命令均在博客根目录运行：
+
+| 命令 | 用途 |
+| --- | --- |
+| `npm run build` | 生成压缩后的正式静态文件到 `public/`，不包含草稿，不执行部署 |
+| `npm run update:links` | 根据友链配置手动抓取朋友 RSS 动态 |
+| `npm run update:bangumi` | 根据本站 Bilibili 配置手动更新追番缓存 |
+
+启动与构建不会自动抓取 RSS、追番或补下载资源。手动更新需要对应来源可访问，追番结果还受账号隐私设置影响。
+
+正式构建前先停止正在使用该项目的 Hugo 开发服务；如提示构建锁占用，不要直接删除运行中的锁。`public/` 是生成目录，不在其中编辑源文件。
+
+## 常见问题
+
+- **localhost 打不开：** 检查对应服务终端是否仍在运行，以及实际启动的是 1313 还是 1314。后台 3000 和评论 8080 需单独启动。
+- **端口已被占用：** 可用 `netstat -ano | findstr :1314` 查看监听进程；按实际端口替换数字，确认进程用途后再处理。博客可换端口，评论后端与前台地址则需保持一致。
+- **后台保存后首页没变化：** CMS 写入远端，常规预览读本地工作区，1314 还使用独立内容副本；三者不是自动同步关系。
+- **本地没有访问量：** 开发环境关闭第三方统计上报；线上统计和服务验收见 [部署后 TODO](docs/post-deployment-todo.md)。
+
+## 维护说明与致谢
+
+协作约定见 [项目宪章](AGENTS.md)。功能说明可从 [音乐播放器](docs/music-player.md)、可视化编辑器（本地文档：`docs/admin/12-visual-editor-integration.md`）、GIF 与视频上传（本地文档：`docs/admin/13-gif-video-upload.md`）、周报独立栏目（本地文档：`docs/admin/30-weekly-independent-front.md`） 进入。
+
+请保留用户待检查的草稿和素材；`.local/`、`.runtime/`、`.tools/`、`.cache/`、备份及环境密钥不上传仓库。正式部署、评论迁移与第三方服务验收按计划单独推进。
+
+本项目基于 [AIOVTUE/hugo-theme-aiovtue](https://github.com/AIOVTUE/hugo-theme-aiovtue) 二次开发，感谢上游主题及所使用的开源项目。主题、第三方依赖和素材的许可分别遵循其来源声明；本站改名与个性化不改变这些来源归属。
