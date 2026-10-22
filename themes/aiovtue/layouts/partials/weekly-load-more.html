@@ -5,7 +5,7 @@
 {{- if $remaining -}}
   {{- $morePosts := slice -}}
   {{- range $index, $post := $remaining -}}
-    {{- $modifiedDate := partial "post-modified-date.html" $post -}}
+    {{- $meta := partial "weekly-meta.html" $post -}}
     {{- $cover := partial "post-cover.html" $post -}}
     {{- $coverSrc := $cover -}}
     {{- if and $cover (not (or (hasPrefix $cover "http://") (hasPrefix $cover "https://") (hasPrefix $cover "//"))) -}}
@@ -21,17 +21,19 @@
     {{- $morePosts = $morePosts | append (dict
       "title" $post.Title
       "url" $post.RelPermalink
-      "date" $modifiedDate.display
-      "dateTime" $modifiedDate.datetime
-      "dateOnly" $modifiedDate.dateOnly
+      "date" ($post.Date.Format "2006.01.02")
+      "dateTime" ($post.Date.Format "2006-01-02T15:04:05Z07:00")
+      "dateOnly" true
       "dateDay" ($post.Date.Format "02")
       "dateMonth" (printf "%s月" ($post.Date.Format "01"))
       "dateYear" ($post.Date.Format "2006")
       "weekday" (index (slice "日" "一" "二" "三" "四" "五" "六") $post.Date.Weekday)
+      "weekdayIndex" (int $post.Date.Weekday)
       "cover" $coverSrc
       "coverIsVideo" (or (hasSuffix $lower ".mp4") (hasSuffix $lower ".webm") (hasSuffix $lower ".ogg"))
       "tags" $tags
-      "issue" ($post.Params.issue | default "")
+      "issue" $meta.issue
+      "kindLabel" $meta.kindLabel
       "excerpt" (partial "post-card-excerpt.html" $post)
       "pinned" (default false $post.Params.pinned)
       "index" $cardIndex

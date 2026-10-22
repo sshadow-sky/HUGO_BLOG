@@ -1,5 +1,5 @@
 {{- /* Match the homepage article sections; exclude entries without standalone pages. */ -}}
-{{- $pages := where site.RegularPages "Section" "in" (slice "posts" "excalidraw") -}}
+{{- $pages := partial "article-pages.html" site.RegularPages -}}
 {{- $pages = where $pages "Permalink" "ne" "" -}}
 {{- $pages = where $pages "Title" "ne" "" -}}
 {{- $pages = $pages.ByDate.Reverse -}}

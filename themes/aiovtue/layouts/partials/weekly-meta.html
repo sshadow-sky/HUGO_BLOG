@@ -1,0 +1,13 @@
+{{- /* Issue is explicit content metadata, never derived from card position. */ -}}
+{{- $issue := "—" -}}
+{{- if isset .Params "issue" -}}
+  {{- $value := strings.TrimSpace (printf "%v" .Params.issue) -}}
+  {{- if findRE "^0*[1-9][0-9]*$" $value -}}
+    {{- $issue = replaceRE "^0+" "" $value -}}
+    {{- if lt (len $issue) 2 -}}{{- $issue = printf "0%s" $issue -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $kind := .Params.weekly_kind | default "original" -}}
+{{- $labels := dict "original" "原创" "curated" "资讯精选" "mixed" "混合周报" -}}
+{{- $kindLabel := index $labels (printf "%v" $kind) | default "周报" -}}
+{{- return (dict "issue" $issue "kind" $kind "kindLabel" $kindLabel) -}}

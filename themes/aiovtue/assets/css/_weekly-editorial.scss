@@ -1,0 +1,261 @@
+// Weekly-only editorial layouts. Shared card motion remains in weekly.scss.
+.sakura-weekly-page {
+  .weekly-post-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    align-items: stretch;
+  }
+
+  .weekly-card { min-width: 0; }
+  .weekly-card__surface { height: 100%; }
+  .weekly-card__link {
+    position: relative;
+    height: 100%;
+    outline-offset: -5px;
+    border-radius: 14px;
+  }
+  .weekly-card__link:focus-visible { outline: 2px solid var(--weekly-card-accent); }
+  .weekly-card__arch-stroke { display: none; }
+  .weekly-card__folio {
+    position: absolute;
+    bottom: 48px;
+    right: 18px;
+    font: italic 700 112px/1 Georgia, serif;
+    letter-spacing: -.08em;
+    color: var(--weekly-card-accent);
+    opacity: .065;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // A full-height cover beside a lace-edged editorial sheet.
+  .weekly-card--featured {
+    grid-column: 1 / -1;
+
+    .weekly-card__link { display: grid; grid-template-columns: minmax(0, 42%) minmax(0, 1fr); grid-template-areas: "media body"; }
+    .weekly-card__media--rect {
+      width: 100%;
+      height: auto;
+      min-height: 420px;
+      margin: 0;
+      border-radius: 0;
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, #09233399, transparent 65%), linear-gradient(0deg, #10243666, transparent 60%);
+      }
+    }
+    .weekly-card__cover-img { object-position: center 44%; }
+    .weekly-card__body {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      padding: 30px 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+      border-radius: 0;
+      background: var(--weekly-sheet);
+      overflow: visible;
+      box-shadow: none;
+    }
+    .weekly-card__label-row { grid-column: 1 / -1; padding-bottom: 14px; }
+    .weekly-card__title { grid-column: 1; font-size: clamp(1.35rem, 2.4vw, 1.8rem); line-height: 1.5; }
+    .weekly-card__summary { grid-column: 1; margin: 0; font-size: .9rem; line-height: 1.85; }
+    .weekly-card__guide {
+      grid-column: 1;
+      grid-row: auto;
+      align-self: stretch;
+      border-radius: 0;
+      border-left: 0;
+      border-top: 1px solid var(--weekly-rule);
+      padding: 14px 0 0;
+      background: transparent;
+      h3 { letter-spacing: .15em; margin-bottom: 12px; }
+      ul { padding-left: 0; list-style: none; counter-reset: weekly-guide; }
+      li {
+        counter-increment: weekly-guide;
+        position: relative;
+        padding-left: 26px;
+        margin-block: 9px;
+        line-height: 1.7;
+        &::before {
+          content: counter(weekly-guide, decimal-leading-zero);
+          position: absolute;
+          left: 0;
+          font-size: .65rem;
+          color: var(--weekly-card-accent);
+        }
+      }
+    }
+    .weekly-card__body:not(:has(.weekly-card__guide)) { grid-template-columns: minmax(0, 1fr); }
+    .weekly-card__meta-row { grid-column: 1 / -1; padding-top: 12px; border-top: 1px solid var(--weekly-rule); }
+  }
+  .weekly-cover-stamp {
+    position: absolute;
+    z-index: 1;
+    top: 28px;
+    left: 30px;
+    color: #fff;
+    font-size: .68rem;
+    letter-spacing: .24em;
+    text-shadow: 0 1px 8px #0008;
+    border-left: 2px solid #b1edf1;
+    padding-left: 12px;
+    span { display: block; margin-top: 8px; font-size: .75rem; letter-spacing: .12em; }
+  }
+  .weekly-cover-issue {
+    position: absolute;
+    z-index: 1;
+    bottom: 42px;
+    right: 32px;
+    color: #fff;
+    font: italic 700 clamp(72px, 9vw, 110px)/1 Georgia, serif;
+    text-shadow: 0 2px 20px #061b3899;
+    small { font: 400 11px/1.5 sans-serif; letter-spacing: .2em; display: block; text-align: right; }
+  }
+
+  // Alternate the cover side while keeping a comfortable text width.
+  .weekly-card--layout-a {
+    .weekly-card__link {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 40%);
+      grid-template-rows: 1fr auto;
+      grid-template-areas: "body media" "date media";
+      min-height: 290px;
+    }
+    .weekly-card__body { padding: 28px 34px 18px; }
+  }
+  .weekly-card--layout-b {
+    .weekly-card__link {
+      grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+      grid-template-rows: 1fr auto;
+      grid-template-areas: "media body" "media date";
+      min-height: 290px;
+    }
+    .weekly-card__body { padding: 28px 34px 18px; }
+    .weekly-card__media { margin: 0; width: 100%; border-radius: 0; }
+    .weekly-card__label-row { justify-content: flex-start; }
+    .weekly-card__kind { font-size: .65rem; }
+    .weekly-card__meta-row { flex-wrap: wrap; gap: 8px; }
+    .weekly-card__read-more { margin-left: auto; }
+    .weekly-card__excerpt { -webkit-line-clamp: 4; }
+    .weekly-card__folio { right: 22px; left: auto; }
+  }
+  .weekly-card--mag {
+    .weekly-card__media { min-height: 0; overflow: hidden; }
+    .weekly-card__media--curve-left { width: 100%; margin: 0; }
+    .weekly-card__media-shape { mask-image: none; -webkit-mask-image: none; }
+    .weekly-card__body { justify-content: flex-start; gap: 12px; }
+    .weekly-card__title { font-size: 1.22rem; line-height: 1.6; }
+    .weekly-card__meta-row { margin-top: auto; padding-top: 10px; }
+    .weekly-card__label-row { border: 0; padding: 0; margin: 0; }
+    .weekly-card__issue-label { font-size: .58rem; letter-spacing: .16em; }
+    .weekly-card__issue-num { font-size: 1.15rem; }
+    .weekly-card__mobile-date { display: none; }
+    .weekly-card__kind { margin-left: auto; }
+    .weekly-mag-date {
+      display: block;
+      margin: 0 34px;
+      padding: 14px 0;
+      border-top: 1px dashed color-mix(in srgb, var(--weekly-card-accent) 25%, var(--weekly-rule));
+      background: transparent;
+      &::before { display: none; }
+      &::after {
+        content: "✦";
+        position: absolute;
+        inset: auto 0 16px auto;
+        width: auto;
+        border: 0;
+        color: var(--weekly-card-accent);
+        font-size: 15px;
+      }
+    }
+    .weekly-mag-date__time { flex-direction: row; flex-wrap: wrap; gap: 8px; padding-right: 24px; text-align: left; }
+    .weekly-mag-date__brand,
+    .weekly-mag-date__issue-num,
+    .weekly-mag-date__issue-label { display: none; }
+    .weekly-mag-date__year-bar { width: auto; margin: 0; font-size: .58rem; }
+    .weekly-mag-date__day-num { order: -1; font-size: 1.1rem; margin: 0; }
+    .weekly-mag-date__weekday { margin: 0; font-size: .6rem; span { display: none; } }
+  }
+}
+
+.sakura-weekly-page {
+  --weekly-sheet: var(--weekly-paper);
+  --weekly-lace: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48' viewBox='0 0 28 48'%3E%3Cg fill='none' stroke='black' stroke-width='1'%3E%3Cpath d='M23 0C23 6 5 6 5 12S23 18 23 24S5 30 5 36S23 42 23 48'/%3E%3Ccircle cx='15' cy='12' r='3'/%3E%3Ccircle cx='15' cy='36' r='3'/%3E%3C/g%3E%3Cpath d='M26 0V48' stroke='black' stroke-dasharray='1 4'/%3E%3C/svg%3E");
+  .weekly-card__link::before,
+  .weekly-card__link::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(40% - 24px);
+    width: 28px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .weekly-card__link::before {
+    background: radial-gradient(circle at 100% 50%, var(--weekly-sheet) 12px, transparent 12.6px) right top / 24px 24px repeat-y;
+  }
+  .weekly-card__link::after {
+    background: var(--weekly-card-accent);
+    mask: var(--weekly-lace) left top / 28px 48px repeat-y;
+    opacity: .45;
+  }
+  .weekly-card--featured .weekly-card__link::before,
+  .weekly-card--featured .weekly-card__link::after { left: calc(42% - 24px); }
+  .weekly-card--layout-a .weekly-card__link::before,
+  .weekly-card--layout-a .weekly-card__link::after { left: auto; right: calc(40% - 24px); transform: scaleX(-1); }
+  .weekly-card--layout-a .weekly-card__folio { right: calc(40% + 22px); }
+}
+
+html.dark .sakura-weekly-page {
+  --weekly-sheet: color-mix(in srgb, var(--weekly-paper) 94%, #fff);
+  .weekly-card--featured .weekly-card__body { background: var(--weekly-sheet); }
+}
+
+@media (max-width: 700px) {
+  .sakura-weekly-page {
+    .weekly-card--featured {
+      .weekly-card__link { grid-template-columns: minmax(0, 1fr); grid-template-areas: "media" "body"; }
+      .weekly-card__media--rect { height: 210px; min-height: 210px; }
+      .weekly-card__body { margin: 0; padding: 24px; gap: 12px; }
+      .weekly-card__title { font-size: 1.3rem; }
+    }
+    .weekly-cover-stamp { top: 20px; left: 20px; font-size: .6rem; }
+    .weekly-cover-issue { bottom: 30px; right: 22px; font-size: 72px; }
+    .weekly-card--mag {
+      .weekly-card__link {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: 180px 1fr auto;
+        grid-template-areas: "media" "body" "date";
+        min-height: 0;
+      }
+      .weekly-card__media { margin: 0; width: 100%; border-radius: 0; }
+      .weekly-card__body { padding: 20px 24px; }
+      .weekly-card__excerpt { -webkit-line-clamp: 3; }
+      .weekly-card__read-more { margin-left: auto; }
+    }
+    .weekly-card .weekly-card__link::before,
+    .weekly-card .weekly-card__link::after {
+      left: 0;
+      right: 0;
+      top: 158px;
+      bottom: auto;
+      width: 100%;
+      height: 28px;
+      transform: none;
+    }
+    .weekly-card .weekly-card__link::before {
+      background: radial-gradient(circle at 50% 100%, var(--weekly-sheet) 12px, transparent 12.6px) left bottom / 24px 24px repeat-x;
+    }
+    .weekly-card .weekly-card__link::after {
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='28' viewBox='0 0 48 28'%3E%3Cg transform='matrix(0 1 1 0 0 0)' fill='none' stroke='black' stroke-width='1'%3E%3Cpath d='M23 0C23 6 5 6 5 12S23 18 23 24S5 30 5 36S23 42 23 48'/%3E%3Ccircle cx='15' cy='12' r='3'/%3E%3Ccircle cx='15' cy='36' r='3'/%3E%3Cpath d='M26 0V48' stroke-dasharray='1 4'/%3E%3C/g%3E%3C/svg%3E") left top / 48px 28px repeat-x;
+    }
+    .weekly-card--featured .weekly-card__link::before,
+    .weekly-card--featured .weekly-card__link::after { top: 188px; }
+    .weekly-card--layout-a .weekly-card__folio { right: 22px; }
+  }
+}

@@ -1,33 +1,34 @@
 {{ define "main" }}
-{{- $followHome := .Site.Params.weekly.followHome | default true -}}
+{{- $followHome := true -}}
+{{- with .Site.Params.weekly -}}
+  {{- if isset . "followhome" -}}{{- $followHome = .followHome -}}{{- end -}}
+{{- end -}}
 {{- $cardsPagingConfig := partial "home-cards-paging-config.html" (dict "Site" .Site "WeeklyFollowHome" $followHome) -}}
 {{- $cardsPaging := $cardsPagingConfig.Paging -}}
 {{- $cardsBatchSize := $cardsPagingConfig.BatchSize -}}
 {{- $loadMore := eq $cardsPaging "loadMore" -}}
-{{- $pages := .RegularPages -}}
-{{- if not $pages -}}
-  {{- $pages = .Pages -}}
-{{- end -}}
-{{- if not $pages -}}
-  {{- $pages = where .Site.RegularPages "RelPermalink" "hasPrefix" "/posts/weekly/" -}}
-{{- end -}}
-{{- $pages = partial "posts-sorted.html" (dict "Pages" $pages) -}}
+{{- $pages := .RegularPagesRecursive.ByDate.Reverse -}}
 {{- $paginator := .Paginate $pages $cardsBatchSize -}}
 <article class="sakura-page sakura-weekly-page">
   <div class="sakura-page-content">
-    <header class="weekly-masthead" aria-label="周刊版头">
+    <header class="weekly-masthead" aria-label="周报版头">
       <div class="weekly-masthead__rule weekly-masthead__rule--top" aria-hidden="true"></div>
-      <h2 class="weekly-masthead__title">{{ .Title }}</h2>
+      <p class="weekly-masthead__eyebrow">OBSERVE · CREATE · SHARE</p>
+      <h1 class="weekly-masthead__title">{{ .Title }}</h1>
+      {{- with .Description -}}<p class="weekly-masthead__description">{{ . }}</p>{{- end -}}
       {{- if $pages -}}
         <div class="weekly-masthead__meta">
           <span class="weekly-masthead__stat">共 {{ len $pages }} 期</span>
           <span class="weekly-masthead__stat">最新 {{ (index $pages 0).Date.Format "2006.01.02" }}</span>
         </div>
       {{- end -}}
+      {{- with .OutputFormats.Get "RSS" -}}
+        <a class="weekly-masthead__rss" href="{{ .RelPermalink }}" type="application/rss+xml">订阅周报 RSS <span aria-hidden="true">↗</span></a>
+      {{- end -}}
       <div class="weekly-masthead__rule weekly-masthead__rule--bottom" aria-hidden="true"></div>
     </header>
     {{- if not $pages -}}
-      <p class="weekly-empty">暂无周刊，请在 <code>content/posts/weekly/</code> 下创建文章。</p>
+      <div class="weekly-empty"><h2>第一期，正在酝酿</h2><p>把一周的观察与发现，慢慢写成值得分享的篇章。</p></div>
     {{- else -}}
       <div
         class="weekly-posts"
@@ -41,10 +42,7 @@
             {{- if and (eq $index 0) (eq $paginator.PageNumber 1) -}}
               {{- partial "weekly-card-featured.html" (dict "Page" $page "Site" $.Site "Index" $index) -}}
             {{- else -}}
-              {{- $magIndex := $index -}}
-              {{- if eq $paginator.PageNumber 1 -}}
-                {{- $magIndex = sub $index 1 -}}
-              {{- end -}}
+              {{- $magIndex := sub (add (mul (sub $paginator.PageNumber 1) $cardsBatchSize) $index) 1 -}}
               {{- partial "weekly-card.html" (dict "Page" $page "Site" $.Site "Index" $magIndex) -}}
             {{- end -}}
           {{- end -}}

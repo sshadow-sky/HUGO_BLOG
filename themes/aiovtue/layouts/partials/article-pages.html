@@ -1,0 +1,9 @@
+{{- /* A legacy weekly bundle must never leak into the ordinary article collection. */ -}}
+{{- $pages := where . "Section" "in" (slice "posts" "excalidraw") -}}
+{{- $articles := $pages -}}
+{{- range $pages -}}
+  {{- $legacyWeekly := false -}}
+  {{- with .File -}}{{- $legacyWeekly = hasPrefix (replace .Path "\\" "/") "posts/weekly/" -}}{{- end -}}
+  {{- if $legacyWeekly -}}{{- $articles = $articles | complement (slice .) -}}{{- end -}}
+{{- end -}}
+{{- return $articles -}}

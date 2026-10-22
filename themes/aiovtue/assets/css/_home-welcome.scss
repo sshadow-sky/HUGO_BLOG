@@ -1,0 +1,9 @@
+.home-welcome {
+  margin: 0 0 16px; padding: 10px 2px 4px;
+  color: var(--sakura-color-text);
+  h3 { display: flex; gap: 8px; align-items: center; margin: 0 0 10px; color: var(--sakura-color-primary); font-size: 1rem; }
+  p { margin: 0; }
+}
+.home-welcome__meta { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; font-size: .78rem; }
+.home-welcome__meta [data-welcome-distance] { font-size: .68rem; color: var(--sakura-color-text-muted); font-variant-numeric: tabular-nums; }
+.home-welcome p.home-welcome__copy { margin-top: 8px; font-size: .78rem; line-height: 1.8; }

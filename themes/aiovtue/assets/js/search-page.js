@@ -50,7 +50,7 @@ function renderSearchResultItem(item) {
     </a>
     <div class="search-result-entry__body">
       <div class="search-result-entry__head">
-        <h3 class="search-result-entry__title"><a href="${url}">${title}</a></h3>
+        <h3 class="search-result-entry__title"><a href="${url}">${item.kind === 'weekly' ? '<span class="search-result-entry__kind">周报 · </span>' : ''}${title}</a></h3>
         <div class="search-result-entry__date">
           <iconify-icon icon="mdi:clock-outline" aria-hidden="true"></iconify-icon>
           发布于 ${date}

@@ -16,6 +16,7 @@ import {
 } from './post-content.js'
 import { initNoticeBoard } from './notice-board.js'
 import { initSiteRuntime } from './site-runtime.js'
+import { initHomeClock } from './home-clock.js'
 import { initStatistics, cleanupStatistics } from './statistics.js'
 import {
   initHomeLayoutRandom,
@@ -40,6 +41,7 @@ import { isPjaxContentMounting } from './page-nav.js'
 import { initSearchPage } from './search-page.js'
 import { initEnvelope, initEnvelopeDanmaku } from './envelope.js'
 import { initWeeklyLoadMore, bootstrapWeeklyLoadMore } from './weekly.js'
+import { initWeeklyCards } from './weekly-cards.js'
 import { cancelTypeWriter } from './typewriter.js'
 import { bootSignatureWidget } from './signature-boot.js'
 
@@ -77,10 +79,12 @@ function mountPage() {
   initHomeListFeatured()
   initHomeListRandomSidebar()
   initHomeListArchiveHeatmap()
+  initHomeClock()
   refreshMobileCardsListPage()
   initHomeCardsLoadMore()
   scheduleHomeCardsLoadMoreSync()
   initWeeklyLoadMore()
+  initWeeklyCards()
   initPostToc()
   initPageComments({
     onTwikooReady: () => {

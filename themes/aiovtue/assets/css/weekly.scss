@@ -1,11 +1,12 @@
-.sakura-weekly-page {
+.sakura-weekly-page,
+.sakura-weekly-post {
   --weekly-paper: var(--sakura-color-background);
   --weekly-ink: var(--sakura-color-text-deep);
   --weekly-muted: var(--sakura-color-text-muted);
-  --weekly-accent: var(--sakura-color-primary);
+  --weekly-accent: var(--weekly-accent-a);
   --weekly-rule: color-mix(in srgb, var(--sakura-color-text) 14%, transparent);
-  --weekly-accent-a: #d65757;
-  --weekly-accent-b: #607d96;
+  --weekly-accent-a: #087f9b;
+  --weekly-accent-b: #7850bd;
   --weekly-card-shadow:
     0 10px 24px color-mix(in srgb, #000 10%, transparent),
     0 2px 8px color-mix(in srgb, #000 6%, transparent);
@@ -13,6 +14,9 @@
     0 14px 30px color-mix(in srgb, #000 13%, transparent),
     0 4px 12px color-mix(in srgb, #000 7%, transparent);
 
+}
+
+.sakura-weekly-page {
   .sakura-page-content {
     width: 100%;
     max-width: calc(var(--sakura-content-max-width) + 80px);
@@ -22,9 +26,10 @@
   }
 }
 
-html.dark .sakura-weekly-page {
-  --weekly-accent-a: #e07070;
-  --weekly-accent-b: #7a9ab3;
+html.dark .sakura-weekly-page,
+html.dark .sakura-weekly-post {
+  --weekly-accent-a: #67d5e9;
+  --weekly-accent-b: #bea3ef;
   --weekly-card-shadow:
     0 12px 26px color-mix(in srgb, #000 24%, transparent),
     0 2px 8px color-mix(in srgb, #000 16%, transparent);
@@ -39,6 +44,93 @@ html.dark .sakura-weekly-page {
   border: 1px dashed var(--sakura-color-divider);
   color: var(--weekly-muted);
   line-height: 1.7;
+  text-align: center;
+  background: var(--weekly-paper);
+
+  h2 { color: var(--weekly-ink); font-size: 1.1rem; }
+  p { margin-bottom: 0; }
+}
+
+.weekly-masthead__eyebrow {
+  margin: 18px 0 10px;
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  color: var(--weekly-accent);
+}
+
+.weekly-masthead__description {
+  max-width: 36rem;
+  margin: 14px auto;
+  color: var(--weekly-muted);
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.weekly-masthead__rss {
+  display: inline-block;
+  margin: 14px 0 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--weekly-rule);
+  border-radius: 4px;
+  color: var(--weekly-accent);
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+.weekly-card__kind {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--weekly-accent-b) 35%, transparent);
+  border-radius: 3px;
+  color: var(--weekly-accent-b);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.weekly-card__summary {
+  margin: 12px 0;
+  color: var(--weekly-muted);
+  font-size: 0.85rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.weekly-card__guide {
+  padding-top: 10px;
+  margin-bottom: 14px;
+  border-top: 1px dashed var(--weekly-rule);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--weekly-muted);
+
+  h3 { margin: 0 0 6px; font-size: 0.72rem; color: var(--weekly-accent); }
+  ul { margin: 0; padding-left: 1.2em; }
+  li { overflow-wrap: anywhere; }
+}
+
+.weekly-post-nav {
+  --weekly-card-accent: var(--weekly-accent);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin: 0 0 24px;
+  padding: 14px 0;
+  border-block: 1px solid var(--weekly-rule);
+  color: var(--weekly-muted);
+  font-size: 0.8rem;
+
+  a { margin-right: auto; color: var(--weekly-accent); text-decoration: none; }
+  .weekly-post-nav__rss { margin-right: 0; }
+  .weekly-card__issue-num { font-size: 1rem; }
+}
+
+.sakura-weekly-page a:focus-visible,
+.weekly-post-nav a:focus-visible {
+  outline: 2px solid var(--weekly-accent);
+  outline-offset: -3px;
 }
 
 .weekly-masthead {
@@ -233,57 +325,6 @@ html.dark .weekly-card--mag {
     }
   }
 
-  .weekly-card__content--featured {
-    position: relative;
-    max-height: clamp(110px, 16vw, 180px);
-    overflow: hidden;
-
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 36px;
-      background: linear-gradient(to bottom, transparent, #fff);
-      pointer-events: none;
-    }
-
-    .markdown-body {
-      font-size: 0.82rem;
-      line-height: 1.68;
-      color: var(--weekly-muted);
-    }
-
-    .markdown-body > :first-child {
-      margin-top: 0;
-    }
-
-    .markdown-body h2,
-    .markdown-body h3 {
-      margin: 0.55em 0 0.35em;
-      font-size: 0.88rem;
-      line-height: 1.45;
-      color: var(--weekly-ink);
-    }
-
-    .markdown-body ul,
-    .markdown-body ol {
-      margin: 0.45em 0;
-      padding-left: 1.2em;
-    }
-
-    .markdown-body li + li {
-      margin-top: 0.25em;
-    }
-
-    .markdown-body a {
-      color: var(--weekly-card-accent);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-  }
-
   a.weekly-card__read-more {
     text-decoration: none;
 
@@ -309,14 +350,6 @@ html.dark .weekly-card--mag {
 
 html.dark .weekly-card--featured {
   background: color-mix(in srgb, var(--sakura-color-background) 92%, #fff);
-
-  .weekly-card__content--featured::after {
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      color-mix(in srgb, var(--sakura-color-background) 92%, #fff)
-    );
-  }
 }
 
 .weekly-card__link {
@@ -461,6 +494,7 @@ html.dark .weekly-card__body {
 .weekly-card__label-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 2px;
   padding-bottom: 12px;
@@ -487,14 +521,17 @@ html.dark .weekly-card__body {
   display: inline-flex;
   align-items: baseline;
   gap: 7px;
+  min-width: 0;
+  flex-wrap: wrap;
+  overflow-wrap: anywhere;
   font-family: var(--va-font-serif);
   line-height: 1;
 }
 
 .weekly-card__issue-label {
-  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
+  font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.12em;
   color: var(--weekly-card-accent);
 }
 
@@ -503,6 +540,7 @@ html.dark .weekly-card__body {
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--weekly-card-accent);
+  overflow-wrap: anywhere;
 }
 
 .weekly-card__title {
@@ -512,6 +550,7 @@ html.dark .weekly-card__body {
   line-height: 1.45;
   font-weight: 700;
   color: var(--weekly-ink);
+  overflow-wrap: anywhere;
 }
 
 .weekly-card__excerpt {
@@ -721,10 +760,6 @@ html.dark .weekly-card__body {
     padding: 16px;
   }
 
-  .weekly-card--featured .weekly-card__content--featured {
-    max-height: 140px;
-  }
-
   .weekly-card--layout-a .weekly-card__link,
   .weekly-card--layout-b .weekly-card__link {
     grid-template-columns: 1fr;
@@ -794,4 +829,192 @@ html.dark .weekly-card__body {
   .weekly-masthead__title {
     letter-spacing: 0.12em;
   }
+}
+
+@media (max-width: 480px) {
+  .weekly-masthead { padding-inline: 0; }
+  .weekly-masthead__title { font-size: 1.45rem; letter-spacing: 0.04em; }
+  .weekly-card--featured .weekly-card__label-row--featured { gap: 8px; }
+  .weekly-card__featured-date { margin-left: auto; }
+  .weekly-post-nav { gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weekly-card,
+  .weekly-card *,
+  .weekly-masthead a {
+    transition: none !important;
+    animation: none !important;
+  }
+  .weekly-card:hover,
+  .weekly-card:hover .weekly-card__cover-img,
+  .weekly-card:hover .weekly-card__media img,
+  .weekly-card:hover .weekly-card__media video {
+    transform: none;
+  }
+}
+
+// A stationary outer card keeps pointer measurements stable while its surface moves.
+.sakura-weekly-page {
+  .weekly-masthead { margin-bottom:28px; padding-block:4px 8px; }
+  .weekly-masthead__eyebrow { margin-top:12px; }
+  .weekly-masthead__description { margin-block:10px; }
+  .weekly-masthead__rss { margin-block:10px 4px; border-radius:999px; }
+  .weekly-post-list { gap:30px; }
+
+  .weekly-card {
+    perspective:1400px;
+    &, &:hover, &.is-pinned, &.is-pinned:hover {
+      background:transparent;
+      border:0;
+      box-shadow:none;
+      overflow:visible;
+      transform:none;
+    }
+  }
+
+  .weekly-card__surface {
+    position:relative;
+    isolation:isolate;
+    min-width:0;
+    border:1px solid var(--weekly-rule);
+    border-radius:14px;
+    overflow:hidden;
+    background:var(--weekly-paper);
+    box-shadow:0 4px 8px #00000004, 0 14px 38px #0000000c;
+    transform:rotateX(var(--weekly-rotate-x, 0deg)) rotateY(var(--weekly-rotate-y, 0deg));
+    transition:transform .42s cubic-bezier(.2,.75,.25,1), box-shadow .3s, border-color .3s;
+
+    &::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+      opacity:0;
+      background:radial-gradient(ellipse at var(--weekly-light-x,50%) var(--weekly-light-y,50%), color-mix(in srgb,var(--weekly-card-accent) 16%,transparent),transparent 65%);
+      transition:opacity .35s;
+    }
+    &::after {
+      content:"";
+      position:absolute;
+      inset:0 12% auto;
+      height:1px;
+      pointer-events:none;
+      background:linear-gradient(90deg,transparent,var(--weekly-accent-a),var(--weekly-accent-b),transparent);
+      opacity:.55;
+    }
+    > .sakura-post-pin { position:absolute; top:10px; left:10px; z-index:5; }
+  }
+  .weekly-card.is-interacting .weekly-card__surface { transition:transform .12s ease-out,box-shadow .3s,border-color .3s; }
+  .weekly-card:focus-within .weekly-card__surface,
+  .weekly-card.is-interacting .weekly-card__surface {
+    border-color:color-mix(in srgb,var(--weekly-card-accent) 55%,var(--weekly-rule));
+    box-shadow:0 8px 16px #00000006,0 22px 48px color-mix(in srgb,var(--weekly-card-accent) 14%,transparent);
+    &::before { opacity:1; }
+  }
+  .weekly-card.is-pinned .weekly-card__surface { border-left:3px solid var(--weekly-card-accent); }
+  .weekly-card--featured .weekly-card__link { grid-template-columns:minmax(240px,38%) minmax(0,1fr); }
+  .weekly-card--featured .weekly-card__media--rect {
+    margin:18px 0 18px 18px;
+    width:calc(100% - 18px);
+    min-height:270px;
+    overflow:hidden;
+    border-radius:9px;
+  }
+  .weekly-card--featured .weekly-card__body { padding:26px 28px; }
+  .weekly-card__guide { padding:12px 14px; border:0; border-radius:8px; background:color-mix(in srgb,var(--weekly-card-accent) 4%,transparent); }
+  .weekly-card__guide ul { margin-bottom:0; }
+  .weekly-card__label-row { border-bottom-color:color-mix(in srgb,var(--weekly-card-accent) 18%,transparent); }
+  .weekly-card__kind { border-radius:999px; padding:4px 9px; }
+  .weekly-card__excerpt { -webkit-line-clamp:3; }
+  .weekly-card__read-more { gap:8px; min-height:30px; }
+  .weekly-card__read-more iconify-icon { transition:transform .25s ease; }
+  .weekly-card:is(:hover,:focus-within) .weekly-card__read-more iconify-icon { transform:translateX(4px); }
+  .weekly-mag-date { background:linear-gradient(135deg,color-mix(in srgb,var(--weekly-card-accent) 5%,transparent),transparent); }
+}
+
+html.dark .sakura-weekly-page .weekly-card { background:transparent; }
+html.dark .sakura-weekly-page .weekly-card__surface { background:color-mix(in srgb,var(--weekly-paper) 94%,#fff); box-shadow:0 12px 36px #0003; }
+html.dark .sakura-weekly-page .weekly-card:is(:focus-within,.is-interacting) .weekly-card__surface { box-shadow:0 16px 40px #0004,0 0 24px color-mix(in srgb,var(--weekly-card-accent) 9%,transparent); }
+
+@supports (animation-timeline: view()) {
+  @media (min-width:901px) and (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+    .sakura-weekly-page .weekly-card--mag { animation:weekly-card-arrive linear both; animation-timeline:view(); animation-range:entry 0% entry 90%; }
+  }
+}
+@keyframes weekly-card-arrive { from { opacity:.25; translate:0 24px; } to { opacity:1; translate:0 0; } }
+
+@media (max-width:900px) {
+  .sakura-weekly-page {
+    .weekly-card--featured .weekly-card__link { grid-template-columns:minmax(0,1fr); }
+    .weekly-card--featured .weekly-card__media--rect { margin:12px 12px 0; width:calc(100% - 24px); min-height:200px; height:clamp(200px,48vw,330px); }
+    .weekly-card--featured .weekly-card__body { padding:20px; }
+    .weekly-post-list { gap:22px; }
+  }
+}
+@media (prefers-reduced-motion:reduce), (hover:none), (pointer:coarse) {
+  .sakura-weekly-page .weekly-card__surface { transform:none; }
+  .sakura-weekly-page .weekly-card .weekly-card__read-more iconify-icon { transform:none; }
+}
+
+@import "weekly-editorial";
+
+
+// The homepage teaser follows the article recommendations' typography and card treatment.
+.home-latest-weekly {
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 10px 0 0;
+  box-sizing: border-box;
+}
+.home-latest-weekly__heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; min-height: 28px; }
+.home-latest-weekly__heading h2 { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 1rem; font-weight: 700; line-height: 1; color: var(--sakura-color-primary); }
+.home-latest-weekly__heading .sakura-icon { flex-shrink: 0; width: 1em; height: 1em; font-size: 1em; color: inherit; }
+.home-latest-weekly__heading a { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; color: var(--sakura-color-text-muted); font-size: .75rem; }
+.home-latest-weekly__heading a:hover { color: var(--sakura-color-action); }
+.home-weekly-card {
+  border: 1px solid var(--sakura-color-divider);
+  border-radius: 14px;
+  background: var(--sakura-post-card-bg);
+  overflow: hidden;
+  transition: border-color .2s ease, transform .2s ease;
+  &:hover, &:focus-within { border-color: color-mix(in srgb, var(--sakura-color-primary) 45%, var(--sakura-color-divider)); }
+  &:hover h3, &:focus-within h3 { color: var(--sakura-color-action); }
+}
+.home-weekly-card__link {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  align-items: stretch;
+  color: var(--sakura-color-text-deep);
+  text-decoration: none;
+  &:focus-visible { outline: 2px solid var(--sakura-color-action); outline-offset: -3px; border-radius: 14px; }
+}
+.home-weekly-card__cover { min-height: 132px; min-width: 0; position: relative; overflow: hidden; background: color-mix(in srgb, var(--sakura-color-primary) 8%, var(--sakura-post-card-bg)); }
+.home-weekly-card__image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.home-weekly-card__placeholder { display: grid; place-items: center; height: 100%; color: var(--sakura-color-primary); font-size: 2.5rem; font-weight: 600; }
+.home-weekly-card__body { min-width: 0; padding: 16px 20px; align-self: center; }
+.home-weekly-card__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: .6875rem; color: var(--sakura-color-text-muted); }
+.home-weekly-card__meta > span:first-child { color: var(--sakura-color-action); font-weight: 600; background: color-mix(in srgb, var(--sakura-color-primary) 10%, var(--sakura-post-card-bg)); padding: 3px 8px; border-radius: 6px; }
+.home-weekly-card__body h3 { margin: 7px 0 5px; font-size: 1rem; font-weight: 700; line-height: 1.5; color: var(--sakura-color-text-deep); transition: color .2s ease; }
+.home-weekly-card__body p { margin: 0; color: var(--sakura-color-text-muted); font-size: .75rem; line-height: 1.6; }
+.home-weekly-card__body :is(h3,p) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+.home-weekly-empty { margin-block: 0; padding: 14px 16px; border: 1px solid var(--sakura-color-divider); border-radius: 14px; font-size: .85rem; color: var(--sakura-color-text-muted); }
+// Weekly belongs to the central column, sharing the recommendations gutter.
+.sakura-home-layout.is-layout-list .home-latest-weekly { padding-inline: var(--home-list-featured-inline-padding, 12px); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .home-weekly-card:hover { transform: translateY(-2px); }
+}
+@media (max-width: 600px) {
+  .home-latest-weekly { margin-bottom: 16px; }
+  .home-weekly-card__link { grid-template-columns: 96px minmax(0, 1fr); }
+  .home-weekly-card__cover { min-height: 122px; }
+  .home-weekly-card__body { padding: 12px; }
+  .home-weekly-card__meta { gap: 4px 8px; font-size: .65rem; }
+  .home-weekly-card__meta > span:nth-child(2) { display: none; }
+  .home-weekly-card__body h3 { font-size: .875rem; margin: 6px 0 4px; }
+  .home-weekly-card__body p { font-size: .6875rem; -webkit-line-clamp: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-weekly-card, .home-weekly-card__body h3 { transition: none; }
 }

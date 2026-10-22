@@ -1,8 +1,8 @@
 {{ define "main" }}
 {{ $layoutPool := partial "home-layout-pool.html" . }}
-{{ $posts := where .Site.RegularPages "Section" "in" (slice "posts" "excalidraw") }}
+{{ $posts := partial "article-pages.html" .Site.RegularPages }}
 {{ $posts = partial "posts-sorted.html" (dict "Pages" $posts) }}
-{{ $cardsPagingConfig := partial "home-cards-paging-config.html" (dict "Site" .Site "WeeklyFollowHome" false) }}
+{{ $cardsPagingConfig := partial "home-cards-paging-config.html" (dict "Site" .Site) }}
 {{ $cardsPaging := $cardsPagingConfig.Paging }}
 {{ $cardsBatchSize := $cardsPagingConfig.BatchSize }}
 {{ $paginator := .Paginate $posts $cardsBatchSize }}

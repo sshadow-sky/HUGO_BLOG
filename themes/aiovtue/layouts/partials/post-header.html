@@ -26,10 +26,10 @@
           {{- if reflect.IsSlice . -}}
           {{- range $i, $c := . -}}
           {{- if $i }} / {{ end -}}
-          <a href="{{ `/categories/` | relLangURL }}?category={{ $c | urlquery }}">{{ $c }}</a>
+          {{ if eq $.Section "weekly" }}<span>{{ $c }}</span>{{ else }}<a href="{{ `/categories/` | relLangURL }}?category={{ $c | urlquery }}">{{ $c }}</a>{{ end }}
           {{- end -}}
           {{- else -}}
-          <a href="{{ `/categories/` | relLangURL }}?category={{ . | urlquery }}">{{ . }}</a>
+          {{ if eq $.Section "weekly" }}<span>{{ . }}</span>{{ else }}<a href="{{ `/categories/` | relLangURL }}?category={{ . | urlquery }}">{{ . }}</a>{{ end }}
           {{- end -}}
         </span>
         {{- end -}}
@@ -41,17 +41,17 @@
           {{- if reflect.IsSlice . -}}
           {{- range $i, $t := . -}}
           {{- if $i }}, {{ end -}}
-          <a href="{{ `/tags/` | relLangURL }}?tag={{ $t | urlquery }}">{{ $t }}</a>
+          {{ if eq $.Section "weekly" }}<span>{{ $t }}</span>{{ else }}<a href="{{ `/tags/` | relLangURL }}?tag={{ $t | urlquery }}">{{ $t }}</a>{{ end }}
           {{- end -}}
           {{- else -}}
-          <a href="{{ `/tags/` | relLangURL }}?tag={{ . | urlquery }}">{{ . }}</a>
+          {{ if eq $.Section "weekly" }}<span>{{ . }}</span>{{ else }}<a href="{{ `/tags/` | relLangURL }}?tag={{ . | urlquery }}">{{ . }}</a>{{ end }}
           {{- end -}}
         </span>
         {{- end -}}
       </div>
       {{- end -}}
     </div>
-    {{- if and .IsPage (eq .Section "posts") -}}
+    {{- if and .IsPage (in (slice "posts" "weekly") .Section) -}}
     {{- $reading := .ReadingTime -}}
     {{- if lt $reading 1 -}}{{- $reading = 1 -}}{{- end -}}
     <p class="sakura-post-header-reading">本文字数：{{ .WordCount }}&nbsp;&nbsp;阅读时长：{{ $reading }}分钟</p>

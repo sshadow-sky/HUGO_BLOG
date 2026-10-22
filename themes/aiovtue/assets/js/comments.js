@@ -598,7 +598,7 @@ async function mountPageCommentsNow({ onTwikooReady } = {}) {
   if (!section) return
 
   const provider = section.dataset.commentProvider || getCommentProvider()
-  const path = normalizeCommentPath(window.location.pathname)
+  const path = normalizeCommentPath(section.dataset.commentPath || window.location.pathname)
 
   if (provider === 'twikoo') {
     const root = document.getElementById('tcomment')
@@ -649,7 +649,7 @@ export function initTwikooVisitors() {
       twikooVisitorObserver.disconnect()
       twikooVisitorObserver = null
     }
-    void mountTwikoo(mount, { path: window.location.pathname })
+    void mountTwikoo(mount, { path: mount.dataset.commentPath || window.location.pathname })
   }
 
   if ('IntersectionObserver' in window) {

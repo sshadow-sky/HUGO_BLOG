@@ -1,0 +1,11 @@
+{{- /* Walk Hugo's heading tree in document order; titles remain plain text. */ -}}
+{{- $titles := slice -}}
+{{- range . -}}
+  {{- if eq .Level 2 -}}
+    {{- $titles = $titles | append (.Title | plainify) -}}
+  {{- end -}}
+  {{- range partial "weekly-headings.html" .Headings -}}
+    {{- $titles = $titles | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- return $titles -}}

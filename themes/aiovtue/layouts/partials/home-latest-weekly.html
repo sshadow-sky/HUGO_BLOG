@@ -1,0 +1,33 @@
+{{- $id := .ID -}}
+{{- with .PageCtx.Site.GetPage "/weekly" -}}
+<section id="{{ $id }}" class="home-latest-weekly" aria-labelledby="{{ $id }}-title">
+  <div class="home-latest-weekly__heading">
+    <h2 id="{{ $id }}-title"><iconify-icon icon="mdi:book-open-page-variant-outline" class="sakura-icon" aria-hidden="true"></iconify-icon>最新周报</h2>
+    <a href="{{ .RelPermalink }}">全部周报 <iconify-icon icon="mdi:chevron-right" class="sakura-icon" aria-hidden="true"></iconify-icon></a>
+  </div>
+  {{- with first 1 .RegularPagesRecursive.ByDate.Reverse -}}
+    {{- range . -}}
+      {{- $meta := partial "weekly-meta.html" . -}}
+      {{- $cover := partial "post-cover.html" . -}}
+      <article class="home-weekly-card">
+        <a class="home-weekly-card__link" href="{{ .RelPermalink }}" aria-label="阅读周报：{{ .Title }}">
+          <div class="home-weekly-card__cover">
+            {{- if $cover -}}
+              {{- partial "cover-list-media.html" (dict "cover" $cover "title" "" "class" "home-weekly-card__image") -}}
+            {{- else -}}
+              <span class="home-weekly-card__placeholder" aria-hidden="true">{{ $meta.issue }}</span>
+            {{- end -}}
+          </div>
+          <div class="home-weekly-card__body">
+            <div class="home-weekly-card__meta"><span>第 {{ $meta.issue }} 期</span><span>{{ $meta.kindLabel }}</span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time></div>
+            <h3>{{ .Title }}</h3>
+            <p>{{ partial "post-card-excerpt.html" . }}</p>
+          </div>
+        </a>
+      </article>
+    {{- end -}}
+  {{- else -}}
+    <p class="home-weekly-empty">第一期，正在酝酿。<a href="{{ .RelPermalink }}">前往周报</a></p>
+  {{- end -}}
+</section>
+{{- end -}}

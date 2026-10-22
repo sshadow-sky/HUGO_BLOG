@@ -1,6 +1,6 @@
 {{- $page := .Page -}}
 
-{{- $issue := .Issue | default 1 -}}
+{{- $issue := .Issue | default "—" -}}
 
 {{- $dateTime := .DateTime -}}
 
@@ -18,7 +18,7 @@
 
     <span class="weekly-mag-date__brand">WEEKLY MAGAZINE</span>
 
-    <span class="weekly-mag-date__issue-num">{{ printf "%02d" (int $issue) }}</span>
+    <span class="weekly-mag-date__issue-num">{{ $issue }}</span>
 
     <span class="weekly-mag-date__issue-label">ISSUE</span>
 

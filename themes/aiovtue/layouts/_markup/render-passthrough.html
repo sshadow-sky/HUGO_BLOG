@@ -1,6 +1,6 @@
 {{- $mathEnabled := false -}}
 {{- if .Page.Params.math -}}
-  {{- if or (eq .Page.Section "posts") (eq .Page.Layout "about") -}}
+  {{- if or (in (slice "posts" "weekly") .Page.Section) (eq .Page.Layout "about") -}}
     {{- $mathEnabled = true -}}
   {{- end -}}
 {{- end -}}

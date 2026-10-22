@@ -17,6 +17,7 @@
   data-mobile-cards-list="false"
   {{- if $hidden }} hidden{{ end -}}
 >
+  {{- if eq $paginator.PageNumber 1 -}}{{- partial "home-latest-weekly.html" (dict "PageCtx" $pageCtx "ID" (cond $postListId "home-latest-weekly" (printf "home-latest-weekly-%s" "timeline"))) -}}{{- end -}}
   <div class="sakura-post-list home-post-list"{{ if $postListId }} id="home-post-list"{{ end }}>
     <div class="post-list-container post-list-container--timeline">
       <ol class="home-timeline home-timeline-list">

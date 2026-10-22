@@ -1,0 +1,29 @@
+{{- $enabled := partial "bool-param.html" (dict "Param" "home.sidebarClock" "Map" (site.Params.home | default dict) "Key" "sidebarClock" "Default" true) -}}
+{{- if $enabled -}}
+<section class="home-clock" data-home-clock aria-label="光阴：本地时钟与时间进度">
+  <div class="home-clock__sky" aria-hidden="true">
+    <span class="home-clock__glow"></span><span class="home-clock__orb"></span>
+    <span class="home-clock__stars"></span>
+    <span class="home-clock__meteor"></span>
+    <span class="home-clock__rain"></span><span class="home-clock__snow"></span><span class="home-clock__mist"></span>
+    <span class="home-clock__cloud home-clock__cloud--near"></span><span class="home-clock__cloud home-clock__cloud--far"></span>
+  </div>
+  <div class="home-clock__content">
+  <div class="home-clock__heading"><h3>光阴</h3><span data-clock-phase>此刻</span></div>
+  <p class="home-clock__date" data-clock-date>日期加载中</p>
+  <time class="home-clock__time" data-clock-time>--:--:--</time>
+  <p class="home-clock__zone" data-clock-zone>浏览器本地时间</p>
+  <div class="home-clock__weather" role="status" aria-label="当地天气">
+    <span class="home-clock__condition" data-weather-status>天气加载中</span>
+    <a class="home-clock__temperature" data-weather-temperature href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" title="天气数据：Open-Meteo；来源与许可说明见关于本站"></a>
+  </div>
+  <div class="home-clock__progress">
+    <div class="home-clock__label"><label>今日 <progress data-clock-day max="1" value="0" aria-label="今日时间进度"></progress></label><span data-clock-day-text>—</span></div>
+    <div class="home-clock__label"><label>本年 <progress data-clock-year max="1" value="0" aria-label="本年时间进度"></progress></label><span data-clock-year-text>—</span></div>
+  </div>
+  <p class="home-clock__note">把此刻，写进明天。</p>
+  <noscript>启用 JavaScript 后显示实时钟表。</noscript>
+  </div>
+</section>
+{{- partial "home-welcome.html" . -}}
+{{- end -}}

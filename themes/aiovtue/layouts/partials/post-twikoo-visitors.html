@@ -1,4 +1,4 @@
-{{- if and .IsPage (eq .Section "posts") -}}
+{{- if and .IsPage (in (slice "posts" "weekly") .Section) -}}
 {{- if partial "twikoo-visitors-enabled.html" . -}}
 <p class="sakura-post-header-visitors">
   <iconify-icon icon="mdi:eye-outline" class="sakura-post-visitors__icon" aria-hidden="true"></iconify-icon>
@@ -6,7 +6,7 @@
   <span id="twikoo_visitors">0</span>
 </p>
 {{- if eq .Params.comment false -}}
-<div id="twikoo-visitor-mount" class="sakura-twikoo-visitor-mount" hidden></div>
+<div id="twikoo-visitor-mount" data-comment-path="{{ .Params.comment_path | default .RelPermalink }}" class="sakura-twikoo-visitor-mount" hidden></div>
 {{- end -}}
 {{- else if and site.Params.statistics.enable site.Params.statistics.articleEnable -}}
 <p class="sakura-post-header-busuanzi">
