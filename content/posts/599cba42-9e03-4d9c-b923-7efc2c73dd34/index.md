@@ -1,7 +1,7 @@
 ---
 title: URL 嵌入测试：图片、视频与 B站
 date: 2026-10-25T15:31:44.886Z
-description: URL素材发布闭环 URL-LIFECYCLE-V1-599cba42：本地图片、外链视频和B站播放器一起核验。
+description: URL素材发布闭环 URL-LIFECYCLE-V2-599cba42：本地图片、外链视频和B站播放器一起核验。
 draft: false
 categories:
   - 测试
@@ -10,7 +10,7 @@ tags:
   - 待检查
 content_id: 599cba42-9e03-4d9c-b923-7efc2c73dd34
 editorial_kind: note
-lastmod: 2026-10-25T15:50:02.123Z
+lastmod: 2026-10-26T02:52:28.938Z
 editorial_assets:
   - name: lifecycle-local.png
     path: static/uploads/editorial/599cba42-9e03-4d9c-b923-7efc2c73dd34/f03c226330c2f38b793262f05a7faef47e681cb1fd5a298571c6ae3828e11aeb.png
@@ -19,7 +19,7 @@ editorial_assets:
     size: 33547
     mime: image/png
 ---
-发布验收版本：URL-LIFECYCLE-V1-599cba42。这篇文章用于本地与模拟生产的发布验收；测试结束后撤下远端并保留本地。请对照下面各节查看“填入URL”后的真实展示：图片应显示为图片，视频直链应显示播放器，B站网页地址会转换为官方嵌入播放器。
+发布验收版本：URL-LIFECYCLE-V2-599cba42。这篇文章用于本地与模拟生产的发布验收；测试结束后撤下远端并保留本地。请对照下面各节查看“填入URL”后的真实展示：图片应显示为图片，视频直链应显示播放器，B站网页地址会转换为官方嵌入播放器。
 
 ## 1. JPG 图片直链与图注
 
@@ -107,7 +107,7 @@ https://www.bilibili.com.evil.example/video/BV1B7411m7LV/ → 应拒绝，不能
 
 ## 9. 本地素材与版本验收
 
-验收标记：URL-LIFECYCLE-V1-599cba42
+验收标记：URL-LIFECYCLE-V2-599cba42
 
 ![本地素材：ShadowSky发布闭环测试图](/uploads/editorial/599cba42-9e03-4d9c-b923-7efc2c73dd34/f03c226330c2f38b793262f05a7faef47e681cb1fd5a298571c6ae3828e11aeb.png)
 
